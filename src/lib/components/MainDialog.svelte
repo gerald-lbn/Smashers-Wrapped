@@ -1,12 +1,4 @@
 <div class="dialog">
-	<div class="dialog-header">
-		<span>#smashers-wrapped</span>
-
-		<div>
-			<a href="https://github.com/gerald-lbn/smashers-wrapped">Source code</a>
-			<a href="/about">About this project</a>
-		</div>
-	</div>
 	<div class="dialog-content">
 		<h1>Your smash year in review</h1>
 		<p>
@@ -35,7 +27,8 @@
 					fill="#ff2768"
 				></path>
 			</svg>
-			<span>Continue with my start.gg account</span>
+			<span class="desktop-only">Continue with my start.gg account</span>
+			<span class="mobile-only"> Continue with start.gg </span>
 		</a>
 	</div>
 </div>
@@ -49,22 +42,6 @@
 		border: 2px solid hsl(var(--color-border));
 
 		color: hsl(var(--color-text-muted-on-surface));
-
-		.dialog-header {
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			padding: 1rem 2rem;
-			border-bottom: 2px solid hsl(var(--color-border));
-
-			a {
-				padding: 0.5rem 1rem;
-				border-radius: 0.25rem;
-
-				font-size: 1rem;
-				line-height: 1.5;
-			}
-		}
 
 		.dialog-content {
 			padding: 2rem;
@@ -119,10 +96,59 @@
 				align-items: center;
 				justify-content: center;
 				gap: 0.75rem;
+				padding: 0 1.5rem;
 				height: 3.5rem;
 				border-radius: 0.5rem;
 				background-color: hsl(var(--color-background-element));
 			}
+		}
+	}
+
+	.desktop-only {
+		display: inline;
+	}
+
+	.mobile-only {
+		display: none;
+	}
+
+	@media screen and (max-width: 768px) {
+		.dialog {
+			.dialog-content {
+				padding: 1.5rem;
+				gap: 1rem;
+
+				h1 {
+					font-size: 1.75rem; /* 28px */
+					line-height: 2.625rem; /* 42px */
+				}
+
+				p {
+					max-width: 30rem; /* 480px */
+				}
+
+				input {
+					height: 2.5rem; /* 40px */
+					padding: 0 1rem;
+				}
+
+				.startgg-oauth {
+					height: 2.5rem;
+
+					svg {
+						width: 1.25rem;
+						height: 1.25rem;
+					}
+				}
+			}
+		}
+
+		.desktop-only {
+			display: none;
+		}
+
+		.mobile-only {
+			display: inline;
 		}
 	}
 </style>

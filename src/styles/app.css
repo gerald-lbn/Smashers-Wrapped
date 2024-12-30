@@ -14,3 +14,9 @@ body {
 	font-size: 1.125rem;
 	line-height: 1.25;
 }
+
+@media screen and (max-width: 768px) {
+	body {
+		font-size: 1rem;
+	}
+}
