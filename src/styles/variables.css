@@ -1,6 +1,6 @@
 :root {
-	--font-headline: 'FOT-RodinHimawariPro-UB';
-	--font-body: 'FOT-Rodin Pro DB';
+	--font-headline: 'Outfit', sans-serif;
+	--font-body: 'Outfit', sans-serif;
 
 	--color-background: 0, 0%, 6%;
 	--color-background-surface: 0, 0%, 12%;

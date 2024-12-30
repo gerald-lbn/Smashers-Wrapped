@@ -20,6 +20,8 @@ a {
 
 a,
 input {
+	font-family: var(--font-body);
+
 	&:focus {
 		outline: 2px solid hsl(var(--color-border));
 	}

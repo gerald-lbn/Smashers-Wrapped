@@ -1,5 +1,6 @@
+@import url(https://fonts.bunny.net/css?family=outfit:400,500,600,700);
+
 @import url('variables.css');
-@import url('fonts.css');
 @import url('reset.css');
 
 body {
@@ -9,8 +10,7 @@ body {
 	background-attachment: fixed;
 	background-size: cover;
 
-	font-family: 'FOT-Rodin Pro DB';
+	font-family: var(--font-body);
 	font-size: 1.125rem;
-	line-height: 1.5;
-	letter-spacing: -1px;
+	line-height: 1.25;
 }
