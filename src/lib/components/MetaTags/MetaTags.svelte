@@ -1,7 +1,8 @@
 <script lang="ts">
 	import type { IMetaTags } from './types';
 
-	let { icon, title, description, keywords, author, twitter, openGraph }: IMetaTags = $props();
+	let { icon, title, description, keywords, author, themeColor, twitter, openGraph }: IMetaTags =
+		$props();
 </script>
 
 <svelte:head>
@@ -25,13 +26,21 @@
 		<meta name="author" content={author} />
 	{/if}
 
+	{#if themeColor}
+		<meta name="theme-color" content={themeColor} />
+	{/if}
+
 	{#if twitter}
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:site" content={twitter.site} />
 		<meta name="twitter:title" content={twitter.title} />
 		<meta name="twitter:description" content={twitter.description} />
-		<meta name="twitter:image" content={twitter.image.src} />
-		<meta name="twitter:image:alt" content={twitter.image.alt} />
+		{#if twitter.image?.src}
+			<meta name="twitter:image" content={twitter.image.src} />
+		{/if}
+		{#if twitter.image?.alt}
+			<meta name="twitter:image:alt" content={twitter.image.alt} />
+		{/if}
 		<meta name="twitter:creator" content={twitter.creator} />
 	{/if}
 
@@ -41,8 +50,12 @@
 		<meta property="og:site_name" content={openGraph.siteName} />
 		<meta property="og:type" content={openGraph.type} />
 		<meta property="og:url" content={openGraph.url} />
-		<meta property="og:image" content={openGraph.image.src} />
-		<meta property="og:image:alt" content={openGraph.image.alt} />
+		{#if openGraph.image?.src}
+			<meta property="og:image" content={openGraph.image.src} />
+		{/if}
+		{#if openGraph.image?.alt}
+			<meta property="og:image:alt" content={openGraph.image.alt} />
+		{/if}
 		<meta property="og:image:width" content="1200" />
 		<meta property="og:image:height" content="630" />
 		<meta property="og:locale" content={openGraph.locale} />

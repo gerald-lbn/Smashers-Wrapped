@@ -7,6 +7,7 @@ export const metaConfig: IMetaTags = {
 		'Unwrap your journey through the tournaments, battles, and triumphs that made your Smash year unforgettable.',
 	keywords: ['svelte', 'sveltekit', 'template'],
 	author: 'Gérald Leban',
+	themeColor: '#0f0f0f',
 	twitter: {
 		title: 'Smasher Wrapped - Your Smash year in review',
 		description:

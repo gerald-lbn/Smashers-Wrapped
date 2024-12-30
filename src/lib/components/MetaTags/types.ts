@@ -4,6 +4,7 @@ export interface IMetaTags {
 	description: string;
 	keywords: string[];
 	author: string;
+	themeColor: string;
 	twitter: Partial<ITwitterMetaTags>;
 	openGraph: Partial<IOpenGraphMetaTags>;
 }
