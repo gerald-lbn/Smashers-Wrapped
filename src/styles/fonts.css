@@ -1,0 +1,13 @@
+@font-face {
+	font-family: 'FOT-Rodin Pro DB';
+	font-style: normal;
+	font-weight: 600;
+	src: url('/fonts/FOT-Rodin Pro DB.otf') format('opentype');
+}
+
+@font-face {
+	font-family: 'FOT-RodinHimawariPro-UB';
+	font-style: normal;
+	font-weight: 800;
+	src: url('/fonts/FOT-RodinHimawariPro-UB.otf') format('opentype');
+}

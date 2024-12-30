@@ -1,0 +1,12 @@
+:root {
+	--font-headline: 'FOT-RodinHimawariPro-UB';
+	--font-body: 'FOT-Rodin Pro DB';
+
+	--color-background: 0, 0%, 6%;
+	--color-background-surface: 0, 0%, 12%;
+	--color-background-element: 0, 0%, 18%;
+
+	--color-border: 0, 0%, 23%;
+
+	--color-text-muted-on-surface: 273, 10%, 79%;
+}

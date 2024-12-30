@@ -1,0 +1,31 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+input {
+	font-size: inherit;
+	color: inherit;
+
+	&:focus {
+		outline-offset: 0.25rem;
+	}
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+}
+
+a,
+input {
+	&:focus {
+		outline: 2px solid hsl(var(--color-border));
+	}
+
+	&:hover {
+		background-color: hsla(var(--color-background-element), 0.8) !important;
+		transition: background-color 300ms ease-in-out;
+	}
+}
