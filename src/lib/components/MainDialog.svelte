@@ -8,7 +8,7 @@
 
 		<input type="text" placeholder="Enter your start.gg username" />
 
-		<span class="separator">Or</span>
+		<span class="separator" aria-hidden="true">Or</span>
 
 		<a class="startgg-oauth" href="http://start.gg/oath/...">
 			<svg
