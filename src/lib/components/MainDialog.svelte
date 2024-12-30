@@ -72,7 +72,7 @@
 			gap: 1.5rem;
 
 			h1 {
-				font-family: hsl(var(--font-headline));
+				font-family: var(--font-headline);
 				font-size: 2.25rem; /* 36px */
 				line-height: 3.375rem; /* 54px */
 				font-weight: 800;
