@@ -47,12 +47,22 @@
 				if (!prevOption) prevOption = ulElement.lastElementChild as HTMLElement;
 
 				prevOption.focus();
+				prevOption.scrollIntoView({
+					behavior: 'smooth',
+					block: 'center',
+					inline: 'center'
+				});
 				break;
 			case 'ArrowDown':
 				let nextOption = (event.target as HTMLElement).nextElementSibling as HTMLElement | null;
 				if (!nextOption) nextOption = ulElement.firstElementChild as HTMLElement;
 
 				nextOption.focus();
+				nextOption.scrollIntoView({
+					behavior: 'smooth',
+					block: 'center',
+					inline: 'center'
+				});
 				break;
 			case 'Tab':
 			case 'Escape':
@@ -168,6 +178,7 @@
 			max-height: 384px;
 			overflow: auto;
 			overscroll-behavior: contain;
+			scroll-behavior: smooth;
 			transition: 100ms ease;
 			transition-property: height;
 		}
