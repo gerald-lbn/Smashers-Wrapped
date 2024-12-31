@@ -4,13 +4,14 @@
 	box-sizing: border-box;
 }
 
+:focus {
+	outline: 2px solid hsl(var(--color-border));
+	outline-offset: 0.25rem;
+}
+
 input {
 	font-size: inherit;
 	color: inherit;
-
-	&:focus {
-		outline-offset: 0.25rem;
-	}
 }
 
 a {
@@ -21,10 +22,6 @@ a {
 a,
 input {
 	font-family: var(--font-body);
-
-	&:focus {
-		outline: 2px solid hsl(var(--color-border));
-	}
 
 	&:hover {
 		background-color: hsla(var(--color-background-element), 0.8) !important;
