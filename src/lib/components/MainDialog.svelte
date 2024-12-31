@@ -1,3 +1,97 @@
+<script lang="ts">
+	import Combobox from './Combobox/Combobox.svelte';
+
+	let value = $state('');
+	let selected = $state<(typeof suggestions)[number]>();
+
+	let suggestions = $state([
+		{
+			name: 'LT | GWABB'
+		},
+		{
+			name: 'Simonet4'
+		},
+		{
+			name: 'CRBT'
+		},
+		{
+			name: 'nohqq'
+		},
+		{
+			name: 'Blou'
+		},
+		{
+			name: 'PNS| POTICHAT ( DJMAG X DJ MIAW)'
+		},
+		{
+			name: 'Zzeynn_'
+		},
+		{
+			name: 'Le Un'
+		},
+		{
+			name: "BOL | LT |localo fan d'Artemis"
+		},
+		{
+			name: 'Hundred'
+		},
+		{
+			name: 'Pinou'
+		},
+		{
+			name: 'PNS | RouxChov'
+		},
+		{
+			name: 'PR|Patou973'
+		},
+		{
+			name: 'LT | Axol'
+		},
+		{
+			name: '7𝖍0𝖒4𝖘'
+		},
+		{
+			name: 'arnoldafricaus'
+		},
+		{
+			name: 'Tisma'
+		},
+		{
+			name: 'Sov le scribe'
+		},
+		{
+			name: '[DDD] FylaiMonstre'
+		},
+		{
+			name: 'parados'
+		},
+		{
+			name: 'PNS | Premier Niveau Sud'
+		},
+		{
+			name: 'Lapatate'
+		},
+		{
+			name: 'BoB'
+		},
+		{
+			name: 'PNS DJ Mangue'
+		},
+		{
+			name: 'Paktou'
+		},
+		{
+			name: 'Assasnake'
+		},
+		{
+			name: 'Dapoce'
+		},
+		{
+			name: 'PNS Clembs'
+		}
+	]);
+</script>
+
 <div class="dialog">
 	<div class="dialog-content">
 		<h1>Your smash year in review</h1>
@@ -6,7 +100,14 @@
 			unforgettable.
 		</p>
 
-		<input type="text" placeholder="Enter your start.gg username" />
+		<Combobox
+			bind:value
+			bind:selected
+			options={suggestions}
+			getText={(t) => t!.name}
+			getValue={(t) => t!.name}
+			placeholder="Enter your start.gg username"
+		/>
 
 		<span class="separator" aria-hidden="true">Or</span>
 
@@ -58,14 +159,6 @@
 
 			p {
 				max-width: 33.5rem; /* 536px */
-			}
-
-			input {
-				background-color: hsl(var(--color-background-element));
-				height: 3.5rem; /* 56px */
-				padding: 0 1.5rem;
-				border: 2px solid hsl(var(--color-border));
-				border-radius: 0.5rem;
 			}
 
 			.separator {
@@ -125,11 +218,6 @@
 
 				p {
 					max-width: 30rem; /* 480px */
-				}
-
-				input {
-					height: 2.5rem; /* 40px */
-					padding: 0 1rem;
 				}
 
 				.startgg-oauth {
