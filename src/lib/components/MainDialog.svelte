@@ -111,7 +111,7 @@
 
 		<span class="separator" aria-hidden="true">Or</span>
 
-		<a class="startgg-oauth" href="http://start.gg/oath/...">
+		<a class="startgg-oauth" href="/login/startgg">
 			<svg
 				width="24"
 				height="24"
