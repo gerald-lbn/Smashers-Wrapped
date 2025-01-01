@@ -1,11 +1,13 @@
 <script lang="ts" generics="T">
 	import type { HTMLInputAttributes } from 'svelte/elements';
+	import SsbuLoading from '$lib/components/SSBULoading.svelte';
 
 	interface Props<T> extends Partial<HTMLInputAttributes> {
 		options: T[];
 		getText: (t: T) => string | number;
 		getValue: (t: T) => string | number;
 		selected: T;
+		loading: boolean;
 	}
 
 	let {
@@ -13,6 +15,8 @@
 		getText,
 		getValue,
 		selected = $bindable<T>(),
+		loading,
+
 		value = $bindable(),
 		...rest
 	}: Props<T> = $props();
@@ -81,11 +85,15 @@
 			case 'ArrowRight':
 			case 'Enter':
 			case 'Tab':
+			case 'Shift':
+			case 'Control':
 				break;
 			case 'ArrowDown':
-				isListOpen = true;
-				const option = ulElement.querySelector('[role="option"]') as HTMLElement | null;
-				if (option) option.focus();
+				if (filteredOptions.length > 0) {
+					isListOpen = true;
+					const option = ulElement.querySelector('[role="option"]') as HTMLElement | null;
+					if (option) option.focus();
+				}
 				break;
 			default:
 				isListOpen = true;
@@ -130,24 +138,33 @@
 	/>
 
 	<ul
+		style={`display: ${value ? '' : 'none'};`}
 		bind:this={ulElement}
 		role="listbox"
 		hidden={!isListOpen}
 		onclick={onListClick}
 		onkeydown={onListKeyDown}
 	>
-		{#each filteredOptions as option}
-			<li
-				role="option"
-				tabindex={-1}
-				data-text={getText(option)}
-				data-value={getValue(option)}
-				aria-selected={value === getValue(option)}
-				aria-disabled={false}
-			>
-				{getText(option)}
-			</li>
-		{/each}
+		{#if value}
+			{#if loading}
+				<li class="ssbu-loading">
+					<SsbuLoading />
+				</li>
+			{:else if filteredOptions.length > 0}
+				{#each filteredOptions as option (option)}
+					<li
+						role="option"
+						tabindex={-1}
+						data-text={getText(option)}
+						data-value={getValue(option)}
+						aria-selected={value === getValue(option)}
+						aria-disabled={false}
+					>
+						{getText(option)}
+					</li>
+				{/each}
+			{/if}
+		{/if}
 	</ul>
 </div>
 
@@ -181,6 +198,13 @@
 			scroll-behavior: smooth;
 			transition: 100ms ease;
 			transition-property: height;
+		}
+
+		ul:has(.ssbu-loading) {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			height: 12rem;
 		}
 
 		li {
