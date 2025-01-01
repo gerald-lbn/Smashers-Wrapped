@@ -1,7 +1,8 @@
 <script lang="ts">
+	import { useDebounce } from '$lib/runes/useDebounce.svelte';
 	import Combobox from './Combobox/Combobox.svelte';
 
-	let value = $state('');
+	let search = $state('');
 	let selected = $state<(typeof suggestions)[number]>();
 
 	let suggestions = $state([
@@ -90,6 +91,13 @@
 			name: 'PNS Clembs'
 		}
 	]);
+
+	const debounce = useDebounce('', 500);
+
+	const oninput = (event: Event) => {
+		const v = (event.target as HTMLInputElement).value;
+		debounce.update(v);
+	};
 </script>
 
 <div class="dialog">
@@ -101,12 +109,13 @@
 		</p>
 
 		<Combobox
-			bind:value
+			bind:value={search}
 			bind:selected
 			options={suggestions}
 			getText={(t) => t!.name}
 			getValue={(t) => t!.name}
 			placeholder="Enter your start.gg username"
+			{oninput}
 		/>
 
 		<span class="separator" aria-hidden="true">Or</span>
