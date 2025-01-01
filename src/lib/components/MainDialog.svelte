@@ -1,102 +1,26 @@
 <script lang="ts">
 	import { useDebounce } from '$lib/runes/useDebounce.svelte';
+	import useFetcher from '$lib/runes/useFetcher.svelte';
+	import type { Player } from '$lib/validation/find-players';
 	import Combobox from './Combobox/Combobox.svelte';
 
 	let search = $state('');
-	let selected = $state<(typeof suggestions)[number]>();
+	const debounceSearch = useDebounce('', 250);
 
-	let suggestions = $state([
-		{
-			name: 'LT | GWABB'
-		},
-		{
-			name: 'Simonet4'
-		},
-		{
-			name: 'CRBT'
-		},
-		{
-			name: 'nohqq'
-		},
-		{
-			name: 'Blou'
-		},
-		{
-			name: 'PNS| POTICHAT ( DJMAG X DJ MIAW)'
-		},
-		{
-			name: 'Zzeynn_'
-		},
-		{
-			name: 'Le Un'
-		},
-		{
-			name: "BOL | LT |localo fan d'Artemis"
-		},
-		{
-			name: 'Hundred'
-		},
-		{
-			name: 'Pinou'
-		},
-		{
-			name: 'PNS | RouxChov'
-		},
-		{
-			name: 'PR|Patou973'
-		},
-		{
-			name: 'LT | Axol'
-		},
-		{
-			name: '7𝖍0𝖒4𝖘'
-		},
-		{
-			name: 'arnoldafricaus'
-		},
-		{
-			name: 'Tisma'
-		},
-		{
-			name: 'Sov le scribe'
-		},
-		{
-			name: '[DDD] FylaiMonstre'
-		},
-		{
-			name: 'parados'
-		},
-		{
-			name: 'PNS | Premier Niveau Sud'
-		},
-		{
-			name: 'Lapatate'
-		},
-		{
-			name: 'BoB'
-		},
-		{
-			name: 'PNS DJ Mangue'
-		},
-		{
-			name: 'Paktou'
-		},
-		{
-			name: 'Assasnake'
-		},
-		{
-			name: 'Dapoce'
-		},
-		{
-			name: 'PNS Clembs'
-		}
-	]);
+	const DEFAULT_URL = `/api/find-player?gamerTag=${debounceSearch.value}`;
+	let url = $derived(`/api/find-player?gamerTag=${debounceSearch.value}`);
+	const response = useFetcher<Player[]>(DEFAULT_URL);
+	const options = $derived(response.data);
 
-	const debounce = useDebounce('', 500);
+	$effect(() => {
+		response.url = url;
+	});
+
+	let selected = $state<Player>();
 
 	const oninput = (event: Event) => {
 		const v = (event.target as HTMLInputElement).value;
-		debounce.update(v);
+		debounceSearch.update(v);
 	};
 </script>
 
@@ -111,9 +35,10 @@
 		<Combobox
 			bind:value={search}
 			bind:selected
-			options={suggestions}
-			getText={(t) => t!.name}
-			getValue={(t) => t!.name}
+			loading={response.loading}
+			options={options || []}
+			getText={(t) => (t ? `${t.prefix ? t.prefix + ' | ' : ''}${t.gamerTag}` : 'N/A')}
+			getValue={(t) => String(t?.id)}
 			placeholder="Enter your start.gg username"
 			{oninput}
 		/>
