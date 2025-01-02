@@ -10,10 +10,15 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "prettier --write .",
-		"lint": "prettier --check . && eslint ."
+		"lint": "prettier --check . && eslint .",
+		"gql:gen": "gql-tada generate output",
+		"gql:check": "gql-tada check",
+		"gql:doctor": "gql-tada doctor"
 	},
 	"devDependencies": {
+		"@0no-co/graphqlsp": "^1.12.16",
 		"@eslint/compat": "^1.2.3",
+		"@gql.tada/svelte-support": "^1.0.1",
 		"@sveltejs/adapter-vercel": "^5.5.0",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^4.0.0",
@@ -31,6 +36,8 @@
 	},
 	"dependencies": {
 		"@inlang/paraglide-sveltekit": "^0.11.1",
+		"@urql/svelte": "^4.2.2",
+		"gql.tada": "^1.8.10",
 		"zod": "^3.24.1"
 	}
 }
