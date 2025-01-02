@@ -1,5 +1,6 @@
 import { STARTGG_BEARER_TOKEN } from '$env/static/private';
-import { cacheExchange, Client, fetchExchange, ssrExchange } from '@urql/svelte';
+import { cacheExchange } from '@urql/exchange-graphcache';
+import { Client, fetchExchange, ssrExchange } from '@urql/svelte';
 
 const isServerSide = typeof window === 'undefined';
 
@@ -12,7 +13,7 @@ const ssr = ssrExchange({
 
 const client = new Client({
 	url: ENDPOINT,
-	exchanges: [cacheExchange, ssr, fetchExchange],
+	exchanges: [cacheExchange(), ssr, fetchExchange],
 	fetchOptions: () => {
 		return {
 			headers: {
