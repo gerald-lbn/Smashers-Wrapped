@@ -1,17 +1,20 @@
 <script lang="ts" generics="T">
 	import type { HTMLInputAttributes } from 'svelte/elements';
 	import SsbuLoading from '$lib/components/SSBULoading.svelte';
+	import type { Snippet } from 'svelte';
 
 	interface Props<T> extends Partial<HTMLInputAttributes> {
 		options: T[];
-		getText: (t: T) => string | number;
-		getValue: (t: T) => string | number;
-		selected: T;
+		getText: (t: T) => string;
+		getValue: (t: T) => string;
+		option: Snippet<[T]>;
+		selected: T | undefined;
 		loading: boolean;
 	}
 
 	let {
 		options = $bindable([]),
+		option,
 		getText,
 		getValue,
 		selected = $bindable<T>(),
@@ -151,17 +154,8 @@
 					<SsbuLoading />
 				</li>
 			{:else if filteredOptions.length > 0}
-				{#each filteredOptions as option (option)}
-					<li
-						role="option"
-						tabindex={-1}
-						data-text={getText(option)}
-						data-value={getValue(option)}
-						aria-selected={value === getValue(option)}
-						aria-disabled={false}
-					>
-						{getText(option)}
-					</li>
+				{#each filteredOptions as opt}
+					{@render option(opt)}
 				{/each}
 			{/if}
 		{/if}
@@ -207,7 +201,7 @@
 			height: 12rem;
 		}
 
-		li {
+		:global(li) {
 			user-select: none;
 			cursor: pointer;
 			display: flex;
