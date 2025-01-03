@@ -1,11 +1,11 @@
 import client from '$lib/start.gg';
 import { json } from '@sveltejs/kit';
-import { WrappedTournamentsAndSetsOnStream } from './queries';
+import { WrappedSets, WrappedTournamentsAndSetsOnStream } from './queries';
 
 export const GET = async () => {
-	const id = '1960701';
+	const playerId = '1960701';
 	const res = await client.query(WrappedTournamentsAndSetsOnStream, {
-		playerId: id,
+		playerId,
 		videoGameId: '1386'
 	});
 
@@ -73,6 +73,10 @@ export const GET = async () => {
 
 	const setsOnStream = res.data?.player?.sets?.pageInfo?.total ?? 0;
 
+	const offlineTournamentsIds = offlineTournaments
+		.map((tournament) => tournament.id)
+		.filter((id) => id !== null);
+
 	console.log('Tournaments this year:', tournamentsThisYear.length);
 	console.log('Online tournaments:', onlineTournaments.length);
 	console.log('Offline tournaments:', offlineTournaments.length);
@@ -84,7 +88,99 @@ export const GET = async () => {
 	console.table({ ...countriesCount });
 	console.log('Sets on stream:', setsOnStream);
 
+	console.log('********************************************');
+
+	const resSets1stPage = await client.query(WrappedSets, {
+		playerId,
+		tournamentsIds: offlineTournamentsIds,
+		page: 1,
+		perPage: 50
+	});
+
+	const recurringOpponents = {} as Record<
+		string,
+		{
+			name: string;
+			count: number;
+		}
+	>;
+
+	const totalPages = resSets1stPage.data?.player?.sets?.pageInfo?.totalPages ?? 0;
+
+	// Fetch all pages in parallel
+	const allPagesPromises = Array.from({ length: totalPages - 1 }, (_, i) => {
+		return client.query(WrappedSets, {
+			playerId,
+			tournamentsIds: offlineTournamentsIds,
+			page: i + 2,
+			perPage: 50
+		});
+	});
+
+	const allPagesResults = await Promise.all(allPagesPromises);
+
+	// Process all sets from all pages
+	allPagesResults.forEach((page) => {
+		page.data?.player?.sets?.nodes?.forEach((set) => {
+			const winnerId = set?.winnerId;
+			if (!winnerId) return;
+
+			if (!set.game) return;
+			if (!set.game.selections) return;
+
+			const opponent = set.game.selections.find((selection) => {
+				const participants = selection?.entrant?.participants;
+				if (!participants) return false;
+				return !participants.map((p) => String(p?.player?.id)).includes(playerId);
+			});
+
+			if (!opponent) return;
+			if (!opponent.entrant) return;
+			if (!opponent.entrant.participants) return;
+			if (opponent.entrant.participants.length > 1) return;
+			if (!opponent.entrant.participants[0]?.player) return;
+
+			const opponentPlayerId = opponent.entrant.participants[0].player.id;
+			if (!opponentPlayerId) return;
+
+			const prefix = opponent.entrant.participants[0].player.prefix;
+			const gamerTag = opponent.entrant.participants[0].player.gamerTag;
+
+			const name = prefix ? `${prefix} ${gamerTag}` : (gamerTag as string);
+
+			if (!recurringOpponents[opponentPlayerId]) {
+				recurringOpponents[opponentPlayerId] = {
+					name,
+					count: 0
+				};
+			}
+
+			recurringOpponents[opponentPlayerId].count++;
+		});
+	});
+
+	// Sort recurring opponents by count
+	const sortedRecurringOpponents = Object.entries(recurringOpponents)
+		.sort(([, a], [, b]) => b.count - a.count)
+		.map(([id, data]) => ({
+			id,
+			...data
+		}))
+		.slice(0, 3);
+
+	console.log('Number of sets this year:', resSets1stPage.data?.player?.sets?.pageInfo?.total ?? 0);
+	console.log('Top 3 recurring opponents:');
+	console.table(sortedRecurringOpponents);
+	console.log('');
+
 	return json({
-		...res
+		res: {
+			...res
+		},
+		resSets1stPage: {
+			...resSets1stPage
+		},
+		allPagesResults,
+		ids: offlineTournamentsIds
 	});
 };
