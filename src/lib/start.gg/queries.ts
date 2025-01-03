@@ -16,6 +16,8 @@ export const WrappedTournamentsAndSetsOnStream = graphql(`
 			user {
 				id
 				images(type: "profile") {
+					id
+
 					url
 					ratio
 				}
@@ -70,18 +72,26 @@ export const WrappedSets = graphql(`
 
 				nodes {
 					id
+
 					displayScore
 					winnerId
 
 					game(orderNum: 1) {
+						id
+
 						selections {
+							id
+
 							entrant {
 								id
 								name
 								initialSeedNum
 								participants {
+									id
+
 									player {
 										id
+
 										gamerTag
 										prefix
 									}
