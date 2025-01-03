@@ -1,9 +1,10 @@
-import client from '$lib/start.gg';
+import { parseMatch } from '$lib/start.gg/helper';
+import { WrappedSets, WrappedTournamentsAndSetsOnStream } from '$lib/start.gg/queries';
+import client from '$lib/start.gg/start.gg';
 import { json } from '@sveltejs/kit';
-import { WrappedSets, WrappedTournamentsAndSetsOnStream } from './queries';
 
-export const GET = async () => {
-	const playerId = '1960701';
+export const GET = async ({ params }) => {
+	const playerId = params.id;
 	const res = await client.query(WrappedTournamentsAndSetsOnStream, {
 		playerId,
 		videoGameId: '1386'
@@ -77,19 +78,6 @@ export const GET = async () => {
 		.map((tournament) => tournament.id)
 		.filter((id) => id !== null);
 
-	console.log('Tournaments this year:', tournamentsThisYear.length);
-	console.log('Online tournaments:', onlineTournaments.length);
-	console.log('Offline tournaments:', offlineTournaments.length);
-	console.log('Tournaments per month:', tournamentsPerMonth);
-	console.log('Tournament with most attendees:', tournamentWithMostAttendees);
-	console.log('Cities attended:');
-	console.table({ ...citiesCount });
-	console.log('Countries attended:');
-	console.table({ ...countriesCount });
-	console.log('Sets on stream:', setsOnStream);
-
-	console.log('********************************************');
-
 	const resSets1stPage = await client.query(WrappedSets, {
 		playerId,
 		tournamentsIds: offlineTournamentsIds,
@@ -107,7 +95,7 @@ export const GET = async () => {
 
 	const totalPages = resSets1stPage.data?.player?.sets?.pageInfo?.totalPages ?? 0;
 
-	// Fetch all pages in parallel
+	// Fetch all sets pages
 	const allPagesPromises = Array.from({ length: totalPages - 1 }, (_, i) => {
 		return client.query(WrappedSets, {
 			playerId,
@@ -118,6 +106,7 @@ export const GET = async () => {
 	});
 
 	const allPagesResults = await Promise.all(allPagesPromises);
+	let shutoutsDealt = 0;
 
 	// Process all sets from all pages
 	allPagesResults.forEach((page) => {
@@ -156,6 +145,16 @@ export const GET = async () => {
 			}
 
 			recurringOpponents[opponentPlayerId].count++;
+
+			// Check for shutouts
+			if (!set.displayScore) return;
+			const score = parseMatch(set.displayScore);
+			if (score === 'DQ') return;
+
+			const opponentScore = score.find((s) => s.name === name);
+			if (!opponentScore) return;
+
+			if (opponentScore.score === 0) shutoutsDealt++;
 		});
 	});
 
@@ -168,19 +167,24 @@ export const GET = async () => {
 		}))
 		.slice(0, 3);
 
-	console.log('Number of sets this year:', resSets1stPage.data?.player?.sets?.pageInfo?.total ?? 0);
-	console.log('Top 3 recurring opponents:');
-	console.table(sortedRecurringOpponents);
-	console.log('');
-
 	return json({
-		res: {
-			...res
+		player: {},
+		sets: {
+			total: resSets1stPage.data?.player?.sets?.pageInfo?.total ?? 0,
+			setsOnStream,
+			shutoutsDealt
 		},
-		resSets1stPage: {
-			...resSets1stPage
+		tournaments: {
+			cities: citiesCount,
+			countries: countriesCount,
+			perMonth: tournamentsPerMonth,
+			mostAttendees: tournamentWithMostAttendees,
+			total: tournamentsThisYear.length,
+			online: onlineTournaments.length,
+			offline: offlineTournaments.length
 		},
-		allPagesResults,
-		ids: offlineTournamentsIds
+		opponents: {
+			recurring: sortedRecurringOpponents
+		}
 	});
 };
