@@ -51,6 +51,15 @@
 		aria-selected={selected?.id === option.id}
 		aria-disabled={false}
 	>
+		{#if option.image}
+			<img
+				src={option.image}
+				alt={makeText(option)}
+				width={32}
+				height={32}
+				style="border-radius: 0.5rem; object-fit: cover; object-position: center; margin-right: 0.5rem;"
+			/>
+		{/if}
 		{makeText(option)}
 	</li>
 {/snippet}
@@ -69,7 +78,7 @@
 					bind:value
 					bind:selected
 					option={ComboboxOption}
-					loading={debounceResults.loading}
+					loading={debounceResults.loading || debounceSearch.loading}
 					options={debounceResults.value}
 					getText={(t) => (t ? `${t.prefix ? t.prefix + ' | ' : ''}${t.gamerTag}` : 'N/A')}
 					getValue={(t) => String(t?.id)}
