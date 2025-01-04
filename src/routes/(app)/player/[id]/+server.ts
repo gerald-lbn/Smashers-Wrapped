@@ -168,7 +168,13 @@ export const GET = async ({ params }) => {
 		.slice(0, 3);
 
 	return json({
-		player: { ...res.data },
+		player: {
+			id: res.data?.player?.id,
+			name: res.data?.player?.prefix
+				? `${res.data.player.prefix} | ${res.data.player.gamerTag}`
+				: res.data?.player?.gamerTag,
+			image: res.data?.player?.user?.images?.[0]?.url
+		},
 		sets: {
 			total: resSets1stPage.data?.player?.sets?.pageInfo?.total ?? 0,
 			setsOnStream,
