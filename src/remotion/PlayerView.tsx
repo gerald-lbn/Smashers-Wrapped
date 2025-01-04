@@ -1,6 +1,7 @@
 import React, { forwardRef, useEffect, useImperativeHandle } from 'react';
 import { Player, type PlayerRef } from '@remotion/player';
 import { HelloWorld } from './HelloWorld';
+import { COMPOSITION_HEIGHT, COMPOSITION_WIDTH } from './components/constants';
 
 export interface PlayerSchema {
 	titleText: string;
@@ -34,8 +35,8 @@ export const PlayerView = forwardRef(
 				component={HelloWorld}
 				durationInFrames={150}
 				fps={30}
-				compositionHeight={1080}
-				compositionWidth={1920}
+				compositionHeight={COMPOSITION_HEIGHT}
+				compositionWidth={COMPOSITION_WIDTH}
 				inputProps={props.data}
 				style={{ width: '100%' }}
 				controls

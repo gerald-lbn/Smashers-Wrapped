@@ -2,6 +2,7 @@ import { Composition } from 'remotion';
 import { HelloWorld, myCompSchema } from './HelloWorld';
 import { Logo, myCompSchema2 } from './components/Logo';
 import React from 'react';
+import { COMPOSITION_HEIGHT, COMPOSITION_WIDTH } from './components/constants';
 
 // Each <Composition> is an entry in the sidebar!
 
@@ -15,8 +16,8 @@ export const RemotionRoot: React.FC = () => {
 				component={HelloWorld}
 				durationInFrames={150}
 				fps={30}
-				width={1920}
-				height={1080}
+				width={COMPOSITION_WIDTH}
+				height={COMPOSITION_HEIGHT}
 				// You can override these props for each render:
 				// https://www.remotion.dev/docs/parametrized-rendering
 				schema={myCompSchema}
@@ -34,8 +35,8 @@ export const RemotionRoot: React.FC = () => {
 				component={Logo}
 				durationInFrames={150}
 				fps={30}
-				width={1920}
-				height={1080}
+				width={COMPOSITION_WIDTH}
+				height={COMPOSITION_HEIGHT}
 				schema={myCompSchema2}
 				defaultProps={{
 					logoColor1: '#91dAE2' as const,
