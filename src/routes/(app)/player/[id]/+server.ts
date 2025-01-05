@@ -244,15 +244,15 @@ export const GET = async ({ params }) => {
 				? `${res.data.player.prefix} | ${res.data.player.gamerTag}`
 				: res.data?.player?.gamerTag,
 			image: res.data?.player?.user?.images?.[0]?.url,
-			playedStages,
-			characters
+			selection: {
+				stages: playedStages,
+				characters
+			},
+			achievements: {
+				shutoutsDealt
+			}
 		},
-		sets: {
-			total: resSets1stPage.data?.player?.sets?.pageInfo?.total ?? 0,
-			setsOnStream,
-			shutoutsDealt
-		},
-		tournaments: {
+		tournament: {
 			cities: citiesCount,
 			countries: countriesCount,
 			perMonth: tournamentsPerMonth,
@@ -261,8 +261,10 @@ export const GET = async ({ params }) => {
 			online: onlineTournaments.length,
 			offline: offlineTournaments.length
 		},
-		opponents: {
-			recurring: sortedRecurringOpponents
+		set: {
+			total: resSets1stPage.data?.player?.sets?.pageInfo?.total ?? 0,
+			setsOnStream,
+			recurringOpponents: sortedRecurringOpponents
 		}
 	});
 };
