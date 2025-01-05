@@ -104,3 +104,36 @@ export const WrappedSets = graphql(`
 		}
 	}
 `);
+
+export const WrappedSelections = graphql(`
+	query WrappedSelections($playerId: ID!, $tournamentsIds: [ID!], $page: Int, $perPage: Int) {
+		player(id: $playerId) {
+			id
+			sets(filters: { tournamentIds: $tournamentsIds }, page: $page, perPage: $perPage) {
+				pageInfo {
+					total
+					totalPages
+				}
+
+				nodes {
+					id
+					games {
+						id
+						selections {
+							id
+							entrant {
+								id
+							}
+							character {
+								name
+							}
+						}
+						stage {
+							name
+						}
+					}
+				}
+			}
+		}
+	}
+`);
