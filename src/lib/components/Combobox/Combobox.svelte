@@ -1,15 +1,14 @@
 <script lang="ts" generics="T">
 	import type { HTMLInputAttributes } from 'svelte/elements';
-	import SsbuLoading from '$lib/components/SSBULoading.svelte';
 	import type { Snippet } from 'svelte';
+	import SsbuLoading from '$lib/components/SSBULoading.svelte';
 
 	interface Props<T> extends Partial<HTMLInputAttributes> {
 		options: T[];
 		getText: (t: T) => string;
 		getValue: (t: T) => string;
-		option: Snippet<[T]>;
+		option: Snippet<[T, number]>;
 		selected: T | undefined;
-		loading: boolean;
 	}
 
 	let {
@@ -18,7 +17,6 @@
 		getText,
 		getValue,
 		selected = $bindable<T>(),
-		loading,
 
 		value = $bindable(),
 		...rest
@@ -149,14 +147,14 @@
 		onkeydown={onListKeyDown}
 	>
 		{#if value}
-			{#if loading}
+			{#if filteredOptions.length > 0}
+				{#each filteredOptions as opt, idx}
+					{@render option(opt, idx)}
+				{/each}
+			{:else}
 				<li class="ssbu-loading">
 					<SsbuLoading />
 				</li>
-			{:else if filteredOptions.length > 0}
-				{#each filteredOptions as opt}
-					{@render option(opt)}
-				{/each}
 			{/if}
 		{/if}
 	</ul>

@@ -35,9 +35,11 @@ export const load = async ({ fetch, url }) => {
 
 	// Fetching users profile image
 	const playerIds = players.map((player) => player.id);
-	const playersImages = await Promise.all(
+	const playersImages = Promise.all(
 		playerIds.map(async (playerId) => {
 			const req = await fetch(`${ENDPOINT}/player/${playerId}`);
+			if (!req.ok) return '';
+
 			const data = await req.json();
 			// @ts-expect-error - To lazy to make a schema
 			const image = data?.entities?.player?.images?.find((image) => image?.type === 'profile');
@@ -46,9 +48,7 @@ export const load = async ({ fetch, url }) => {
 	);
 
 	return {
-		players: players.map((player, index) => ({
-			...player,
-			image: playersImages[index]
-		}))
+		players,
+		images: playersImages
 	};
 };
