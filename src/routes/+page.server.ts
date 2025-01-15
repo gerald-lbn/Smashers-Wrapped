@@ -1,3 +1,5 @@
+import { PlayerSeachInfo } from '$lib/start.gg/queries';
+import client from '$lib/start.gg/start.gg';
 import { findPlayerResultSchema } from '$lib/validation/find-players';
 
 const ENDPOINT = 'https://api.smash.gg';
@@ -31,24 +33,17 @@ export const load = async ({ fetch, url }) => {
 			players: []
 		};
 
-	const players = result.data.items.entities.player.filter((player) => player.hasUser);
+	const playersIds = result.data.items.entities.player.map((player) => player.id.toString());
 
-	// Fetching users profile image
-	const playerIds = players.map((player) => player.id);
-	const playersImages = Promise.all(
-		playerIds.map(async (playerId) => {
-			const req = await fetch(`${ENDPOINT}/player/${playerId}`);
-			if (!req.ok) return '';
+	const playersSearchInfoPromise = Array.from(playersIds).map((id) => {
+		return client.query(PlayerSeachInfo, {
+			id
+		});
+	});
 
-			const data = await req.json();
-			// @ts-expect-error - To lazy to make a schema
-			const image = data?.entities?.player?.images?.find((image) => image?.type === 'profile');
-			if (image) return image?.url;
-		})
-	);
+	const players = await Promise.all(playersSearchInfoPromise);
 
 	return {
-		players,
-		images: playersImages
+		search: players.map((player) => player.data?.player)
 	};
 };

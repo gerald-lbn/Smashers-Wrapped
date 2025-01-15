@@ -137,3 +137,26 @@ export const WrappedSelections = graphql(`
 		}
 	}
 `);
+
+export const PlayerSeachInfo = graphql(`
+	query PlayerSeachInfo($id: ID!) {
+		player(id: $id) {
+			id
+			gamerTag
+			prefix
+			user {
+				id
+				name
+				images {
+					id
+					url
+					type
+				}
+				location {
+					id
+					countryId
+				}
+			}
+		}
+	}
+`);

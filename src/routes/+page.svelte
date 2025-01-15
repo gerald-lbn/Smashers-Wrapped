@@ -6,7 +6,7 @@
 	const { data } = $props();
 
 	const debounceSearch = useDebounce('', 250);
-	const debounceResults = useDebounce(data.players, 250);
+	const debounceResults = useDebounce(data.search, 250);
 
 	const onComboboxInput = (event: Event) => {
 		const v = (event.target as HTMLInputElement).value;
@@ -21,11 +21,11 @@
 	});
 
 	// Update the debounced results when the data changes
-	$effect(() => {
-		if (debounceResults.value.length !== data.players.length && !debounceResults.loading) {
-			debounceResults.update(data.players);
-		}
-	});
+	// $effect(() => {
+	// 	if (debounceResults.value.length !== data.players.length && !debounceResults.loading) {
+	// 		debounceResults.update(data.players);
+	// 	}
+	// });
 
 	$effect(() => {
 		if (selected) {
@@ -33,37 +33,35 @@
 		}
 	});
 
-	type Player = (typeof data.players)[number];
+	type Player = NonNullable<typeof data.search>[number];
 
 	let value = $state('');
 	let selected = $state<Player>();
 
 	const makeText = (player: Player) =>
-		`${player.prefix ? player.prefix + ' | ' : ''}${player.gamerTag}`;
+		`${player?.prefix ? player.prefix + ' | ' : ''}${player?.gamerTag}`;
 </script>
 
 {#snippet ComboboxOption(option: Player, idx: number)}
-	{#await data.images then images}
-		<li
-			role="option"
-			tabindex={-1}
-			data-text={makeText(option)}
-			data-value={option.id}
-			aria-selected={selected?.id === option.id}
-			aria-disabled={false}
-		>
-			{#if images}
-				<img
-					src={images[idx]}
-					alt={''}
-					width={32}
-					height={32}
-					style="border-radius: 0.5rem; object-fit: cover; object-position: center; margin-right: 0.5rem;"
-				/>
-			{/if}
-			{makeText(option)}
-		</li>
-	{/await}
+	<li
+		role="option"
+		tabindex={-1}
+		data-text={makeText(option)}
+		data-value={option?.id}
+		aria-selected={selected?.id === option?.id}
+		aria-disabled={false}
+	>
+		{#if option?.user?.images}
+			<img
+				src={option?.user?.images.find((i) => i?.type === 'profile')?.url}
+				alt={''}
+				width={32}
+				height={32}
+				style="border-radius: 0.5rem; object-fit: cover; object-position: center; margin-right: 0.5rem;"
+			/>
+		{/if}
+		{makeText(option)}
+	</li>
 {/snippet}
 
 <main class="container">
@@ -80,7 +78,7 @@
 					bind:value
 					bind:selected
 					option={ComboboxOption}
-					options={debounceResults.value}
+					options={debounceResults.value?.filter((v) => !!v)}
 					getText={(t) => (t ? `${t.prefix ? t.prefix + ' | ' : ''}${t.gamerTag}` : 'N/A')}
 					getValue={(t) => String(t?.id)}
 					placeholder="Enter your start.gg username"
