@@ -1,6 +1,6 @@
 import React, { forwardRef, useEffect, useImperativeHandle } from 'react';
 import { Player, type PlayerRef } from '@remotion/player';
-import { HelloWorld } from './hello-world';
+import { HelloWorld } from './main';
 import { COMPOSITION_HEIGHT, COMPOSITION_WIDTH } from './components/constants';
 
 export interface PlayerSchema {
