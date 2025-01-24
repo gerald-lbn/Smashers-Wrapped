@@ -1,9 +1,9 @@
 import React from 'react';
 import { spring } from 'remotion';
 import { AbsoluteFill, interpolate, Sequence, useCurrentFrame, useVideoConfig } from 'remotion';
-import { Logo } from './components/Logo';
-import { Subtitle } from './components/Subtitle';
-import { Title } from './components/Title';
+import { Logo } from './components/logo';
+import { Subtitle } from './components/subtitle';
+import { Title } from './components/title';
 import { z } from 'zod';
 import { zColor } from '@remotion/zod-types';
 
