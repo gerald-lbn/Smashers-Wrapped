@@ -2,9 +2,9 @@
 export const fakeData = {
 	player: {
 		id: 1960701,
-		name: 'ARK | Licane',
+		name: 'PNS Rouxchov',
 		image:
-			'https://images.start.gg/images/user/1243541/image-fa9c9584accf136ce78b905b4415a0e7.jpg?ehk=7zpYie9%2B6jdS%2FvPXdUFI%2FXz%2BW%2FplTe1zdVfe0YPPBtw%3D&ehkOptimized=nADGSbxNY7OrcvLQtpNmv8x09RvL%2FqkxkEiLrsaEhmM%3D',
+			'https://www.bing.com/th?u=https%3A%2F%2Fimages.start.gg%2Fimages%2Fuser%2F2858645%2Fimage-473beadfe794490f6472c59148f596d7-optimized.jpg&ehk=MWx6XzvH75Z1GNI6pNQgK%2FIzWVlMY32vazygPTdEorE%3D',
 		selection: {
 			stages: {
 				'Final Destination': 19,
