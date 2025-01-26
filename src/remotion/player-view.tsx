@@ -1,13 +1,11 @@
 import React, { forwardRef, useEffect, useImperativeHandle } from 'react';
 import { Player, type PlayerRef } from '@remotion/player';
-import { HelloWorld } from './main';
-import { COMPOSITION_HEIGHT, COMPOSITION_WIDTH } from './components/constants';
+import { Main } from './main';
+import { config, findTheme, type ThemeId } from './constants';
 
 export interface PlayerSchema {
-	titleText: string;
-	titleColor: string;
-	logoColor1: string;
-	logoColor2: string;
+	stats: unknown;
+	themeId: ThemeId;
 }
 
 export const PlayerView = forwardRef(
@@ -32,12 +30,16 @@ export const PlayerView = forwardRef(
 		return (
 			<Player
 				ref={playerRef}
-				component={HelloWorld}
-				durationInFrames={150}
-				fps={30}
-				compositionHeight={COMPOSITION_HEIGHT}
-				compositionWidth={COMPOSITION_WIDTH}
-				inputProps={props.data}
+				component={Main}
+				durationInFrames={config.duration}
+				fps={config.fps}
+				compositionHeight={config.compositionHeight}
+				compositionWidth={config.compositionWidth}
+				inputProps={{
+					// @ts-expect-error I'll add the types later
+					stats: props.data.stats,
+					theme: findTheme(props.data.themeId)
+				}}
 				style={{ width: '100%' }}
 				controls
 			/>

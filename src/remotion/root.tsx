@@ -1,8 +1,10 @@
-import { Composition } from 'remotion';
+import { Composition, Folder } from 'remotion';
 import { Main } from './main';
 import React from 'react';
-import { COMPOSITION_HEIGHT, COMPOSITION_WIDTH, DURATION, FPS } from './components/constants';
-import { fakeData } from './fake-data';
+import { config, player1Theme } from './constants';
+import { ThisIsMyRecap } from './ThisIsMyRecap';
+import { fakeData } from './all';
+import { thisIsMyRecapSchema } from './ThisIsMyRecap/schema';
 
 // Each <Composition> is an entry in the sidebar!
 
@@ -12,19 +14,37 @@ export const RemotionRoot: React.FC = () => {
 			<Composition
 				// You can take the "id" to render a video:
 				// npx remotion render src/index.ts <id> out/video.mp4
-				id="Main"
+				id="Video"
 				component={Main}
-				durationInFrames={DURATION}
-				fps={FPS}
-				width={COMPOSITION_WIDTH}
-				height={COMPOSITION_HEIGHT}
+				durationInFrames={config.duration}
+				fps={config.fps}
+				width={config.compositionWidth}
+				height={config.compositionHeight}
 				// You can override these props for each render:
 				// https://www.remotion.dev/docs/parametrized-rendering
 				defaultProps={{
 					stats: fakeData,
+					theme: player1Theme,
 					type: 'square'
 				}}
 			/>
+			<Folder name="Slides">
+				<Composition
+					id="this-is-my-recap"
+					component={ThisIsMyRecap}
+					durationInFrames={60}
+					fps={config.fps}
+					width={config.compositionWidth}
+					height={config.compositionHeight}
+					schema={thisIsMyRecapSchema}
+					defaultProps={{
+						theme: player1Theme,
+						name: fakeData.player.name,
+						image: fakeData.player.image,
+						country: 'USA'
+					}}
+				/>
+			</Folder>
 		</>
 	);
 };

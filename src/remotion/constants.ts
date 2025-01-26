@@ -39,3 +39,8 @@ export const player2Theme: Theme = {
 		primary: '#3189FD'
 	}
 };
+
+export const themes = [player1Theme, player2Theme];
+
+export const findTheme = (themeId: ThemeId) =>
+	themes.find((t) => t.name === themeId) || player1Theme;
