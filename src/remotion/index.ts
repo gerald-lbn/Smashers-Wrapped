@@ -4,4 +4,7 @@
 import { registerRoot } from 'remotion';
 import { RemotionRoot } from './root';
 
+import './_styles/fonts.css';
+import './_styles/reset.css';
+
 registerRoot(RemotionRoot);
