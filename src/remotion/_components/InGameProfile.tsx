@@ -20,7 +20,8 @@ const Chip: React.FC<{
 					lineHeight: '20px',
 					color: theme.colors.white,
 					// @ts-expect-error -webkit-text-stroke is not in the types
-					'-webkit-text-stroke': `1.5px ${theme.colors.black}`
+					'-webkit-text-stroke': `1px ${theme.colors.black}`,
+					textShadow: `2px 2px ${theme.colors.black}`
 				}}
 			>
 				{label}
@@ -51,7 +52,8 @@ export const InGameProfile: React.FC<{
 			>
 				{/* Chips */}
 				<div style={{ display: 'flex', gap: 8 }}>
-					{country && <Chip label={'France'} theme={theme} />}
+					{country && <Chip label={country} theme={theme} />}
+					{country && <Chip label={'He/Him'} theme={theme} />}
 				</div>
 
 				{/* Name */}
