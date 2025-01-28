@@ -3,6 +3,7 @@ import { Main } from './main';
 import React from 'react';
 import { config, player1Theme } from './constants';
 import { ThisIsMyRecap } from './ThisIsMyRecap';
+import { BiggestTournament } from './BiggestTournament';
 import { fakeData } from './all';
 import { thisIsMyRecapSchema } from './ThisIsMyRecap/schema';
 
@@ -42,6 +43,18 @@ export const RemotionRoot: React.FC = () => {
 						name: fakeData.player.name,
 						image: fakeData.player.image,
 						country: 'USA'
+					}}
+				/>
+				<Composition
+					id="biggest-tournament"
+					component={BiggestTournament}
+					durationInFrames={60}
+					fps={config.fps}
+					width={config.compositionWidth}
+					height={config.compositionHeight}
+					defaultProps={{
+						theme: player1Theme,
+						stats: fakeData
 					}}
 				/>
 			</Folder>
