@@ -1,7 +1,7 @@
 import type { Theme } from './constants';
 import { fakeData } from './all';
 
-type Stats = typeof fakeData;
+export type Stats = typeof fakeData;
 
 export type CompositionProps = {
 	stats: Stats;
