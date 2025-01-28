@@ -34,9 +34,10 @@ export const InGameProfile: React.FC<{
 	image?: string;
 	name: string;
 	country?: string;
+	genderPronouns?: string;
 	theme: Theme;
 	style?: React.CSSProperties;
-}> = ({ image, name, country, theme, style }) => {
+}> = ({ image, name, country, genderPronouns, theme, style }) => {
 	return (
 		<div style={style}>
 			{/* Informations */}
@@ -53,7 +54,7 @@ export const InGameProfile: React.FC<{
 				{/* Chips */}
 				<div style={{ display: 'flex', gap: 8 }}>
 					{country && <Chip label={country} theme={theme} />}
-					{country && <Chip label={'He/Him'} theme={theme} />}
+					{genderPronouns && <Chip label={genderPronouns} theme={theme} />}
 				</div>
 
 				{/* Name */}

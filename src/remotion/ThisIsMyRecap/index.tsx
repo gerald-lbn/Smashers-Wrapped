@@ -8,8 +8,9 @@ export const ThisIsMyRecap: React.FC<{
 	name: string;
 	image?: string;
 	country?: string;
+	genderPronouns?: string;
 	theme: Theme;
-}> = ({ theme, name, image, country }) => {
+}> = ({ theme, name, image, genderPronouns, country }) => {
 	const frame = useCurrentFrame();
 	const { fps, height } = useVideoConfig();
 
@@ -45,6 +46,7 @@ export const ThisIsMyRecap: React.FC<{
 				name={name}
 				image={image}
 				country={country}
+				genderPronouns={genderPronouns}
 				theme={theme}
 				style={{
 					position: 'absolute',

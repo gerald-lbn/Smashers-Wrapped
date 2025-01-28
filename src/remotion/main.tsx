@@ -10,7 +10,13 @@ export const Main: React.FC<CompositionProps> = ({ stats, theme }) => {
 			<Background theme={theme} />
 
 			<AbsoluteFill>
-				<ThisIsMyRecap theme={theme} name={stats.player.name} image={stats.player.image} />
+				<ThisIsMyRecap
+					theme={theme}
+					name={stats.player.name}
+					country={'USA'}
+					genderPronouns={stats.player.genderPronouns}
+					image={stats.player.image}
+				/>
 			</AbsoluteFill>
 		</>
 	);

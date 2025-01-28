@@ -3,6 +3,7 @@ export const fakeData = {
 	player: {
 		id: 1960701,
 		name: 'PNS Rouxchov',
+		genderPronouns: 'He/Him',
 		image:
 			'https://www.bing.com/th?u=https%3A%2F%2Fimages.start.gg%2Fimages%2Fuser%2F2858645%2Fimage-473beadfe794490f6472c59148f596d7-optimized.jpg&ehk=MWx6XzvH75Z1GNI6pNQgK%2FIzWVlMY32vazygPTdEorE%3D',
 		selection: {
