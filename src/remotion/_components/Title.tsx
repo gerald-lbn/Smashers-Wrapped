@@ -15,13 +15,27 @@ export const Title: React.FC<{
 				display: 'flex',
 				justifyContent: 'center',
 				alignItems: 'center',
-				width: 436,
 				height: 78,
 				backgroundColor: theme.colors.primary,
-				border: `8px solid ${theme.colors.black}`
+				border: `8px solid ${theme.colors.black}`,
+				paddingLeft: 32,
+				paddingRight: 32,
+				paddingTop: 8,
+				paddingBottom: 8
 			}}
 		>
-			{children}
+			<h1
+				className="fot-rodin"
+				style={{
+					color: theme.colors.white,
+					// @ts-expect-error -webkit-text-stroke is not in the types
+					'-webkit-text-stroke': `2.5px ${theme.colors.black}`,
+					textShadow: `4px 4px ${theme.colors.black}`,
+					letterSpacing: '-0.04em'
+				}}
+			>
+				{children}
+			</h1>
 		</div>
 	);
 };
