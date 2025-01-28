@@ -1,6 +1,5 @@
 import React from 'react';
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from 'remotion';
-import { Background } from '../_components/Background';
 import { InGameProfile } from '../_components/InGameProfile';
 import { Title } from '../_components/Title';
 import { type Theme } from '../constants';
@@ -31,8 +30,6 @@ export const ThisIsMyRecap: React.FC<{
 				alignItems: 'center'
 			}}
 		>
-			<Background theme={theme} />
-
 			{/* Title */}
 			<Title
 				theme={theme}
