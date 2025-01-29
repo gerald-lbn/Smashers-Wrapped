@@ -20,8 +20,8 @@ const Chip: React.FC<{
 					lineHeight: '20px',
 					color: theme.colors.white,
 					// @ts-expect-error -webkit-text-stroke is not in the types
-					'-webkit-text-stroke': `1px ${theme.colors.black}`,
-					textShadow: `2px 2px ${theme.colors.black}`
+					'-webkit-text-stroke': `6px ${theme.colors.black}`,
+					textShadow: `4px 4px ${theme.colors.black}`
 				}}
 			>
 				{label}

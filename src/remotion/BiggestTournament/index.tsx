@@ -41,8 +41,8 @@ export const BiggestTournament: React.FC<{
 						lineHeight: 1.2,
 						color: theme.colors.white,
 						// @ts-expect-error -webkit-text-stroke is not in the types
-						'-webkit-text-stroke': `2.5px ${theme.colors.black}`,
-						textShadow: `4px 4px ${theme.colors.black}`,
+						'-webkit-text-stroke': `8px ${theme.colors.black}`,
+						textShadow: `6px 6px ${theme.colors.black}`,
 						letterSpacing: '-0.04em',
 						maxWidth: width - 100
 					}}

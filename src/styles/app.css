@@ -20,3 +20,8 @@ body {
 		font-size: 1rem;
 	}
 }
+
+/* Change paint order */
+* {
+	paint-order: stroke fill;
+}
