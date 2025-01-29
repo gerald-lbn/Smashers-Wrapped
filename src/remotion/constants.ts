@@ -1,7 +1,9 @@
+export const DURATIONS = [75, 150];
+
 export const config = {
 	compositionHeight: 600,
 	compositionWidth: 600,
-	duration: 1000,
+	duration: DURATIONS.reduce((a, b) => a + b, 0),
 	fps: 30
 };
 
