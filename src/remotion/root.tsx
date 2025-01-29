@@ -49,7 +49,7 @@ export const RemotionRoot: React.FC = () => {
 				<Composition
 					id="biggest-tournament"
 					component={BiggestTournament}
-					durationInFrames={60}
+					durationInFrames={240}
 					fps={config.fps}
 					width={config.compositionWidth}
 					height={config.compositionHeight}
