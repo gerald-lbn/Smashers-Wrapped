@@ -1,4 +1,4 @@
-export const DURATIONS = [75, 150];
+export const DURATIONS = [75, 150, 240];
 
 export const config = {
 	compositionHeight: 600,
@@ -17,6 +17,16 @@ export type Theme = {
 		black: string;
 		white: string;
 		primary: string;
+		heatmap: {
+			0: string;
+			1: string;
+			2: string;
+			3: string;
+			4: string;
+			5: string;
+			6: string;
+			7: string;
+		};
 	};
 };
 
@@ -27,7 +37,17 @@ export const player1Theme: Theme = {
 		background: '#1a1a1a',
 		black: '#141414',
 		white: '#ffffff',
-		primary: '#FD3132'
+		primary: '#FD3132',
+		heatmap: {
+			0: '#FFFFFF',
+			1: '#FFDBDB',
+			2: '#FE9393',
+			3: '#FD4B4B',
+			4: '#FD0204',
+			5: '#B40203',
+			6: '#6C0102',
+			7: '#240001'
+		}
 	}
 };
 
@@ -38,7 +58,18 @@ export const player2Theme: Theme = {
 		background: '#1a1a1a',
 		black: '#141414',
 		white: '#ffffff',
-		primary: '#3189FD'
+		primary: '#3189FD',
+		// TODO: Change colors to match player 2 theme
+		heatmap: {
+			0: '#FFFFFF',
+			1: '#FFDBDB',
+			2: '#FE9393',
+			3: '#FD4B4B',
+			4: '#FD0204',
+			5: '#B40203',
+			6: '#6C0102',
+			7: '#240001'
+		}
 	}
 };
 

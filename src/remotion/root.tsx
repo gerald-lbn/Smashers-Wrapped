@@ -4,6 +4,7 @@ import React from 'react';
 import { config, player1Theme } from './constants';
 import { ThisIsMyRecap } from './ThisIsMyRecap';
 import { BiggestTournament } from './BiggestTournament';
+import { TournamentsHeatmap } from './TournamentsHeatmap';
 import { fakeData } from './all';
 import { thisIsMyRecapSchema } from './ThisIsMyRecap/schema';
 
@@ -56,6 +57,17 @@ export const RemotionRoot: React.FC = () => {
 					defaultProps={{
 						theme: player1Theme,
 						stats: fakeData
+					}}
+				/>
+				<Composition
+					id="tournaments-heatmap"
+					component={TournamentsHeatmap}
+					durationInFrames={240}
+					fps={config.fps}
+					width={config.compositionWidth}
+					height={config.compositionHeight}
+					defaultProps={{
+						theme: player1Theme
 					}}
 				/>
 			</Folder>
