@@ -1,7 +1,7 @@
 import { Composition, Folder } from 'remotion';
 import { Main } from './main';
 import React from 'react';
-import { config, player1Theme } from './constants';
+import { config, DURATIONS, player1Theme } from './constants';
 import { ThisIsMyRecap } from './ThisIsMyRecap';
 import { BiggestTournament } from './BiggestTournament';
 import { TournamentsHeatmap } from './TournamentsHeatmap';
@@ -34,7 +34,7 @@ export const RemotionRoot: React.FC = () => {
 				<Composition
 					id="this-is-my-recap"
 					component={ThisIsMyRecap}
-					durationInFrames={60}
+					durationInFrames={DURATIONS[0]}
 					fps={config.fps}
 					width={config.compositionWidth}
 					height={config.compositionHeight}
@@ -50,7 +50,7 @@ export const RemotionRoot: React.FC = () => {
 				<Composition
 					id="biggest-tournament"
 					component={BiggestTournament}
-					durationInFrames={240}
+					durationInFrames={DURATIONS[1]}
 					fps={config.fps}
 					width={config.compositionWidth}
 					height={config.compositionHeight}
@@ -62,7 +62,7 @@ export const RemotionRoot: React.FC = () => {
 				<Composition
 					id="tournaments-heatmap"
 					component={TournamentsHeatmap}
-					durationInFrames={240}
+					durationInFrames={DURATIONS[2]}
 					fps={config.fps}
 					width={config.compositionWidth}
 					height={config.compositionHeight}
