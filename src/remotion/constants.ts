@@ -1,9 +1,10 @@
-export const DURATIONS = [75, 120, 150];
+export const DURATIONS = [75, 120, 150, 120];
+export const TRANSITION_DURATION = 15;
 
 export const config = {
 	compositionHeight: 600,
 	compositionWidth: 600,
-	duration: DURATIONS.reduce((a, b) => a + b, 0),
+	duration: DURATIONS.reduce((a, b) => a + b, 0) - (DURATIONS.length - 1) * TRANSITION_DURATION,
 	fps: 30
 };
 

@@ -3,10 +3,11 @@ import { AbsoluteFill, Series } from 'remotion';
 import type { CompositionProps } from './types';
 import { ThisIsMyRecap } from './ThisIsMyRecap';
 import { Background } from './_components/Background';
-import { Slide, transitionDuration } from './_components/Slide';
+import { Slide } from './_components/Slide';
 import { BiggestTournament } from './BiggestTournament';
-import { DURATIONS } from './constants';
+import { DURATIONS, TRANSITION_DURATION } from './constants';
 import { TournamentsHeatmap } from './TournamentsHeatmap';
+import { ReccuringOpponents } from './RecurringOpponents';
 
 export const Main: React.FC<CompositionProps> = ({ stats, theme }) => {
 	return (
@@ -28,7 +29,7 @@ export const Main: React.FC<CompositionProps> = ({ stats, theme }) => {
 
 				<Series.Sequence
 					durationInFrames={DURATIONS[1]}
-					offset={-transitionDuration}
+					offset={-TRANSITION_DURATION}
 					name="Tournament Heatmap"
 				>
 					<Slide direction="right">
@@ -40,12 +41,24 @@ export const Main: React.FC<CompositionProps> = ({ stats, theme }) => {
 
 				<Series.Sequence
 					durationInFrames={DURATIONS[2]}
-					offset={-transitionDuration}
+					offset={-TRANSITION_DURATION}
 					name="Biggest tournament"
 				>
 					<Slide direction="right">
 						<Slide direction="left">
 							<BiggestTournament stats={stats} theme={theme} />
+						</Slide>
+					</Slide>
+				</Series.Sequence>
+
+				<Series.Sequence
+					durationInFrames={DURATIONS[3]}
+					offset={-TRANSITION_DURATION}
+					name="Reccurring opponents"
+				>
+					<Slide direction="right">
+						<Slide direction="left">
+							<ReccuringOpponents />
 						</Slide>
 					</Slide>
 				</Series.Sequence>

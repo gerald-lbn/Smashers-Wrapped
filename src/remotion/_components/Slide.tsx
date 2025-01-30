@@ -1,7 +1,6 @@
 import React from 'react';
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from 'remotion';
-
-export const transitionDuration = 15;
+import { TRANSITION_DURATION } from '../constants';
 
 type SlideDirection = 'left' | 'right' | 'up' | 'down';
 
@@ -16,10 +15,10 @@ export const Slide: React.FC<{ children: React.ReactNode; direction: SlideDirect
 		fps,
 		frame:
 			direction === 'left' || direction === 'down'
-				? frame - (durationInFrames - transitionDuration)
+				? frame - (durationInFrames - TRANSITION_DURATION)
 				: frame,
 		config: { damping: 200 },
-		durationInFrames: transitionDuration
+		durationInFrames: TRANSITION_DURATION
 	});
 
 	const getTransform = () => {

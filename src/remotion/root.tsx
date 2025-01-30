@@ -7,6 +7,7 @@ import { BiggestTournament } from './BiggestTournament';
 import { TournamentsHeatmap } from './TournamentsHeatmap';
 import { fakeData } from './all';
 import { thisIsMyRecapSchema } from './ThisIsMyRecap/schema';
+import { ReccuringOpponents } from './RecurringOpponents';
 
 // Each <Composition> is an entry in the sidebar!
 
@@ -63,6 +64,17 @@ export const RemotionRoot: React.FC = () => {
 					id="tournaments-heatmap"
 					component={TournamentsHeatmap}
 					durationInFrames={DURATIONS[2]}
+					fps={config.fps}
+					width={config.compositionWidth}
+					height={config.compositionHeight}
+					defaultProps={{
+						theme: player1Theme
+					}}
+				/>
+				<Composition
+					id="recurring-opponents"
+					component={ReccuringOpponents}
+					durationInFrames={DURATIONS[3]}
 					fps={config.fps}
 					width={config.compositionWidth}
 					height={config.compositionHeight}
