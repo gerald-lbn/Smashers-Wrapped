@@ -157,6 +157,12 @@ export const HeatmapScale: React.FC<{
 
 	const scale = Array.from({ length: 8 }).map((_, i) => i);
 
+	const style: React.CSSProperties = {
+		color: theme.colors.white,
+		// @ts-expect-error -webkit-text-stroke is not in the types
+		'-webkit-text-stroke': `6px ${theme.colors.black}`
+	};
+
 	return (
 		<div
 			className="fot-rodin"
@@ -166,13 +172,13 @@ export const HeatmapScale: React.FC<{
 				gap: 16
 			}}
 		>
-			<span>0</span>
+			<span style={style}>0</span>
 			<div style={{ display: 'flex', gap: 4 }}>
 				{scale.map((sc) => (
 					<HeatmapCell heat={sc as Heat} size={SIZE} index={sc} theme={theme} animate={false} />
 				))}
 			</div>
-			<span>7</span>
+			<span style={style}>7</span>
 		</div>
 	);
 };
