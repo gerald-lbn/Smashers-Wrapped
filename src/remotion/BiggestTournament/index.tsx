@@ -48,7 +48,7 @@ export const BiggestTournament: React.FC<{
 					}}
 				>
 					Out of my {totalTournaments} tournament{totalTournaments > 1 && 's'}, my biggest one
-					{totalTournaments > 1 ? 's are' : 'is'}
+					{totalTournaments > 1 ? 's were' : 'was'}
 				</h1>
 			</AbsoluteFill>
 
