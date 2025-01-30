@@ -28,13 +28,14 @@ export const HeatmapCell: React.FC<{
 	theme: Theme;
 	style?: React.CSSProperties;
 	index: number;
-}> = ({ heat, size, style, theme, index }) => {
+	animate?: boolean;
+}> = ({ heat, size, style, theme, index, animate = true }) => {
 	const { fps } = useVideoConfig();
 	const frame = useCurrentFrame();
 
 	const spr = spring({
 		fps,
-		frame: frame - index / 4,
+		frame: frame - index / 2.5,
 		config: {}
 	});
 
@@ -48,7 +49,7 @@ export const HeatmapCell: React.FC<{
 				height: size,
 				border: `4px solid ${theme.colors.black}`,
 				backgroundColor: theme.colors.heatmap[heat],
-				opacity
+				opacity: animate ? opacity : 1
 			}}
 		></div>
 	);
@@ -114,31 +115,64 @@ export const Heatmap: React.FC<{
 	theme: Theme;
 }> = ({ weeks, rowLabels, size, theme }) => {
 	return (
-		<div style={{ display: 'flex', gap: 4 }}>
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'column',
-					gap: 4,
-					alignSelf: 'flex-end',
-					marginRight: 8
-				}}
-			>
-				{rowLabels.map((label, i) => (
-					<HeatmapRowLabel key={i} label={label} theme={theme} />
+		<div>
+			<div style={{ display: 'flex', gap: 4 }}>
+				<div
+					style={{
+						display: 'flex',
+						flexDirection: 'column',
+						gap: 4,
+						alignSelf: 'flex-end',
+						marginRight: 8
+					}}
+				>
+					{rowLabels.map((label, i) => (
+						<HeatmapRowLabel key={i} label={label} theme={theme} />
+					))}
+				</div>
+				{weeks.map((week, i) => (
+					<HeatmapColumn
+						key={i}
+						label={week.label}
+						heats={week.heats}
+						size={size}
+						theme={theme}
+						index={i}
+						maxIndex={weeks.length}
+					/>
 				))}
 			</div>
-			{weeks.map((week, i) => (
-				<HeatmapColumn
-					key={i}
-					label={week.label}
-					heats={week.heats}
-					size={size}
-					theme={theme}
-					index={i}
-					maxIndex={weeks.length}
-				/>
-			))}
+
+			<div style={{ display: 'flex', justifyContent: 'center', marginTop: 24 }}>
+				<HeatmapScale theme={theme} />
+			</div>
+		</div>
+	);
+};
+
+export const HeatmapScale: React.FC<{
+	theme: Theme;
+}> = ({ theme }) => {
+	const SIZE = 36;
+
+	const scale = Array.from({ length: 8 }).map((_, i) => i);
+
+	return (
+		<div
+			className="fot-rodin"
+			style={{
+				display: 'flex',
+				alignItems: 'center',
+				gap: 16
+			}}
+		>
+			<span>0</span>
+			<div style={{ display: 'flex', gap: 4 }}>
+				{scale.map((sc) => (
+					<HeatmapCell heat={sc as Heat} size={SIZE} index={sc} theme={theme} animate={false} />
+				))}
+			</div>
+			<span>7</span>
 		</div>
 	);
 };
