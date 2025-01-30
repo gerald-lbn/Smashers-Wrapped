@@ -1,5 +1,6 @@
 import React from 'react';
 import { type Theme } from '../constants';
+import { interpolate, spring, useCurrentFrame, useVideoConfig } from 'remotion';
 
 export type Heat = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
@@ -25,14 +26,29 @@ export const HeatmapCell: React.FC<{
 	heat: Heat;
 	size: number;
 	theme: Theme;
-}> = ({ heat, size, theme }) => {
+	style?: React.CSSProperties;
+	index: number;
+}> = ({ heat, size, style, theme, index }) => {
+	const { fps } = useVideoConfig();
+	const frame = useCurrentFrame();
+
+	const spr = spring({
+		fps,
+		frame: frame - index / 4,
+		config: {}
+	});
+
+	const opacity = interpolate(spr, [0, 1], [0, 1]);
+
 	return (
 		<div
 			style={{
+				...style,
 				width: size,
 				height: size,
 				border: `4px solid ${theme.colors.black}`,
-				backgroundColor: theme.colors.heatmap[heat]
+				backgroundColor: theme.colors.heatmap[heat],
+				opacity
 			}}
 		></div>
 	);
@@ -43,7 +59,9 @@ export const HeatmapColumn: React.FC<{
 	heats: Heat[];
 	size: number;
 	theme: Theme;
-}> = ({ label, heats, size, theme }) => {
+	index: number;
+	maxIndex: number;
+}> = ({ label, heats, size, theme, index, maxIndex }) => {
 	return (
 		<div>
 			<div style={{ marginBottom: 8, textAlign: 'center' }}>
@@ -62,7 +80,7 @@ export const HeatmapColumn: React.FC<{
 			</div>
 			<div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
 				{heats.map((heat, i) => (
-					<HeatmapCell key={i} heat={heat} size={size} theme={theme} />
+					<HeatmapCell key={i} heat={heat} size={size} theme={theme} index={i + index * maxIndex} />
 				))}
 			</div>
 		</div>
@@ -111,7 +129,15 @@ export const Heatmap: React.FC<{
 				))}
 			</div>
 			{weeks.map((week, i) => (
-				<HeatmapColumn key={i} label={week.label} heats={week.heats} size={size} theme={theme} />
+				<HeatmapColumn
+					key={i}
+					label={week.label}
+					heats={week.heats}
+					size={size}
+					theme={theme}
+					index={i}
+					maxIndex={weeks.length}
+				/>
 			))}
 		</div>
 	);
