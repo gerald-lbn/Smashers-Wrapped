@@ -1,4 +1,4 @@
-export const DURATIONS = [75, 150, 120];
+export const DURATIONS = [75, 120, 150];
 
 export const config = {
 	compositionHeight: 600,

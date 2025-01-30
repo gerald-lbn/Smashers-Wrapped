@@ -29,11 +29,11 @@ export const Main: React.FC<CompositionProps> = ({ stats, theme }) => {
 				<Series.Sequence
 					durationInFrames={DURATIONS[1]}
 					offset={-transitionDuration}
-					name="Biggest tournament"
+					name="Tournament Heatmap"
 				>
 					<Slide direction="right">
 						<Slide direction="left">
-							<BiggestTournament stats={stats} theme={theme} />
+							<TournamentsHeatmap theme={theme} />
 						</Slide>
 					</Slide>
 				</Series.Sequence>
@@ -41,11 +41,11 @@ export const Main: React.FC<CompositionProps> = ({ stats, theme }) => {
 				<Series.Sequence
 					durationInFrames={DURATIONS[2]}
 					offset={-transitionDuration}
-					name="Tournament Heatmap"
+					name="Biggest tournament"
 				>
 					<Slide direction="right">
 						<Slide direction="left">
-							<TournamentsHeatmap theme={theme} />
+							<BiggestTournament stats={stats} theme={theme} />
 						</Slide>
 					</Slide>
 				</Series.Sequence>
