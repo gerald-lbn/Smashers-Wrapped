@@ -21,7 +21,7 @@ export const TournamentsHeatmap: React.FC<{
 
 	const delayedSpr = spring({
 		fps,
-		frame: frame - 30,
+		frame: frame - 60,
 		config: {
 			damping: 200
 		}
