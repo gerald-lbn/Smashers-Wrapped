@@ -7,7 +7,7 @@ import { Slide } from './_components/Slide';
 import { BiggestTournament } from './BiggestTournament';
 import { DURATIONS, TRANSITION_DURATION } from './constants';
 import { TournamentsHeatmap } from './TournamentsHeatmap';
-import { ReccuringOpponents } from './RecurringOpponents';
+import { RecurringOpponents } from './RecurringOpponents';
 
 export const Main: React.FC<CompositionProps> = ({ stats, theme }) => {
 	return (
@@ -58,7 +58,7 @@ export const Main: React.FC<CompositionProps> = ({ stats, theme }) => {
 				>
 					<Slide direction="right">
 						<Slide direction="left">
-							<ReccuringOpponents />
+							<RecurringOpponents opponents={[]} theme={theme} />
 						</Slide>
 					</Slide>
 				</Series.Sequence>
