@@ -41,7 +41,9 @@ export const PlayerView = forwardRef(
 					theme: findTheme(props.data.themeId)
 				}}
 				style={{ width: '100%' }}
-				controls
+				allowFullscreen={false}
+				clickToPlay={true}
+				controls={false}
 			/>
 		);
 	}
