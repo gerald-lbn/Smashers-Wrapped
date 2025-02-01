@@ -13,7 +13,8 @@
 		"lint": "prettier --check . && eslint .",
 		"gql:gen": "gql-tada generate output",
 		"gql:check": "gql-tada check",
-		"gql:doctor": "gql-tada doctor"
+		"gql:doctor": "gql-tada doctor",
+		"studio": "remotion studio ./src/remotion/index.ts"
 	},
 	"devDependencies": {
 		"@0no-co/graphqlsp": "^1.12.16",
@@ -22,6 +23,7 @@
 		"@sveltejs/adapter-vercel": "^5.5.0",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^4.0.0",
+		"@types/react": "^19.0.8",
 		"eslint": "^9.7.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.36.0",
@@ -36,9 +38,16 @@
 	},
 	"dependencies": {
 		"@inlang/paraglide-sveltekit": "^0.11.1",
+		"@remotion/cli": "^4.0.251",
+		"@remotion/player": "^4.0.251",
+		"@remotion/zod-types": "^4.0.251",
+		"@types/react-dom": "^19.0.3",
 		"@urql/exchange-graphcache": "^7.2.1",
 		"@urql/svelte": "^4.2.2",
 		"gql.tada": "^1.8.10",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0",
+		"remotion": "^4.0.251",
 		"zod": "^3.24.1"
 	}
 }

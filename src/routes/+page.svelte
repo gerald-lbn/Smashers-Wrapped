@@ -115,12 +115,6 @@
 </main>
 
 <style>
-	.container {
-		max-width: 75rem;
-		margin: 0 auto;
-		padding: 0 1rem;
-	}
-
 	#hero {
 		display: flex;
 		align-items: center;
