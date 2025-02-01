@@ -174,8 +174,15 @@ export const HeatmapScale: React.FC<{
 		>
 			<span style={style}>0</span>
 			<div style={{ display: 'flex', gap: 4 }}>
-				{scale.map((sc) => (
-					<HeatmapCell heat={sc as Heat} size={SIZE} index={sc} theme={theme} animate={false} />
+				{scale.map((sc, idx) => (
+					<HeatmapCell
+						key={idx}
+						heat={sc as Heat}
+						size={SIZE}
+						index={sc}
+						theme={theme}
+						animate={false}
+					/>
 				))}
 			</div>
 			<span style={style}>7</span>
