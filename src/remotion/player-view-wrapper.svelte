@@ -45,4 +45,4 @@
 	});
 </script>
 
-<div bind:this={containerRef}></div>
+<div bind:this={containerRef} style="user-select: none;"></div>
