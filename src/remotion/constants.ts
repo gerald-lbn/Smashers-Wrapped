@@ -59,17 +59,17 @@ export const player2Theme: Theme = {
 		background: '#1a1a1a',
 		black: '#141414',
 		white: '#ffffff',
-		primary: '#3189FD',
+		primary: '#2E88FD',
 		// TODO: Change colors to match player 2 theme
 		heatmap: {
 			0: '#FFFFFF',
-			1: '#FFDBDB',
-			2: '#FE9393',
-			3: '#FD4B4B',
-			4: '#FD0204',
-			5: '#B40203',
-			6: '#6C0102',
-			7: '#240001'
+			1: '#DBEAFF',
+			2: '#93C1FE',
+			3: '#4B98FD',
+			4: '#026FFD',
+			5: '#024FB4',
+			6: '#01306C',
+			7: '#001024'
 		}
 	}
 };
