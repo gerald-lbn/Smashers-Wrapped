@@ -9,9 +9,16 @@ import { DURATIONS, TRANSITION_DURATION } from './constants';
 import { TournamentsHeatmap } from './TournamentsHeatmap';
 import { RecurringOpponents } from './RecurringOpponents';
 
+import './_styles/fonts.css';
+import './_styles/reset.css';
+
 export const Main: React.FC<CompositionProps> = ({ stats, theme }) => {
 	return (
-		<AbsoluteFill>
+		<AbsoluteFill
+			style={{
+				fontFamily: 'FOT-Rodin Pro UB'
+			}}
+		>
 			<Background theme={theme} />
 
 			<Series>
