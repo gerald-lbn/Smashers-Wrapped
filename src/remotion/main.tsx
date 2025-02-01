@@ -20,7 +20,7 @@ export const Main: React.FC<CompositionProps> = ({ stats, theme }) => {
 						<ThisIsMyRecap
 							theme={theme}
 							name={stats.player.name}
-							country={'USA'}
+							country={stats.player.country}
 							genderPronouns={stats.player.genderPronouns}
 							image={stats.player.image}
 						/>

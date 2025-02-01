@@ -44,7 +44,7 @@ export const RemotionRoot: React.FC = () => {
 						theme: player1Theme,
 						name: fakeData.player.name,
 						image: fakeData.player.image,
-						country: 'USA',
+						country: fakeData.player.country,
 						genderPronouns: fakeData.player.genderPronouns
 					}}
 				/>
