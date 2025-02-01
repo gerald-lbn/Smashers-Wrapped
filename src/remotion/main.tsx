@@ -57,9 +57,7 @@ export const Main: React.FC<CompositionProps> = ({ stats, theme }) => {
 					name="Reccurring opponents"
 				>
 					<Slide direction="right">
-						<Slide direction="left">
-							<RecurringOpponents opponents={[]} theme={theme} />
-						</Slide>
+						<RecurringOpponents opponents={[]} theme={theme} />
 					</Slide>
 				</Series.Sequence>
 			</Series>
