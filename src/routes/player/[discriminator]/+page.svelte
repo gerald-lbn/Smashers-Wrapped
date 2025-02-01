@@ -1,5 +1,6 @@
 <script lang="ts">
 	import PlayerViewWrapper from '$remotion/player-view-wrapper.svelte';
+	import { fakeData } from '$remotion/all';
 	import { type PlayerRef } from '@remotion/player';
 
 	let { data } = $props();
@@ -16,10 +17,8 @@
 		bind:player
 		{onPaused}
 		data={{
-			logoColor1: '#FF0000',
-			logoColor2: '#00FF00',
-			titleText: 'This is remotion on svelte',
-			titleColor: 'white'
+			stats: fakeData,
+			themeId: 'player1'
 		}}
 	/>
 </div>
