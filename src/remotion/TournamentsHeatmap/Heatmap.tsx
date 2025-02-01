@@ -72,8 +72,7 @@ export const HeatmapColumn: React.FC<{
 						fontSize: 12,
 						lineHeight: 1,
 						color: theme.colors.white,
-						// @ts-expect-error -webkit-text-stroke is not in the types
-						'-webkit-text-stroke': `4px ${theme.colors.black}`
+						WebkitTextStroke: `4px ${theme.colors.black}`
 					}}
 				>
 					{label}
@@ -99,8 +98,8 @@ export const HeatmapRowLabel: React.FC<{
 				fontSize: 12,
 				lineHeight: 3,
 				color: theme.colors.white,
-				// @ts-expect-error -webkit-text-stroke is not in the types
-				'-webkit-text-stroke': `4px ${theme.colors.black}`
+
+				WebkitTextStroke: `4px ${theme.colors.black}`
 			}}
 		>
 			{label}
@@ -159,8 +158,8 @@ export const HeatmapScale: React.FC<{
 
 	const style: React.CSSProperties = {
 		color: theme.colors.white,
-		// @ts-expect-error -webkit-text-stroke is not in the types
-		'-webkit-text-stroke': `6px ${theme.colors.black}`
+
+		WebkitTextStroke: `6px ${theme.colors.black}`
 	};
 
 	return (

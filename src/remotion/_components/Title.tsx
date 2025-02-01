@@ -34,8 +34,7 @@ export const Title: React.FC<{
 					letterSpacing: '-0.04em',
 					textAlign: 'center',
 					color: theme.colors.white,
-					// @ts-expect-error -webkit-text-stroke is not in the types
-					'-webkit-text-stroke': `8px ${theme.colors.black}`,
+					WebkitTextStroke: `8px ${theme.colors.black}`,
 					textShadow: `6px 6px ${theme.colors.black}`
 				}}
 			>

@@ -39,8 +39,7 @@ export const RecurringOpponents: React.FC<{
 						fontSize: 40,
 						lineHeight: 1.2,
 						color: theme.colors.white,
-						// @ts-expect-error -webkit-text-stroke is not in the types
-						'-webkit-text-stroke': `8px ${theme.colors.black}`,
+						WebkitTextStroke: `8px ${theme.colors.black}`,
 						textShadow: `6px 6px ${theme.colors.black}`,
 						letterSpacing: '-0.04em',
 						maxWidth: width - 100

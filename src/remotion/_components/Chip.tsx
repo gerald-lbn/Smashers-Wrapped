@@ -19,8 +19,7 @@ export const Chip: React.FC<{
 					fontSize: '13.6px',
 					lineHeight: '20px',
 					color: theme.colors.white,
-					// @ts-expect-error -webkit-text-stroke is not in the types
-					'-webkit-text-stroke': `6px ${theme.colors.black}`,
+					WebkitTextStroke: `6px ${theme.colors.black}`,
 					textShadow: `4px 4px ${theme.colors.black}`
 				}}
 			>
