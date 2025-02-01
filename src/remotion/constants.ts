@@ -8,7 +8,7 @@ export const config = {
 	fps: 30
 };
 
-export type ThemeId = 'player1' | 'player2';
+export type ThemeId = 'player1' | 'player2' | 'player3' | 'player4';
 
 export type Theme = {
 	name: ThemeId;
@@ -18,6 +18,7 @@ export type Theme = {
 		black: string;
 		white: string;
 		primary: string;
+		// Shade generator: https://mdigi.tools/color-shades
 		heatmap: {
 			0: string;
 			1: string;
@@ -74,7 +75,49 @@ export const player2Theme: Theme = {
 	}
 };
 
-export const themes = [player1Theme, player2Theme];
+export const player3Theme: Theme = {
+	name: 'player3',
+	displayName: 'Player 3',
+	colors: {
+		background: '#1a1a1a',
+		black: '#141414',
+		white: '#ffffff',
+		primary: '#f9ad01',
+		heatmap: {
+			0: '#FFFFFF',
+			1: '#fff4db',
+			2: '#ffdd92',
+			3: '#fec74a',
+			4: '#feb001',
+			5: '#b57e01',
+			6: '#6d4c00',
+			7: '#241900'
+		}
+	}
+};
+
+export const player4Theme: Theme = {
+	name: 'player4',
+	displayName: 'Player 4',
+	colors: {
+		background: '#1a1a1a',
+		black: '#141414',
+		white: '#ffffff',
+		primary: '#019d1d',
+		heatmap: {
+			0: '#FFFFFF',
+			1: '#dbffe1',
+			2: '#92fea6',
+			3: '#4afe6a',
+			4: '#02fd2f',
+			5: '#01b521',
+			6: '#016d14',
+			7: '#002407'
+		}
+	}
+};
+
+export const themes = [player1Theme, player2Theme, player3Theme, player4Theme];
 
 export const findTheme = (themeId: ThemeId) =>
 	themes.find((t) => t.name === themeId) || player1Theme;
