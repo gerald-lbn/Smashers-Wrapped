@@ -190,4 +190,24 @@
 		max-height: 600px;
 		aspect-ratio: 1 / 1;
 	}
+
+	@media (max-width: 1024px) {
+		.container {
+			height: auto;
+			padding-top: 2rem;
+			padding-bottom: 2rem;
+		}
+
+		.dialog {
+			max-width: 30rem;
+
+			.dialog-content {
+				grid-template-columns: 1fr;
+
+				.dialog-controls {
+					gap: 1.5rem;
+				}
+			}
+		}
+	}
 </style>
