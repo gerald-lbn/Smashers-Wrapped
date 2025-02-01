@@ -191,7 +191,7 @@
 		aspect-ratio: 1 / 1;
 	}
 
-	@media (max-width: 1024px) {
+	@media screen and (max-width: 1024px) {
 		.container {
 			height: auto;
 			padding-top: 2rem;
@@ -202,6 +202,7 @@
 			max-width: 30rem;
 
 			.dialog-content {
+				padding: 1rem;
 				grid-template-columns: 1fr;
 
 				.dialog-controls {
