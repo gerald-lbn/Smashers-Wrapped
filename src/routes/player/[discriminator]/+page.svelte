@@ -1,7 +1,8 @@
 <script lang="ts">
 	import ThemeSelector from '$lib/components/ThemeSelector.svelte';
+	import { createIntent } from '$lib/helpers/intents';
 	import { fakeData } from '$remotion/all';
-	import type { Theme, ThemeId } from '$remotion/constants';
+	import type { ThemeId } from '$remotion/constants';
 	import PlayerViewWrapper from '$remotion/player-view-wrapper.svelte';
 	import { type PlayerRef } from '@remotion/player';
 
@@ -9,6 +10,19 @@
 
 	let player = $state<PlayerRef | undefined>();
 	let themeId = $state<ThemeId>('player1');
+
+	const intentText = `This is my Smash Recap! Get your own: ${data.canonicalUrl}\n\n[Delete this placeholder, download and drag your MP4 video in here]`;
+
+	const twitterIntent = createIntent({
+		platform: 'twitter',
+		text: intentText
+	});
+
+	const blueSkyIntent = createIntent({
+		platform: 'bluesky',
+		text: intentText,
+		isMobile: false
+	});
 
 	const onPaused = () => {
 		console.log('paused');
@@ -50,7 +64,7 @@
 					</ol>
 
 					<div class="socials">
-						<a href="#TODO" class="link social center">
+						<a href={twitterIntent.href} target="_blank" class="link social center">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor">
 								<path
 									d="M214.75,211.71l-62.6-98.38,61.77-67.95a8,8,0,0,0-11.84-10.76L143.24,99.34,102.75,35.71A8,8,0,0,0,96,32H48a8,8,0,0,0-6.75,12.3l62.6,98.37-61.77,68a8,8,0,1,0,11.84,10.76l58.84-64.72,40.49,63.63A8,8,0,0,0,160,224h48a8,8,0,0,0,6.75-12.29ZM164.39,208,62.57,48h29L193.43,208Z"
@@ -59,7 +73,7 @@
 							<span>Make a tweet</span>
 						</a>
 
-						<a href="#TODO" class="link social center">
+						<a href={blueSkyIntent.href} target="_blank" class="link social center">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 568 501">
 								<path
 									fill="currentColor"
