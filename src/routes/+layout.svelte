@@ -40,6 +40,13 @@
 	<meta property="og:image:alt" content={title} />
 	<meta property="og:image:width" content="1200" />
 	<meta property="og:image:height" content="630" />
+
+	<!-- Analytics -->
+	<script
+		defer
+		src="https://analytics.grld.dev/script.js"
+		data-website-id="62fb038f-6cb7-4c2c-9471-0f86ff9337ee"
+	></script>
 </svelte:head>
 
 <ParaglideJS {i18n}>
