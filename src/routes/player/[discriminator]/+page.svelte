@@ -21,7 +21,7 @@
 	const blueSkyIntent = createIntent({
 		platform: 'bluesky',
 		text: intentText,
-		isMobile: false
+		isMobile: data.userAgentInfo.isMobile
 	});
 
 	const onPaused = () => {
