@@ -45,7 +45,7 @@
 	<script
 		defer
 		src="https://analytics.grld.dev/script.js"
-		data-website-id="62fb038f-6cb7-4c2c-9471-0f86ff9337ee"
+		data-website-id="299754b2-67be-42b3-b3ab-15bec27322f5"
 	></script>
 </svelte:head>
 
