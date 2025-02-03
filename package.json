@@ -37,7 +37,6 @@
 		"vite": "^5.4.11"
 	},
 	"dependencies": {
-		"@inlang/paraglide-sveltekit": "^0.11.1",
 		"@remotion/cli": "^4.0.251",
 		"@remotion/player": "^4.0.251",
 		"@remotion/zod-types": "^4.0.251",
