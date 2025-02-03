@@ -40,6 +40,7 @@ export const PlayerView = forwardRef(
 					stats: props.data.stats,
 					theme: findTheme(props.data.themeId)
 				}}
+				acknowledgeRemotionLicense
 				autoPlay
 				controls={true}
 				showVolumeControls={false}
