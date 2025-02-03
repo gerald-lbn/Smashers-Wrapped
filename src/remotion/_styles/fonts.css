@@ -1,4 +1,9 @@
-@import url('https://archive.org/download/Fontworks/Fonts/FOT-Rodin%20Pro%20UB.otf');
+@font-face {
+	font-family: 'FOT-Rodin Pro UB';
+	font-style: normal;
+	font-weight: 900;
+	src: url('/fonts/FOT-Rodin Pro UB.otf') format('opentype');
+}
 
 .fot-rodin {
 	font-family: 'FOT-Rodin Pro UB';

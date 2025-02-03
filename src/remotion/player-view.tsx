@@ -40,10 +40,13 @@ export const PlayerView = forwardRef(
 					stats: props.data.stats,
 					theme: findTheme(props.data.themeId)
 				}}
-				style={{ width: '100%' }}
+				acknowledgeRemotionLicense
+				autoPlay
+				controls={true}
+				showVolumeControls={false}
 				allowFullscreen={false}
-				clickToPlay={true}
-				controls={false}
+				doubleClickToFullscreen={false}
+				style={{ width: '100%' }}
 			/>
 		);
 	}
