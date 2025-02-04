@@ -2,6 +2,7 @@
 
 @import url('variables.css');
 @import url('reset.css');
+@import url('fonts.css');
 
 body {
 	background-color: hsl(var(--color-background));
@@ -30,4 +31,8 @@ body {
 	max-width: 75rem;
 	margin: 0 auto;
 	padding: 0 1rem;
+}
+
+.remotion-root {
+	font-family: 'FOT-Rodin Pro UB';
 }

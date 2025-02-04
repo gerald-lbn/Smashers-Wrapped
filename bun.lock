@@ -5,6 +5,7 @@
       "name": "smashers-wrapped",
       "dependencies": {
         "@remotion/cli": "^4.0.251",
+        "@remotion/fonts": "^4.0.258",
         "@remotion/player": "^4.0.251",
         "@remotion/zod-types": "^4.0.251",
         "@types/react-dom": "^19.0.3",
@@ -174,6 +175,8 @@
     "@remotion/compositor-linux-x64-musl": ["@remotion/compositor-linux-x64-musl@4.0.258", "", { "os": "linux", "cpu": "x64" }, "sha512-VS1RETYAkOj/Dqv1DekuelGKMxglDhXLOrBIrhbKIItYNHck7LdafPGzQZC8q+w25RMmrfLGuB8bwKnqCr+nhQ=="],
 
     "@remotion/compositor-win32-x64-msvc": ["@remotion/compositor-win32-x64-msvc@4.0.258", "", { "os": "win32", "cpu": "x64" }, "sha512-y3dV05OarVWHCUDh9xOyGzVLCsnnnTn30U2hjvDazmBZviyRexkAUUdtUhfvRvITJsth8YspxxcQlOAI0rH01A=="],
+
+    "@remotion/fonts": ["@remotion/fonts@4.0.258", "", { "dependencies": { "remotion": "4.0.258" } }, "sha512-UxfWKvaj2hkSqzrquhJOhhwq3jMacnMFHJto16xSu3bcB4NXylPo2alVEA6zE24FF4j5AlXSISmIdZWka5r1Rw=="],
 
     "@remotion/media-parser": ["@remotion/media-parser@4.0.258", "", {}, "sha512-q7AHC4u8d8LQWvFVUyziGT9Mti8OHbETlnEu+1dD2j2Wnk8jQ+fZ4lcvNwD9+/D2sYX+1KDOddXXXa0GrwCf6w=="],
 

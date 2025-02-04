@@ -38,6 +38,7 @@
 	},
 	"dependencies": {
 		"@remotion/cli": "^4.0.251",
+		"@remotion/fonts": "^4.0.258",
 		"@remotion/player": "^4.0.251",
 		"@remotion/zod-types": "^4.0.251",
 		"@types/react-dom": "^19.0.3",
