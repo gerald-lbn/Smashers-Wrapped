@@ -3,8 +3,11 @@
 
 import { registerRoot } from 'remotion';
 import { RemotionRoot } from './root';
+import { loadFontRodinPro } from './load-fonts';
 
 import './_styles/fonts.css';
 import './_styles/reset.css';
+
+void loadFontRodinPro();
 
 registerRoot(RemotionRoot);
