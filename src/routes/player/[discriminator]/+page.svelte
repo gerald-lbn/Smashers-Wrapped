@@ -32,7 +32,7 @@
 <main class="container">
 	<div class="dialog">
 		<div class="dialog-content">
-			<div class="player-container">
+			<div class="player-container remotion-root">
 				<PlayerViewWrapper
 					bind:player
 					{onPaused}
