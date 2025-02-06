@@ -8,6 +8,7 @@ import { TournamentsHeatmap } from './TournamentsHeatmap';
 import { fakeData } from './all';
 import { thisIsMyRecapSchema } from './ThisIsMyRecap/schema';
 import { RecurringOpponents } from './RecurringOpponents';
+import { FavouriteCharacters } from './FavouriteCharacters';
 
 // Each <Composition> is an entry in the sidebar!
 
@@ -81,6 +82,34 @@ export const RemotionRoot: React.FC = () => {
 					defaultProps={{
 						opponents: [],
 						theme: player1Theme
+					}}
+				/>
+				<Composition
+					id="favourite-characters"
+					component={FavouriteCharacters}
+					durationInFrames={DURATIONS[4]}
+					fps={config.fps}
+					width={config.compositionWidth}
+					height={config.compositionHeight}
+					defaultProps={{
+						theme: player1Theme,
+						characters: [
+							{
+								id: 'sora',
+								name: 'Sora',
+								games: 790
+							},
+							{
+								id: 'lucario',
+								name: 'Lucario',
+								games: 480
+							},
+							{
+								id: 'sonic',
+								name: 'Sonic',
+								games: 6
+							}
+						]
 					}}
 				/>
 			</Folder>
