@@ -62,18 +62,6 @@ export const Main: React.FC<CompositionProps> = ({ stats, theme }) => {
 				<Series.Sequence
 					durationInFrames={DURATIONS[3]}
 					offset={-TRANSITION_DURATION}
-					name="Reccurring opponents"
-				>
-					<Slide direction="right">
-						<Slide direction="left">
-							<RecurringOpponents opponents={[]} theme={theme} />
-						</Slide>
-					</Slide>
-				</Series.Sequence>
-
-				<Series.Sequence
-					durationInFrames={DURATIONS[4]}
-					offset={-TRANSITION_DURATION}
 					name="Favourite characters"
 				>
 					<Slide direction="right">
@@ -86,6 +74,18 @@ export const Main: React.FC<CompositionProps> = ({ stats, theme }) => {
 									{ id: 'sonic', name: 'Sonic', games: 6 }
 								]}
 							/>
+						</Slide>
+					</Slide>
+				</Series.Sequence>
+
+				<Series.Sequence
+					durationInFrames={DURATIONS[4]}
+					offset={-TRANSITION_DURATION}
+					name="Reccurring opponents"
+				>
+					<Slide direction="right">
+						<Slide direction="left">
+							<RecurringOpponents opponents={[]} theme={theme} />
 						</Slide>
 					</Slide>
 				</Series.Sequence>
