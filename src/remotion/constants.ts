@@ -1,4 +1,4 @@
-export const DURATIONS = [90, 140, 150, 120];
+export const DURATIONS = [90, 140, 150, 300, 120];
 export const TRANSITION_DURATION = 15;
 
 export const config = {

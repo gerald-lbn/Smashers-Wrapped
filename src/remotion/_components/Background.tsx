@@ -20,7 +20,8 @@ export const Background: React.FC<{
 				fill="none"
 				xmlns="http://www.w3.org/2000/svg"
 				style={{
-					transform: 'scale(2)'
+					transform: 'scale(2)',
+					opacity: 0.5
 				}}
 			>
 				<g opacity="0.15">

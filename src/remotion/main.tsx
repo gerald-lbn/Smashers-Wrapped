@@ -8,6 +8,7 @@ import { BiggestTournament } from './BiggestTournament';
 import { DURATIONS, TRANSITION_DURATION } from './constants';
 import { TournamentsHeatmap } from './TournamentsHeatmap';
 import { RecurringOpponents } from './RecurringOpponents';
+import { FavouriteCharacters } from './FavouriteCharacters';
 
 import './_styles/fonts.css';
 import './_styles/reset.css';
@@ -61,10 +62,31 @@ export const Main: React.FC<CompositionProps> = ({ stats, theme }) => {
 				<Series.Sequence
 					durationInFrames={DURATIONS[3]}
 					offset={-TRANSITION_DURATION}
+					name="Favourite characters"
+				>
+					<Slide direction="right">
+						<Slide direction="left">
+							<FavouriteCharacters
+								theme={theme}
+								characters={[
+									{ id: 'sora', name: 'Sora', games: 790 },
+									{ id: 'lucario', name: 'Lucario', games: 480 },
+									{ id: 'sonic', name: 'Sonic', games: 6 }
+								]}
+							/>
+						</Slide>
+					</Slide>
+				</Series.Sequence>
+
+				<Series.Sequence
+					durationInFrames={DURATIONS[4]}
+					offset={-TRANSITION_DURATION}
 					name="Reccurring opponents"
 				>
 					<Slide direction="right">
-						<RecurringOpponents opponents={[]} theme={theme} />
+						<Slide direction="left">
+							<RecurringOpponents opponents={[]} theme={theme} />
+						</Slide>
 					</Slide>
 				</Series.Sequence>
 			</Series>
