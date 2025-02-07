@@ -21,18 +21,17 @@ export const Characters: React.FC<{
 		.map((_, i) =>
 			spring({
 				fps,
-				frame: frame - (i + 1) * 60 - DELAY,
+				frame: frame - (i + 1) * 70 - DELAY,
 				config: {
 					damping: 200
 				}
 			})
-		)
-		.reduce((acc, curr) => acc + curr, 0);
+		);
 
 	return (
 		<AbsoluteFill
 			style={{
-				marginLeft: Math.floor(-offset * width)
+				marginLeft: Math.floor(-offset.reduce((acc, curr) => acc + curr, 0) * width)
 			}}
 			id="characters"
 		>

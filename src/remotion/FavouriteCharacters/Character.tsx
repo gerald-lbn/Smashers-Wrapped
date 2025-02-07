@@ -26,7 +26,7 @@ export const Character: React.FC<{
 	const ANGLE = -5;
 	const MAX_BG_HEIGHT = 530;
 
-	const DELAY = 85 + 2 * offsetDelay;
+	const DELAY = 85 + 2.5 * offsetDelay;
 
 	const spr = spring({
 		fps,
