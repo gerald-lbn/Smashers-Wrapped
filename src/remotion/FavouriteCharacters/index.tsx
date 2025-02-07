@@ -130,7 +130,6 @@ export const FavouriteCharacters: React.FC<{
 							display: 'flex',
 							justifyContent: 'center',
 							alignItems: 'center',
-							overflow: 'visible',
 							clipPath: 'inset(-50% 0 0 0)' // Makes the top of the image visible
 						}}
 					>
