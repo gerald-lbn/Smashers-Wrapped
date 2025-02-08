@@ -8,10 +8,11 @@ import client from '$lib/start.gg/start.gg';
 import { json } from '@sveltejs/kit';
 import redis from '$lib/redis';
 import { z } from 'zod';
+import { calculateWeeksInMonth } from '$lib/helpers/date';
 
 const responseSchema = z.object({
 	player: z.object({
-		id: z.string(),
+		id: z.number(),
 		name: z.string(),
 		image: z.string().optional(),
 		selection: z.object({
@@ -23,16 +24,23 @@ const responseSchema = z.object({
 		})
 	}),
 	tournament: z.object({
-		perMonth: z.array(z.object({ month: z.number(), total: z.number() })),
-		mostAttendees: z.object({
-			id: z.string(),
-			name: z.string(),
-			startAt: z.string(),
-			image: z.string(),
-			hasOnlineEvents: z.boolean(),
-			hasOfflineEvents: z.boolean(),
-			numAttendees: z.number()
-		}),
+		perWeek: z.array(
+			z.object({
+				label: z.string(),
+				heats: z.array(z.number())
+			})
+		),
+		mostAttendees: z.array(
+			z.object({
+				id: z.number(),
+				name: z.string(),
+				startAt: z.number(),
+				image: z.string(),
+				hasOnlineEvents: z.boolean(),
+				hasOfflineEvents: z.boolean(),
+				numAttendees: z.number()
+			})
+		),
 		total: z.number(),
 		online: z.number(),
 		offline: z.number()
@@ -80,17 +88,50 @@ export const GET = async ({ params }) => {
 		(tournament) => tournament?.hasOfflineEvents
 	);
 
-	const tournamentsPerMonth = Array.from({ length: 12 }, (_, i) => {
-		const month = i + 1;
-		return {
-			month,
-			total: tournamentsThisYear.filter((tournament) => {
+	const monthNames = [
+		'Jan',
+		'Feb',
+		'Mar',
+		'Apr',
+		'May',
+		'Jun',
+		'Jul',
+		'Aug',
+		'Sep',
+		'Oct',
+		'Nov',
+		'Dec'
+	];
+
+	const tournamentsPerWeeks = monthNames.map((month, index) => {
+		// Filter tournaments for this month
+		const tournamentsThisMonth = tournamentsThisYear.filter((tournament) => {
+			if (!tournament?.startAt) return false;
+			const date = new Date(parseInt(tournament.startAt) * 1000);
+			const month = date.getMonth();
+			return month === index;
+		});
+
+		// Get the number of weeks in this month
+		const weeksInMonth = calculateWeeksInMonth(thisYear, index);
+
+		// Get the number of tournaments per week
+		const heats = weeksInMonth.map((week) => {
+			const tournamentsThisWeek = tournamentsThisMonth.filter((tournament) => {
 				if (!tournament?.startAt) return false;
 
-				const tournamentDate = new Date(parseInt(tournament.startAt) * 1000);
-				const tournamentMonth = tournamentDate.getMonth() + 1;
-				return tournamentMonth === month;
-			}).length
+				const date = new Date(parseInt(tournament.startAt) * 1000);
+
+				// Check if the date is in the week
+				return week.dates.includes(date.getDate());
+			});
+
+			return tournamentsThisWeek.length;
+		});
+
+		return {
+			label: month,
+			heats
 		};
 	});
 
@@ -285,7 +326,7 @@ export const GET = async ({ params }) => {
 			}
 		},
 		tournament: {
-			perMonth: tournamentsPerMonth,
+			perWeek: tournamentsPerWeeks,
 			mostAttendees: tournamentsWithAttendees,
 			total: tournamentsThisYear.length,
 			online: onlineTournaments.length,
@@ -302,6 +343,12 @@ export const GET = async ({ params }) => {
 	// NOTE: I have `eviction` set to `true` so there is no need to set an expiration time
 	// More info: https://upstash.com/docs/redis/features/eviction
 	await redis.set(REDIS_KEY, JSON.stringify(response));
+
+	// Validate the response
+	const safeResponse = responseSchema.safeParse(response);
+	if (!safeResponse.success) {
+		return json({ error: 'An error occurred while fetching the player data' });
+	}
 
 	// Return the response
 	return json(response);
