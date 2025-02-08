@@ -45,19 +45,19 @@ export const fakeData = {
 			Montgiscard: 1
 		},
 		countries: { FR: 100 },
-		perMonth: [
-			{ month: 1, total: 7 },
-			{ month: 2, total: 12 },
-			{ month: 3, total: 11 },
-			{ month: 4, total: 5 },
-			{ month: 5, total: 9 },
-			{ month: 6, total: 9 },
-			{ month: 7, total: 10 },
-			{ month: 8, total: 3 },
-			{ month: 9, total: 12 },
-			{ month: 10, total: 13 },
-			{ month: 11, total: 11 },
-			{ month: 12, total: 6 }
+		perWeek: [
+			{ label: 'Jan', heats: [6, 1, 2, 3, 4] },
+			{ label: 'Feb', heats: [4, 7, 1, 2, 3] },
+			{ label: 'Mar', heats: [4, 6, 1, 2, 3, 4] },
+			{ label: 'Apr', heats: [3, 1, 2, 3, 4] },
+			{ label: 'May', heats: [3, 5, 1, 2, 3] },
+			{ label: 'Jun', heats: [2, 6, 1, 2, 3, 4] },
+			{ label: 'Jul', heats: [8, 1, 2, 3, 4] },
+			{ label: 'Aug', heats: [3, 1, 2, 3, 4] },
+			{ label: 'Sep', heats: [12, 1, 2, 3, 4] },
+			{ label: 'Oct', heats: [7, 4, 1, 2, 3] },
+			{ label: 'Nov', heats: [5, 5, 1, 2, 3] },
+			{ label: 'Dec', heats: [5, 1, 2, 3, 4] }
 		],
 		mostAttendees: [
 			{
