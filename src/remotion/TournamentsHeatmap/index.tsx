@@ -2,12 +2,12 @@ import React from 'react';
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from 'remotion';
 import { type Theme } from '../constants';
 import { Title } from '../_components/Title';
-import { FAKE_DATA, Heatmap } from './Heatmap';
+import { Heatmap, type HeatmapData } from './Heatmap';
 
 export const TournamentsHeatmap: React.FC<{
-	// weeks: number[];
+	heats: HeatmapData;
 	theme: Theme;
-}> = ({ theme }) => {
+}> = ({ heats: data, theme }) => {
 	const frame = useCurrentFrame();
 	const { fps, width } = useVideoConfig();
 
@@ -30,7 +30,8 @@ export const TournamentsHeatmap: React.FC<{
 	const translateYTitle = interpolate(spr, [0, 1], [-300, -30]);
 	const translateYQuote = interpolate(delayedSpr, [0, 1], [300, 30]);
 
-	const numberOfTournaments = FAKE_DATA.map((heats) => heats.heats.map((heat) => Number(heat)))
+	const numberOfTournaments = data
+		.map((heats) => heats.heats.map((heat) => Number(heat)))
 		.flat()
 		.reduce((acc, curr) => acc + curr, 0);
 
@@ -71,10 +72,10 @@ export const TournamentsHeatmap: React.FC<{
 				</Title>
 
 				<Heatmap
-					weeks={FAKE_DATA}
+					data={data}
 					size={36}
 					theme={theme}
-					rowLabels={['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5']}
+					rowLabels={['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6']}
 				/>
 
 				<p
