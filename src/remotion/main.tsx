@@ -7,7 +7,6 @@ import { Slide } from './_components/Slide';
 import { BiggestTournament } from './BiggestTournament';
 import { DURATIONS, TRANSITION_DURATION } from './constants';
 import { TournamentsHeatmap } from './TournamentsHeatmap';
-import { RecurringOpponents } from './RecurringOpponents';
 import { FavouriteCharacters } from './FavouriteCharacters';
 
 import './_styles/fonts.css';
@@ -23,7 +22,7 @@ export const Main: React.FC<CompositionProps> = ({ stats, theme }) => {
 			<Background theme={theme} />
 
 			<Series>
-				<Series.Sequence durationInFrames={DURATIONS[0]} name="This is my recap">
+				<Series.Sequence durationInFrames={DURATIONS.myRecap} name="This is my recap">
 					<Slide direction="left">
 						<ThisIsMyRecap
 							theme={theme}
@@ -36,7 +35,7 @@ export const Main: React.FC<CompositionProps> = ({ stats, theme }) => {
 				</Series.Sequence>
 
 				<Series.Sequence
-					durationInFrames={DURATIONS[1]}
+					durationInFrames={DURATIONS.tournamentHeatmap}
 					offset={-TRANSITION_DURATION}
 					name="Tournament Heatmap"
 				>
@@ -48,7 +47,7 @@ export const Main: React.FC<CompositionProps> = ({ stats, theme }) => {
 				</Series.Sequence>
 
 				<Series.Sequence
-					durationInFrames={DURATIONS[2]}
+					durationInFrames={DURATIONS.biggestTournament}
 					offset={-TRANSITION_DURATION}
 					name="Biggest tournament"
 				>
@@ -60,7 +59,7 @@ export const Main: React.FC<CompositionProps> = ({ stats, theme }) => {
 				</Series.Sequence>
 
 				<Series.Sequence
-					durationInFrames={DURATIONS[3]}
+					durationInFrames={DURATIONS.favouriteCharacters}
 					offset={-TRANSITION_DURATION}
 					name="Favourite characters"
 				>
@@ -74,18 +73,6 @@ export const Main: React.FC<CompositionProps> = ({ stats, theme }) => {
 									{ id: 'sonic', name: 'Sonic', games: 6 }
 								]}
 							/>
-						</Slide>
-					</Slide>
-				</Series.Sequence>
-
-				<Series.Sequence
-					durationInFrames={DURATIONS[4]}
-					offset={-TRANSITION_DURATION}
-					name="Reccurring opponents"
-				>
-					<Slide direction="right">
-						<Slide direction="left">
-							<RecurringOpponents opponents={[]} theme={theme} />
 						</Slide>
 					</Slide>
 				</Series.Sequence>
