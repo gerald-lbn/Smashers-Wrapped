@@ -41,7 +41,7 @@ export const Main: React.FC<CompositionProps> = ({ stats, theme }) => {
 				>
 					<Slide direction="right">
 						<Slide direction="left">
-							<TournamentsHeatmap theme={theme} />
+							<TournamentsHeatmap theme={theme} heats={stats.tournament.perWeek} />
 						</Slide>
 					</Slide>
 				</Series.Sequence>

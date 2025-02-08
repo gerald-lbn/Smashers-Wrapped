@@ -68,7 +68,8 @@ export const RemotionRoot: React.FC = () => {
 					width={config.compositionWidth}
 					height={config.compositionHeight}
 					defaultProps={{
-						theme: player1Theme
+						theme: player1Theme,
+						heats: fakeData.tournament.perWeek
 					}}
 				/>
 				<Composition
