@@ -25,7 +25,11 @@ const responseSchema = z.object({
 	tournament: z.object({
 		perMonth: z.array(z.object({ month: z.number(), total: z.number() })),
 		mostAttendees: z.object({
+			id: z.string(),
 			name: z.string(),
+			startAt: z.string(),
+			hasOnlineEvents: z.boolean(),
+			hasOfflineEvents: z.boolean(),
 			numAttendees: z.number()
 		}),
 		total: z.number(),
@@ -56,6 +60,7 @@ export const GET = async ({ params }) => {
 		videoGameId: '1386'
 	});
 
+	// Filter tournaments for this year
 	const thisYear = 2024;
 	const tournamentsThisYear =
 		res.data?.player?.user?.tournaments?.nodes
@@ -88,15 +93,12 @@ export const GET = async ({ params }) => {
 		};
 	});
 
-	const tournamentWithMostAttendees = offlineTournaments.reduce(
-		(previousTournament, tournament) => {
-			if ((tournament.numAttendees ?? 0) > (previousTournament.numAttendees ?? 0)) {
-				return tournament;
-			}
-			return previousTournament;
-		},
-		offlineTournaments[0] ?? {}
-	);
+	// Grab the top 3 tournaments with the most attendees
+	const tournamentsWithAttendees = offlineTournaments
+		.sort((t1, t2) => {
+			return (t2.numAttendees ?? 0) - (t1.numAttendees ?? 0);
+		})
+		.slice(0, 3);
 
 	// Sets on stream
 	const setsOnStream = res.data?.player?.sets?.pageInfo?.total ?? 0;
@@ -274,7 +276,7 @@ export const GET = async ({ params }) => {
 		},
 		tournament: {
 			perMonth: tournamentsPerMonth,
-			mostAttendees: tournamentWithMostAttendees,
+			mostAttendees: tournamentsWithAttendees,
 			total: tournamentsThisYear.length,
 			online: onlineTournaments.length,
 			offline: offlineTournaments.length
