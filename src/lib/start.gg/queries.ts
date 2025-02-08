@@ -128,10 +128,12 @@ export const WrappedSelections = graphql(`
 								id
 							}
 							character {
+								id
 								name
 							}
 						}
 						stage {
+							id
 							name
 						}
 					}
