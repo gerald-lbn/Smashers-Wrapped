@@ -1,10 +1,18 @@
-export const DURATIONS = [90, 140, 150, 300, 120];
+export const DURATIONS = {
+	myRecap: 90,
+	tournamentHeatmap: 140,
+	biggestTournament: 150,
+	favouriteCharacters: 300
+};
+
 export const TRANSITION_DURATION = 15;
 
 export const config = {
 	compositionHeight: 600,
 	compositionWidth: 600,
-	duration: DURATIONS.reduce((a, b) => a + b, 0) - (DURATIONS.length - 1) * TRANSITION_DURATION,
+	duration:
+		Object.values(DURATIONS).reduce((a, b) => a + b, 0) -
+		(Object.values(DURATIONS).length - 1) * TRANSITION_DURATION,
 	fps: 30
 };
 
