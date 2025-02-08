@@ -6,9 +6,51 @@ import {
 } from '$lib/start.gg/queries';
 import client from '$lib/start.gg/start.gg';
 import { json } from '@sveltejs/kit';
+import redis from '$lib/redis';
+import { z } from 'zod';
+
+const responseSchema = z.object({
+	player: z.object({
+		id: z.string(),
+		name: z.string(),
+		image: z.string().optional(),
+		selection: z.object({
+			stages: z.record(z.number()),
+			characters: z.record(z.number())
+		}),
+		achievements: z.object({
+			shutoutsDealt: z.number()
+		})
+	}),
+	tournament: z.object({
+		perMonth: z.array(z.object({ month: z.number(), total: z.number() })),
+		mostAttendees: z.object({
+			name: z.string(),
+			numAttendees: z.number()
+		}),
+		total: z.number(),
+		online: z.number(),
+		offline: z.number()
+	}),
+	set: z.object({
+		total: z.number(),
+		setsOnStream: z.number(),
+		recurringOpponents: z.array(z.object({ id: z.string(), name: z.string(), count: z.number() }))
+	})
+});
 
 export const GET = async ({ params }) => {
 	const playerId = params.id;
+
+	const REDIS_KEY = `player:${playerId}`;
+
+	// Check if the player's data is in the KV store
+	const playerData = await redis.get(REDIS_KEY);
+	if (playerData) {
+		const safePlayerData = responseSchema.safeParse(playerData);
+		if (safePlayerData.success) return json(safePlayerData.data);
+	}
+
 	const res = await client.query(WrappedTournamentsAndSetsOnStream, {
 		playerId,
 		videoGameId: '1386'
@@ -215,7 +257,7 @@ export const GET = async ({ params }) => {
 		});
 	});
 
-	return json({
+	const response = {
 		player: {
 			id: res.data?.player?.id,
 			name: res.data?.player?.prefix
@@ -242,5 +284,13 @@ export const GET = async ({ params }) => {
 			setsOnStream,
 			recurringOpponents: sortedRecurringOpponents
 		}
-	});
+	};
+
+	// Save the player's data in the KV store
+	// NOTE: I have `eviction` set to `true` so there is no need to set an expiration time
+	// More info: https://upstash.com/docs/redis/features/eviction
+	await redis.set(REDIS_KEY, JSON.stringify(response));
+
+	// Return the response
+	return json(response);
 };
