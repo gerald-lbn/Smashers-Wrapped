@@ -28,6 +28,7 @@ const responseSchema = z.object({
 			id: z.string(),
 			name: z.string(),
 			startAt: z.string(),
+			image: z.string(),
 			hasOnlineEvents: z.boolean(),
 			hasOfflineEvents: z.boolean(),
 			numAttendees: z.number()
@@ -98,7 +99,16 @@ export const GET = async ({ params }) => {
 		.sort((t1, t2) => {
 			return (t2.numAttendees ?? 0) - (t1.numAttendees ?? 0);
 		})
-		.slice(0, 3);
+		.slice(0, 3)
+		.map((tournament) => ({
+			id: tournament.id,
+			name: tournament.name,
+			startAt: tournament.startAt,
+			image: tournament.images?.filter((image) => image?.type === 'profile')[0]?.url,
+			hasOnlineEvents: tournament.hasOnlineEvents,
+			hasOfflineEvents: tournament.hasOfflineEvents,
+			numAttendees: tournament.numAttendees
+		}));
 
 	// Sets on stream
 	const setsOnStream = res.data?.player?.sets?.pageInfo?.total ?? 0;

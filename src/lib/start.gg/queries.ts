@@ -35,6 +35,11 @@ export const WrappedTournamentsAndSetsOnStream = graphql(`
 					nodes {
 						id
 						name
+						images {
+							id
+							type
+							url
+						}
 						startAt
 						hasOfflineEvents
 						hasOnlineEvents
