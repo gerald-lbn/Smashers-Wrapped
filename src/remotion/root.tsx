@@ -7,7 +7,6 @@ import { BiggestTournament } from './BiggestTournament';
 import { TournamentsHeatmap } from './TournamentsHeatmap';
 import { fakeData } from './all';
 import { thisIsMyRecapSchema } from './ThisIsMyRecap/schema';
-import { RecurringOpponents } from './RecurringOpponents';
 import { FavouriteCharacters } from './FavouriteCharacters';
 
 // Each <Composition> is an entry in the sidebar!
@@ -36,7 +35,7 @@ export const RemotionRoot: React.FC = () => {
 				<Composition
 					id="this-is-my-recap"
 					component={ThisIsMyRecap}
-					durationInFrames={DURATIONS[0]}
+					durationInFrames={DURATIONS.myRecap}
 					fps={config.fps}
 					width={config.compositionWidth}
 					height={config.compositionHeight}
@@ -52,7 +51,7 @@ export const RemotionRoot: React.FC = () => {
 				<Composition
 					id="biggest-tournament"
 					component={BiggestTournament}
-					durationInFrames={DURATIONS[1]}
+					durationInFrames={DURATIONS.biggestTournament}
 					fps={config.fps}
 					width={config.compositionWidth}
 					height={config.compositionHeight}
@@ -64,30 +63,18 @@ export const RemotionRoot: React.FC = () => {
 				<Composition
 					id="tournaments-heatmap"
 					component={TournamentsHeatmap}
-					durationInFrames={DURATIONS[2]}
+					durationInFrames={DURATIONS.tournamentHeatmap}
 					fps={config.fps}
 					width={config.compositionWidth}
 					height={config.compositionHeight}
 					defaultProps={{
-						theme: player1Theme
-					}}
-				/>
-				<Composition
-					id="recurring-opponents"
-					component={RecurringOpponents}
-					durationInFrames={DURATIONS[3]}
-					fps={config.fps}
-					width={config.compositionWidth}
-					height={config.compositionHeight}
-					defaultProps={{
-						opponents: [],
 						theme: player1Theme
 					}}
 				/>
 				<Composition
 					id="favourite-characters"
 					component={FavouriteCharacters}
-					durationInFrames={DURATIONS[4]}
+					durationInFrames={DURATIONS.favouriteCharacters}
 					fps={config.fps}
 					width={config.compositionWidth}
 					height={config.compositionHeight}
