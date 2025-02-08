@@ -39,8 +39,6 @@ export const WrappedTournamentsAndSetsOnStream = graphql(`
 						hasOfflineEvents
 						hasOnlineEvents
 						numAttendees
-						city
-						countryCode
 					}
 				}
 			}

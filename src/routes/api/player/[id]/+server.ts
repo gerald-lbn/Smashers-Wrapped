@@ -56,28 +56,6 @@ export const GET = async ({ params }) => {
 		offlineTournaments[0] ?? {}
 	);
 
-	// Cities and countries visited by the player
-	const citiesAttended = offlineTournaments
-		.map((tournament) => tournament?.city)
-		.filter((city) => city !== null);
-	const citiesCount = citiesAttended.reduce(
-		(acc, city) => {
-			acc[city] = (acc[city] || 0) + 1;
-			return acc;
-		},
-		{} as Record<string, number>
-	);
-	const countriesAttended = offlineTournaments
-		.map((tournament) => tournament?.countryCode)
-		.filter((country) => country !== null);
-	const countriesCount = countriesAttended.reduce(
-		(acc, country) => {
-			acc[country] = (acc[country] || 0) + 1;
-			return acc;
-		},
-		{} as Record<string, number>
-	);
-
 	// Sets on stream
 	const setsOnStream = res.data?.player?.sets?.pageInfo?.total ?? 0;
 
@@ -253,8 +231,6 @@ export const GET = async ({ params }) => {
 			}
 		},
 		tournament: {
-			cities: citiesCount,
-			countries: countriesCount,
 			perMonth: tournamentsPerMonth,
 			mostAttendees: tournamentWithMostAttendees,
 			total: tournamentsThisYear.length,
