@@ -23,78 +23,109 @@ export const fakeData = {
 				'Castle Siege': 1,
 				'Frigate Orpheon': 1
 			},
-			characters: { 'Diddy Kong': 67, Ness: 206, Palutena: 3, Sonic: 3, 'Donkey Kong': 2, Wolf: 4 }
+			characters: [
+				{
+					name: 'Sora',
+					image: 'images/chara_1/sora.png',
+					games: 206
+				},
+				{
+					name: 'Lucario',
+					image: 'images/chara_1/lucario.png',
+					games: 67
+				},
+				{
+					name: 'Greeninja',
+					image: 'images/chara_1/greeninja.png',
+					games: 4
+				}
+			]
 		},
-		achievements: { shutoutsDealt: 32 }
+		achievements: {
+			shutoutsDealt: 32
+		}
 	},
 	tournament: {
-		cities: {
-			Montauban: 32,
-			Toulouse: 34,
-			Albi: 10,
-			Hyères: 1,
-			Balma: 7,
-			Mauguio: 2,
-			Carcassonne: 2,
-			Chessy: 1,
-			Paris: 1,
-			'Ivry-sur-Seine': 1,
-			Béziers: 1,
-			Montpellier: 2,
-			Rodez: 1,
-			Montgiscard: 1
-		},
-		countries: { FR: 100 },
 		perWeek: [
-			{ label: 'Jan', heats: [6, 1, 2, 3, 4] },
-			{ label: 'Feb', heats: [4, 7, 1, 2, 3] },
-			{ label: 'Mar', heats: [4, 6, 1, 2, 3, 4] },
-			{ label: 'Apr', heats: [3, 1, 2, 3, 4] },
-			{ label: 'May', heats: [3, 5, 1, 2, 3] },
-			{ label: 'Jun', heats: [2, 6, 1, 2, 3, 4] },
-			{ label: 'Jul', heats: [8, 1, 2, 3, 4] },
-			{ label: 'Aug', heats: [3, 1, 2, 3, 4] },
-			{ label: 'Sep', heats: [12, 1, 2, 3, 4] },
-			{ label: 'Oct', heats: [7, 4, 1, 2, 3] },
-			{ label: 'Nov', heats: [5, 5, 1, 2, 3] },
-			{ label: 'Dec', heats: [5, 1, 2, 3, 4] }
+			{
+				label: 'Jan',
+				heats: [1, 3, 1, 2, 0]
+			},
+			{
+				label: 'Feb',
+				heats: [1, 4, 4, 2, 1]
+			},
+			{
+				label: 'Mar',
+				heats: [1, 4, 2, 2, 2, 0]
+			},
+			{
+				label: 'Apr',
+				heats: [0, 0, 0, 4, 1]
+			},
+			{
+				label: 'May',
+				heats: [2, 3, 2, 1, 1]
+			},
+			{
+				label: 'Jun',
+				heats: [0, 2, 3, 2, 2, 0]
+			},
+			{
+				label: 'Jul',
+				heats: [2, 3, 2, 1, 2]
+			},
+			{
+				label: 'Aug',
+				heats: [0, 2, 1, 0, 0]
+			},
+			{
+				label: 'Sep',
+				heats: [2, 3, 2, 5, 0]
+			},
+			{
+				label: 'Oct',
+				heats: [2, 4, 4, 2, 1]
+			},
+			{
+				label: 'Nov',
+				heats: [0, 2, 2, 5, 2]
+			},
+			{
+				label: 'Dec',
+				heats: [1, 2, 2, 0, 1]
+			}
 		],
 		mostAttendees: [
 			{
 				id: 659671,
 				name: 'Sunrise 2024',
 				startAt: 1729929600,
-				hasOfflineEvents: true,
-				hasOnlineEvents: false,
-				numAttendees: 212,
-				city: 'Hyères',
-				countryCode: 'FR',
 				image:
-					'https://www.bing.com/th?pid=Sgg&qlt=100&u=https%3A%2F%2Fimages.start.gg%2Fimages%2Ftournament%2F659671%2Fimage-69d035b4cd14dfb83decda1ebbd2752a-optimized.png&ehk=8mSAFkGDRo2%2BzCxSdk%2BH6fRomg1vaLNDyUsU6Pdd0Dw%3D&w=280&h=280&r=0'
+					'https://images.start.gg/images/tournament/659671/image-69d035b4cd14dfb83decda1ebbd2752a.png?ehk=cZnLZEb8VpL9uwNJngMvueHnlPYaO8ykweQob3bx8gk%3D&ehkOptimized=8mSAFkGDRo2%2BzCxSdk%2BH6fRomg1vaLNDyUsU6Pdd0Dw%3D',
+				hasOnlineEvents: false,
+				hasOfflineEvents: true,
+				numAttendees: 212
 			},
 			{
-				id: 659672,
-				name: "TLS MAD'Ness #42 - PK END !",
-				startAt: 1761465600,
-				hasOfflineEvents: true,
-				hasOnlineEvents: false,
-				numAttendees: 107,
-				city: 'Toulouse',
-				countryCode: 'FR',
+				id: 618782,
+				name: 'Le Parthenon #2',
+				startAt: 1706342400,
 				image:
-					'https://www.bing.com/th?pid=Sgg&qlt=100&u=https%3A%2F%2Fimages.start.gg%2Fimages%2Ftournament%2F738440%2Fimage-9ebffce5d0e4b0c5c8dd6c809a74d7ad-optimized.png&ehk=AYqVjOjzZVaBthGQCSXDbzciDyCpgI%2FOxAWfL79jETg%3D&w=280&h=280&r=0'
+					'https://images.start.gg/images/tournament/618782/image-907a40bcc3be49b9d2dfcd2fe28c8641.png?ehk=q%2B%2BkXBEJRFFmY312YfkRzaKuNe7H0taPzk%2BPowUtxrI%3D&ehkOptimized=5BmiE6nBwbaG7eoTCb2t7yKIEq%2FEeIBA4ljfERcDH6M%3D',
+				hasOnlineEvents: false,
+				hasOfflineEvents: true,
+				numAttendees: 162
 			},
 			{
-				id: 659673,
-				name: 'Bergougnoultimate #2',
-				startAt: 1793001600,
-				hasOfflineEvents: true,
-				hasOnlineEvents: false,
-				numAttendees: 14,
-				city: 'Toulouse',
-				countryCode: 'FR',
+				id: 620130,
+				name: 'Chan2LAN 2024',
+				startAt: 1707552000,
 				image:
-					'https://www.bing.com/th?pid=Sgg&qlt=100&u=https%3A%2F%2Fimages.start.gg%2Fimages%2Ftournament%2F718810%2Fimage-49f0a13a8773a70cec9ddb1c9e06511e-optimized.png&ehk=T%2FPt%2Btyg%2BPViyVUilM5Sc7EEvGoZsNLIux68h%2FB9jpE%3D&w=280&h=280&r=0'
+					'https://images.start.gg/images/tournament/620130/image-24000ee2a4fb35bf59f919b22706f7a7.png?ehk=Bh4yynfJcQE8PS7AY%2Bgj6l5i9L15IqexS6Os2tagvX8%3D&ehkOptimized=wQ%2FRGnhX0rYeWDRLWx0e2RnU%2BOs%2F9HGfBl7W0gzynUo%3D',
+				hasOnlineEvents: false,
+				hasOfflineEvents: true,
+				numAttendees: 152
 			}
 		],
 		total: 108,
@@ -105,9 +136,21 @@ export const fakeData = {
 		total: 551,
 		setsOnStream: 12,
 		recurringOpponents: [
-			{ id: '3137190', name: 'ARK OuhPa', count: 11 },
-			{ id: '2455582', name: 'BG Monori', count: 10 },
-			{ id: '2955867', name: 'ARK Shapo', count: 8 }
+			{
+				id: '3137190',
+				name: 'ARK OuhPa',
+				count: 11
+			},
+			{
+				id: '2455582',
+				name: 'BG Monori',
+				count: 10
+			},
+			{
+				id: '2955867',
+				name: 'ARK Shapo',
+				count: 8
+			}
 		]
 	}
 };

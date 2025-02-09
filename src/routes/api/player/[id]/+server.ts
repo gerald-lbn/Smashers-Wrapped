@@ -1,4 +1,4 @@
-import { parseMatch } from '$lib/start.gg/helper';
+import { characterNameToSlug, parseMatch } from '$lib/start.gg/helper';
 import {
 	WrappedSelections,
 	WrappedSets,
@@ -17,7 +17,7 @@ const responseSchema = z.object({
 		image: z.string().optional(),
 		selection: z.object({
 			stages: z.record(z.number()),
-			characters: z.record(z.number())
+			characters: z.array(z.object({ name: z.string(), image: z.string(), games: z.number() }))
 		}),
 		achievements: z.object({
 			shutoutsDealt: z.number()
@@ -260,7 +260,11 @@ export const GET = async ({ params }) => {
 
 	/********************** Selections **********************/
 	const playedStages = {} as Record<string, number>;
-	const characters = {} as Record<string, number>;
+	const characters: {
+		name: string;
+		image: string;
+		games: number;
+	}[] = [];
 	const resSelections1stPage = await client.query(WrappedSelections, {
 		playerId,
 		tournamentsIds: offlineTournamentsIds,
@@ -304,7 +308,17 @@ export const GET = async ({ params }) => {
 					if (!character) return;
 					if (!character.name) return;
 
-					characters[character.name] = (characters[character.name] || 0) + 1;
+					const characterIndex = characters.findIndex((c) => c.name === character.name);
+
+					if (characterIndex === -1) {
+						characters.push({
+							name: character.name,
+							image: `images/chara_1/${characterNameToSlug(character.name)}.png`,
+							games: 1
+						});
+					} else {
+						characters[characterIndex].games++;
+					}
 				}
 			});
 		});
@@ -319,7 +333,7 @@ export const GET = async ({ params }) => {
 			image: res.data?.player?.user?.images?.[0]?.url,
 			selection: {
 				stages: playedStages,
-				characters
+				characters: characters.sort((a, b) => b.games - a.games).slice(0, 3)
 			},
 			achievements: {
 				shutoutsDealt
