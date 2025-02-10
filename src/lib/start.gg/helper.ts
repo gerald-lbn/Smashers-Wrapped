@@ -76,7 +76,7 @@ export const characterNameToSlug = (name: string) => {
 		case 'Isabelle':
 			return 'isabelle';
 		case 'Jigglypuff':
-			return 'puff';
+			return 'jigglypuff';
 		case 'Joker':
 			return 'joker';
 		case 'Kazuya':
