@@ -23,7 +23,7 @@ export const parseMatch = (match: string) => {
 
 export const characterNameToSlug = (name: string) => {
 	switch (name) {
-		case 'Banjo & Kazooie':
+		case 'Banjo-Kazooie':
 			return 'banjo';
 		case 'Bayonetta':
 			return 'bayonetta';
