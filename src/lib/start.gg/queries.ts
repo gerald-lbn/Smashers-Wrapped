@@ -109,16 +109,22 @@ export const WrappedSets = graphql(`
 `);
 
 export const WrappedSelections = graphql(`
-	query WrappedSelections($playerId: ID!, $tournamentsIds: [ID!], $page: Int, $perPage: Int) {
+	query WrappedSelections(
+		$playerId: ID!
+		$tournamentsIds: [ID!]
+		$page: Int
+		$perPage: Int
+		$info: Boolean!
+	) {
 		player(id: $playerId) {
 			id
 			sets(filters: { tournamentIds: $tournamentsIds }, page: $page, perPage: $perPage) {
-				pageInfo {
+				pageInfo @include(if: $info) {
 					total
 					totalPages
 				}
 
-				nodes {
+				nodes @skip(if: $info) {
 					id
 					games {
 						id
