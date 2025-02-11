@@ -1,6 +1,13 @@
-import { STARTGG_BEARER_TOKEN } from '$env/static/private';
 import { cacheExchange } from '@urql/exchange-graphcache';
 import { Client, fetchExchange, ssrExchange } from '@urql/svelte';
+import { getRandomToken } from './helper';
+import {
+	STARTGG_BEARER_TOKEN_1,
+	STARTGG_BEARER_TOKEN_2,
+	STARTGG_BEARER_TOKEN_3,
+	STARTGG_BEARER_TOKEN_4,
+	STARTGG_BEARER_TOKEN_5
+} from '$env/static/private';
 
 const isServerSide = typeof window === 'undefined';
 
@@ -15,9 +22,17 @@ const client = new Client({
 	url: ENDPOINT,
 	exchanges: [cacheExchange(), ssr, fetchExchange],
 	fetchOptions: () => {
+		const token = getRandomToken([
+			STARTGG_BEARER_TOKEN_1,
+			STARTGG_BEARER_TOKEN_2,
+			STARTGG_BEARER_TOKEN_3,
+			STARTGG_BEARER_TOKEN_4,
+			STARTGG_BEARER_TOKEN_5
+		]);
+		console.log('Selected token: ', token);
 		return {
 			headers: {
-				Authorization: `Bearer ${STARTGG_BEARER_TOKEN}`
+				Authorization: `Bearer ${token}`
 			}
 		};
 	}

@@ -199,3 +199,13 @@ export const characterNameToSlug = (name: string) => {
 			return '';
 	}
 };
+
+/**
+ * Randomly select a token from the environment variables
+ * @param tokens An array of tokens to select from
+ */
+export const getRandomToken = (tokens: string[]) => {
+	const count = tokens.length;
+	const index = Math.floor(Math.random() * count);
+	return tokens[index];
+};
