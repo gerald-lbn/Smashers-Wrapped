@@ -180,7 +180,7 @@ export const GET = async ({ params }) => {
 		return client.query(WrappedSets, {
 			playerId,
 			tournamentsIds: offlineTournamentsIds,
-			page: i + 2,
+			page: i + 1,
 			perPage: 50
 		});
 	});
@@ -277,7 +277,7 @@ export const GET = async ({ params }) => {
 		return client.query(WrappedSelections, {
 			playerId,
 			tournamentsIds: offlineTournamentsIds,
-			page: i + 2,
+			page: i + 1,
 			perPage: 50
 		});
 	});
