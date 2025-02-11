@@ -162,7 +162,8 @@ export const GET = async ({ params }) => {
 		playerId,
 		tournamentsIds: offlineTournamentsIds,
 		page: 1,
-		perPage: 50
+		perPage: 10,
+		info: true
 	});
 
 	const recurringOpponents = {} as Record<
@@ -181,7 +182,8 @@ export const GET = async ({ params }) => {
 			playerId,
 			tournamentsIds: offlineTournamentsIds,
 			page: i + 1,
-			perPage: 50
+			perPage: 10,
+			info: false
 		});
 	});
 
