@@ -162,7 +162,8 @@ export const GET = async ({ params }) => {
 		playerId,
 		tournamentsIds: offlineTournamentsIds,
 		page: 1,
-		perPage: 50
+		perPage: 10,
+		info: true
 	});
 
 	const recurringOpponents = {} as Record<
@@ -180,8 +181,9 @@ export const GET = async ({ params }) => {
 		return client.query(WrappedSets, {
 			playerId,
 			tournamentsIds: offlineTournamentsIds,
-			page: i + 2,
-			perPage: 50
+			page: i + 1,
+			perPage: 10,
+			info: false
 		});
 	});
 
@@ -269,7 +271,8 @@ export const GET = async ({ params }) => {
 		playerId,
 		tournamentsIds: offlineTournamentsIds,
 		page: 1,
-		perPage: 50
+		perPage: 10,
+		info: true
 	});
 
 	const totalPagesSelections = resSelections1stPage.data?.player?.sets?.pageInfo?.totalPages ?? 0;
@@ -277,8 +280,9 @@ export const GET = async ({ params }) => {
 		return client.query(WrappedSelections, {
 			playerId,
 			tournamentsIds: offlineTournamentsIds,
-			page: i + 2,
-			perPage: 50
+			page: i + 1,
+			perPage: 10,
+			info: false
 		});
 	});
 

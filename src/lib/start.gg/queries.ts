@@ -52,7 +52,13 @@ export const WrappedTournamentsAndSetsOnStream = graphql(`
 `);
 
 export const WrappedSets = graphql(`
-	query WrappedSets($playerId: ID!, $tournamentsIds: [ID!], $page: Int, $perPage: Int) {
+	query WrappedSets(
+		$playerId: ID!
+		$tournamentsIds: [ID!]
+		$page: Int
+		$perPage: Int
+		$info: Boolean!
+	) {
 		player(id: $playerId) {
 			id
 
@@ -67,13 +73,13 @@ export const WrappedSets = graphql(`
 				page: $page
 				perPage: $perPage
 			) {
-				pageInfo {
+				pageInfo @include(if: $info) {
 					page
 					total
 					totalPages
 				}
 
-				nodes {
+				nodes @skip(if: $info) {
 					id
 
 					displayScore
@@ -109,16 +115,22 @@ export const WrappedSets = graphql(`
 `);
 
 export const WrappedSelections = graphql(`
-	query WrappedSelections($playerId: ID!, $tournamentsIds: [ID!], $page: Int, $perPage: Int) {
+	query WrappedSelections(
+		$playerId: ID!
+		$tournamentsIds: [ID!]
+		$page: Int
+		$perPage: Int
+		$info: Boolean!
+	) {
 		player(id: $playerId) {
 			id
 			sets(filters: { tournamentIds: $tournamentsIds }, page: $page, perPage: $perPage) {
-				pageInfo {
+				pageInfo @include(if: $info) {
 					total
 					totalPages
 				}
 
-				nodes {
+				nodes @skip(if: $info) {
 					id
 					games {
 						id
