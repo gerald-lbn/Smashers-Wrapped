@@ -6,7 +6,7 @@
 
 body {
 	background-color: hsl(var(--color-background));
-	background-image: url('/background-pattern.svg');
+	/* background-image: url('/background-pattern.svg'); */
 	background-position: center;
 	background-attachment: fixed;
 	background-size: cover;

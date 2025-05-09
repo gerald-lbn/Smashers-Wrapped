@@ -1,10 +1,10 @@
 :root {
-	--font-headline: 'Outfit', sans-serif;
+	--font-heading: 'FOT-Rodin Pro UB', sans-serif;
 	--font-body: 'Outfit', sans-serif;
 
 	--color-background: 0, 0%, 6%;
 	--color-background-surface: 0, 0%, 12%;
-	--color-background-element: 0, 0%, 18%;
+	--color-background-element: 0, 0%, 16%;
 
 	--color-border: 0, 0%, 23%;
 
