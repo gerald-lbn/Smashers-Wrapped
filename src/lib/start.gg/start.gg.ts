@@ -17,5 +17,7 @@ export async function getDataFromStartGG<T = TadaDocumentNode>(
 
 	const result = await response.json();
 
-	return result as ResultOf<T>;
+	return result as {
+		data: ResultOf<T>;
+	};
 }
