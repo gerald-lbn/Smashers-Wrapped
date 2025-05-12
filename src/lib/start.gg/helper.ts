@@ -199,3 +199,54 @@ export const characterNameToSlug = (name: string) => {
 			return '';
 	}
 };
+
+/**
+ * Convert a Unix timestamp to a Date object
+ * @param unix Unix timestamp in seconds
+ * @returns A Date object representing the date and time corresponding to the Unix timestamp.
+ */
+export const unixToDate = (unix: number) => new Date(unix * 1000);
+
+/**
+ * Given an array of dates, counts the number of occurrences of each month and returns an
+ * object with the month names as keys and the counts as values.
+ */
+export function aggregateByMonth(startAt: string[]) {
+	const monthCounts: { [key: string]: number } = {};
+	const monthNames = [
+		'Jan',
+		'Feb',
+		'Mar',
+		'Apr',
+		'May',
+		'Jun',
+		'Jul',
+		'Aug',
+		'Sep',
+		'Oct',
+		'Nov',
+		'Dec'
+	];
+	startAt.forEach((date) => {
+		const tournamentDate = unixToDate(parseInt(date));
+		const monthName = monthNames[tournamentDate.getMonth()];
+		if (monthCounts[monthName]) {
+			monthCounts[monthName]++;
+		} else {
+			monthCounts[monthName] = 1;
+		}
+	});
+
+	return monthCounts;
+}
+
+export const countOccurrences = (items: string[]) => {
+	return items.reduce((acc: { [key: string]: number }, item) => {
+		acc[item] = (acc[item] || 0) + 1;
+		return acc;
+	}, {});
+};
+
+export const notNullNorUndefined = <T>(value: T | null | undefined) => {
+	return value !== null && value !== undefined;
+};
