@@ -3,8 +3,8 @@ import { SearchPlayerByGamerTag, SearchPlayerByGamerTagQuery } from '$lib/start.
 import { getDataFromStartGG } from '$lib/start.gg/start.gg';
 import {
 	aggregateByMonth,
-	countOccurrences,
 	getThisYearEvents,
+	getTop3Occurrences,
 	notNullNorUndefined,
 	parseMatch
 } from '$lib/start.gg/helper';
@@ -81,40 +81,26 @@ export const GET = async ({ url }) => {
 	const numberOfLosses = eventsRecord.reduce((acc, record) => acc + record.losses, 0);
 	const winrate = Math.round((numberOfWins / (numberOfLosses + numberOfWins)) * 100);
 
-	// Most played maps
-	const mapsPlayed = events
+	// Paginated sets
+	const paginatedSets = events
 		.flatMap((e) => e?.userEntrant?.paginatedSets?.nodes ?? [])
-		.flatMap((set) => set?.games ?? [])
-		.map((game) => game?.stage?.name)
-		.filter((name) => name !== null && name !== undefined);
-	const mapsPlayedCount = countOccurrences(mapsPlayed);
-	const mapsPlayedTop3 = Object.entries(mapsPlayedCount)
-		.sort((a, b) => b[1] - a[1])
-		.slice(0, 3)
-		.map(([name, count]) => ({
-			name,
-			count
-		}));
+		.filter(notNullNorUndefined);
+
+	// Games
+	const games = paginatedSets.flatMap((set) => set?.games ?? []).filter(notNullNorUndefined);
+
+	// Most played maps
+	const mapsPlayed = games.map((game) => game?.stage?.name);
+	const mapsPlayedTop3 = getTop3Occurrences(mapsPlayed);
 
 	// Most played characters
-	const charactersPlayed = events
-		.flatMap((e) => e?.userEntrant?.paginatedSets?.nodes ?? [])
-		.flatMap((set) => set?.games ?? [])
+	const charactersPlayed = games
 		.flatMap((game) => game?.selections ?? [])
 		.filter((selection) => selection?.entrant?.name && aliasesSet.has(selection?.entrant?.name))
-		.map((selection) => selection?.character?.name)
-		.filter((name) => name !== null && name !== undefined);
-	const charactersPlayedCount = countOccurrences(charactersPlayed);
-	const charactersPlayedTop3 = Object.entries(charactersPlayedCount)
-		.sort((a, b) => b[1] - a[1])
-		.slice(0, 3)
-		.map(([name, count]) => ({
-			name,
-			count
-		}));
+		.map((selection) => selection?.character?.name);
+	const charactersPlayedTop3 = getTop3Occurrences(charactersPlayed);
 
-	const parsedMatches = events
-		.flatMap((e) => e?.userEntrant?.paginatedSets?.nodes ?? [])
+	const parsedMatches = paginatedSets
 		.map((set) => set?.displayScore)
 		.filter(notNullNorUndefined)
 		.map(parseMatch)

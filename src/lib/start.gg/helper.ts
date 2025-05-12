@@ -321,3 +321,15 @@ export const getThisYearEvents = async (userId: string, year: number) => {
 
 	return events;
 };
+
+export const getTop3Occurrences = (items: (string | undefined | null)[]) => {
+	const filtered = items.filter((item) => item !== null && item !== undefined);
+	const counts = countOccurrences(filtered);
+	return Object.entries(counts)
+		.sort((a, b) => b[1] - a[1])
+		.slice(0, 3)
+		.map(([name, count]) => ({
+			name,
+			count
+		}));
+};
