@@ -16,6 +16,7 @@ A platform that generates a year-in-review video for each [start.gg](start.gg) u
 - [x] Nombre total de sets gagnés/perdus
 - [x] Personnages joués les plus fréquents
 - [x] Maps jouées les plus fréquentes
+- [x] Nombre de X-O's réalisés et reçus
 
 ### 🏆 Performances par tournoi
 

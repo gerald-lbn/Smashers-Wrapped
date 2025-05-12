@@ -12,6 +12,7 @@ import {
 	aggregateByMonth,
 	countOccurrences,
 	notNullNorUndefined,
+	parseMatch,
 	unixToDate
 } from '$lib/start.gg/helper';
 
@@ -149,6 +150,29 @@ export const GET = async ({ url }) => {
 			count
 		}));
 
+	const parsedMatches = events
+		.flatMap((e) => e?.userEntrant?.paginatedSets?.nodes ?? [])
+		.map((set) => set?.displayScore)
+		.filter(notNullNorUndefined)
+		.map(parseMatch)
+		.filter((match) => match !== 'DQ');
+
+	const xToZeros = parsedMatches.reduce(
+		(acc, player) => {
+			const playerIndex = player.findIndex((p) => aliasesSet.has(p.name));
+			if (playerIndex === -1) return acc;
+
+			const otherPlayerScore = player[(playerIndex + 1) % 2].score;
+			const playerScore = player[playerIndex].score;
+
+			return {
+				taken: acc.taken + (otherPlayerScore === 0 ? 1 : 0),
+				given: acc.given + (playerScore === 0 ? 1 : 0)
+			};
+		},
+		{ taken: 0, given: 0 }
+	);
+
 	return json({
 		me: player,
 		tournaments: {
@@ -166,7 +190,8 @@ export const GET = async ({ url }) => {
 				winrate,
 				wins: numberOfWins,
 				losses: numberOfLosses
-			}
+			},
+			xToZeros
 		},
 		raw: events
 	});
