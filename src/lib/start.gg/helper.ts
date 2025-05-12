@@ -1,3 +1,11 @@
+import {
+	GetPaginatedTournamentsEvents,
+	GetPaginatedTournamentsEventsQuery,
+	GetTournamentsEventsPageInfoQuery,
+	type GetTournamentsEventsPageInfo
+} from './queries';
+import { getDataFromStartGG } from './start.gg';
+
 export type ParsedMatch = {
 	name: string;
 	score: number;
@@ -254,4 +262,62 @@ export const countOccurrences = (items: string[]) => {
 
 export const notNullNorUndefined = <T>(value: T | null | undefined) => {
 	return value !== null && value !== undefined;
+};
+
+/**
+ * Given a user ID and a year, fetches all events for that user in the specified year.
+ * It retrieves the page info to determine the total number of pages and then fetches
+ * each page of events until it reaches events from previous years.
+ * @param userId The ID of the user whose events to fetch.
+ * @param year The year for which to fetch events.
+ * @returns An array of events for the specified user in the specified year.
+ */
+export const getThisYearEvents = async (userId: string, year: number) => {
+	// Get page info
+	const { data: eventsPageInfoData } = await getDataFromStartGG<
+		typeof GetTournamentsEventsPageInfo
+	>(GetTournamentsEventsPageInfoQuery, {
+		userID: userId
+	});
+
+	const pages = eventsPageInfoData.user?.events?.pageInfo?.totalPages;
+	if (!pages) return [];
+
+	const events = [];
+	let shouldContinue = true;
+
+	for (let page = 1; page <= pages && shouldContinue; page++) {
+		const { data } = await getDataFromStartGG<typeof GetPaginatedTournamentsEvents>(
+			GetPaginatedTournamentsEventsQuery,
+			{
+				userID: userId,
+				page: page
+			}
+		);
+
+		const pageEvents = data.user?.events?.nodes || [];
+
+		// Check if we have reached events from previous years
+		const hasOldEvents = pageEvents.some((e) => {
+			if (!e?.startAt) return false;
+			const startAt = parseInt(e.startAt);
+			const eventDate = unixToDate(startAt);
+			return eventDate.getFullYear() < year;
+		});
+
+		// Filter events from this year
+		const thisYearEvents = pageEvents.filter((e) => {
+			if (!e?.startAt) return false;
+			const startAt = parseInt(e.startAt);
+			const eventDate = unixToDate(startAt);
+			return eventDate.getFullYear() === year;
+		});
+
+		events.push(...thisYearEvents);
+
+		// If we have reached events from previous years, stop fetching more pages
+		if (hasOldEvents) shouldContinue = false;
+	}
+
+	return events;
 };

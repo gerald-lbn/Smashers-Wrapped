@@ -1,19 +1,12 @@
 import { json } from '@sveltejs/kit';
-import {
-	GetPaginatedTournamentsEvents,
-	GetPaginatedTournamentsEventsQuery,
-	GetTournamentsEventsPageInfo,
-	GetTournamentsEventsPageInfoQuery,
-	SearchPlayerByGamerTag,
-	SearchPlayerByGamerTagQuery
-} from '$lib/start.gg/queries';
+import { SearchPlayerByGamerTag, SearchPlayerByGamerTagQuery } from '$lib/start.gg/queries';
 import { getDataFromStartGG } from '$lib/start.gg/start.gg';
 import {
 	aggregateByMonth,
 	countOccurrences,
+	getThisYearEvents,
 	notNullNorUndefined,
-	parseMatch,
-	unixToDate
+	parseMatch
 } from '$lib/start.gg/helper';
 
 export const GET = async ({ url }) => {
@@ -46,37 +39,7 @@ export const GET = async ({ url }) => {
 	/********************************************************************************
 	 * Get attended events
 	 ********************************************************************************/
-	const { data: eventsPageInfoData } = await getDataFromStartGG<
-		typeof GetTournamentsEventsPageInfo
-	>(GetTournamentsEventsPageInfoQuery, {
-		userID: player.user!.id!
-	});
-	const eventsPageInfo = eventsPageInfoData.user?.events?.pageInfo;
-	if (!eventsPageInfo)
-		return json({
-			error: 'No events page info found'
-		});
-
-	// TODO: Filter events by year to prevent fetching all events
-	const pages = eventsPageInfo.totalPages as number;
-	const eventsPromises = Array.from({ length: pages }).map((_, index) => {
-		return getDataFromStartGG<typeof GetPaginatedTournamentsEvents>(
-			GetPaginatedTournamentsEventsQuery,
-			{
-				userID: player.user!.id!,
-				page: index + 1
-			}
-		);
-	});
-	const eventsData = await Promise.all(eventsPromises);
-	const events = eventsData
-		.flatMap((events) => events.data.user?.events?.nodes || [])
-		.filter((e) => {
-			if (!e || !e.startAt) return false;
-			const startAt = parseInt(e.startAt);
-			const eventDate = unixToDate(startAt);
-			return eventDate.getFullYear() === thisYear;
-		});
+	const events = await getThisYearEvents(player.user!.id!, thisYear);
 
 	// Group tournaments by month
 	const tournaments = events.map((e) => ({
