@@ -1,9 +1,14 @@
+export type ParsedMatch = {
+	name: string;
+	score: number;
+}[];
+
 /**
  * Parse the display score from the match
  * @param match A string containing the match score (e.g. "ARK | Licane 1 - PNS | Clembs 2" or "DQ")
  * @returns An array of objects containing the player name and score (e.g. [{ name: 'ARK | Licane', score: 1 }, { name: 'PNS | Clembs', score: 2 }] or 'DQ')
  */
-export const parseMatch = (match: string) => {
+export const parseMatch = (match: string): ParsedMatch | 'DQ' => {
 	if (match.match(/^DQ$/)) return 'DQ';
 
 	const parts = match.split(' - ');
