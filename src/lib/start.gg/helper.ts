@@ -333,3 +333,15 @@ export const getTop3Occurrences = (items: (string | undefined | null)[]) => {
 			count
 		}));
 };
+
+/**
+ * Compute the number of Rounds From Victory
+ * @see https://www.pgstats.com/articles/spr-uf-extra-mathematical-details
+ * @see https://www.pgstats.com/articles/introducing-spr-and-uf
+ * @param placement - The final placement of the player (1 = 1st place)
+ * @param numberOfEntrants - Total number of participants in the tournament
+ * @returns The number of rounds from victory
+ */
+export const roundsFromVictory = (placement: number) => {
+	return Math.ceil(Math.log2(placement));
+};
