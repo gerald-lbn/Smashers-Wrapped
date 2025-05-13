@@ -335,13 +335,24 @@ export const getTop3Occurrences = (items: (string | undefined | null)[]) => {
 };
 
 /**
- * Compute the number of Rounds From Victory
+ * Compute the number of Rounds From Victory in a single-elimination bracket.
  * @see https://www.pgstats.com/articles/spr-uf-extra-mathematical-details
  * @see https://www.pgstats.com/articles/introducing-spr-and-uf
  * @param placement - The final placement of the player (1 = 1st place)
- * @param numberOfEntrants - Total number of participants in the tournament
  * @returns The number of rounds from victory
  */
-export const roundsFromVictory = (placement: number) => {
+export const singleBracketRoundsFromVictory = (placement: number) => {
 	return Math.ceil(Math.log2(placement));
+};
+
+/**
+ * Compute the number of Rounds From Victory in a double-elimination bracket.
+ * @see https://www.pgstats.com/articles/spr-uf-extra-mathematical-details
+ * @see https://www.pgstats.com/articles/introducing-spr-and-uf
+ * @param placement - The final placement of the player (1 = 1st place)
+ * @returns The number of rounds from victory
+ */
+export const doubleBracketRoundsFromVictory = (placement: number) => {
+	if (placement === 1) return 0;
+	return Math.floor(Math.log2(placement - 1)) + Math.ceil(Math.log2((2 / 3) * placement));
 };
