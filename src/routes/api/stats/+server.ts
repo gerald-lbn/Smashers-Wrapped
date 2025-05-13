@@ -100,6 +100,13 @@ export const GET = async ({ url }) => {
 		.map((selection) => selection?.character?.name);
 	const charactersPlayedTop3 = getTop3Occurrences(charactersPlayed);
 
+	// Top 3 characters played against
+	const charactersPlayedAgainst = games
+		.flatMap((game) => game?.selections ?? [])
+		.filter((selection) => selection?.entrant?.name && !aliasesSet.has(selection?.entrant?.name))
+		.map((selection) => selection?.character?.name);
+	const charactersPlayedAgainstTop3 = getTop3Occurrences(charactersPlayedAgainst);
+
 	const parsedMatches = paginatedSets
 		.map((set) => set?.displayScore)
 		.filter(notNullNorUndefined)
@@ -131,7 +138,10 @@ export const GET = async ({ url }) => {
 			mostEntrants: tournamentsWithMostEntrants
 		},
 		selections: {
-			characters: charactersPlayedTop3,
+			characters: {
+				played: charactersPlayedTop3,
+				playedAgainst: charactersPlayedAgainstTop3
+			},
 			maps: mapsPlayedTop3
 		},
 		stats: {
