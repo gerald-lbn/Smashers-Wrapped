@@ -106,7 +106,8 @@ export const GET = async ({ url }) => {
 		.map(parseMatch)
 		.filter((match) => match !== 'DQ');
 
-	const xToZeros = parsedMatches.reduce(
+	// Shutouts dealt and taken
+	const shutouts = parsedMatches.reduce(
 		(acc, player) => {
 			const playerIndex = player.findIndex((p) => aliasesSet.has(p.name));
 			if (playerIndex === -1) return acc;
@@ -140,7 +141,7 @@ export const GET = async ({ url }) => {
 				wins: numberOfWins,
 				losses: numberOfLosses
 			},
-			xToZeros
+			shutouts
 		},
 		raw: events
 	});
