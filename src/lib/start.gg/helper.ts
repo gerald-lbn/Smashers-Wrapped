@@ -356,3 +356,30 @@ export const doubleBracketRoundsFromVictory = (placement: number) => {
 	if (placement === 1) return 0;
 	return Math.floor(Math.log2(placement - 1)) + Math.ceil(Math.log2((2 / 3) * placement));
 };
+
+/**
+ * Measures a player's performance in a bracket relative to their seed.
+ * A positive value indicates that the player performed better than expected,
+ * while a negative value indicates that the player performed worse than expected.
+ * @see https://www.pgstats.com/articles/introducing-spr-and-uf
+ * @param seed - The seed of the player
+ * @param placement - The final placement of the player (1 = 1st place)
+ * @param bracket - The type of bracket (single or double elimination)
+ */
+export const seedingPerformanceRating = (
+	seed: number,
+	placement: number,
+	bracket: 'singleElimination' | 'doubleElimination'
+) => {
+	const expectedRFV =
+		bracket === 'singleElimination'
+			? singleBracketRoundsFromVictory(seed)
+			: doubleBracketRoundsFromVictory(seed);
+
+	const actualRFV =
+		bracket === 'singleElimination'
+			? singleBracketRoundsFromVictory(placement)
+			: doubleBracketRoundsFromVictory(placement);
+
+	return expectedRFV - actualRFV;
+};
