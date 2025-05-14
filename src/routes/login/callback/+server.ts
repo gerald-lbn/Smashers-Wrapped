@@ -15,14 +15,17 @@ export const GET = async ({ url }) => {
 		`${url.origin}/login/callback`
 	);
 
-	let token: OAuth2Token;
+	let tokens: OAuth2Token;
 	try {
-		token = await client.validateAuthorizationCode(code, ['user.email', 'user.identity']);
+		tokens = await client.validateAuthorizationCode(code, ['user.email', 'user.identity']);
 	} catch (e) {
 		return new Response(null, { status: 400, statusText: String(e) });
 	}
 
-	return new Response(JSON.stringify(token), {
+	// Get the user id
+	const user = await client.getUser(tokens.access_token);
+
+	return new Response(JSON.stringify(user), {
 		headers: {
 			'Content-Type': 'application/json'
 		}

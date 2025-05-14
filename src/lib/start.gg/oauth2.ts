@@ -62,4 +62,15 @@ export class Startgg {
 
 		return token;
 	}
+
+	public async getUser(accessToken: OAuth2Token['access_token']) {
+		const res = await fetch('https://api.start.gg/user', {
+			headers: {
+				Authorization: `Bearer ${accessToken}`
+			}
+		});
+
+		const data = await res.json();
+		return data;
+	}
 }
