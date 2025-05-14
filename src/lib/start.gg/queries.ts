@@ -25,7 +25,9 @@ export const SearchPlayerByGamerTag = graphql(SearchPlayerByGamerTagQuery);
 export const GetAuthenticatedUserQuery = `
 	query GetAuthenticatedUser {
 		currentUser {
-			id
+			player {
+				id
+			}
 		}
 	}
 `;
