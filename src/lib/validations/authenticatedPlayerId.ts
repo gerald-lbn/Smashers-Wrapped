@@ -8,7 +8,7 @@ const authenticatedPlayerIdSchema = z.object({
 	}),
 	extensions: z.object({
 		cacheControl: z.object({
-			version: z.string(),
+			version: z.number(),
 			hint: z.unknown().nullable()
 		}),
 		queryComplexity: z.number()
