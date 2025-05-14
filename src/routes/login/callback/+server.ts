@@ -1,5 +1,7 @@
 import { STARTGG_CLIENT_ID, STARTGG_CLIENT_SECRET } from '$env/static/private';
 import { Startgg, type OAuth2Token } from '$lib/start.gg/oauth2';
+import authenticatedPlayerIdSchema from '$lib/validations/authenticatedPlayerId.js';
+import { json, redirect } from '@sveltejs/kit';
 
 export const GET = async ({ url }) => {
 	const code = url.searchParams.get('code');
@@ -23,11 +25,23 @@ export const GET = async ({ url }) => {
 	}
 
 	// Get the user id
-	const user = await client.getUser(tokens.access_token);
+	const userResponse = await client.getUser(tokens.access_token);
+	const safeUserResponse = authenticatedPlayerIdSchema.safeParse(userResponse);
 
-	return new Response(JSON.stringify(user), {
-		headers: {
-			'Content-Type': 'application/json'
-		}
-	});
+	// Check if the response is valid
+	if (!safeUserResponse.success) {
+		return json(
+			{
+				error: 'Invalid user response',
+				details: safeUserResponse.error.flatten()
+			},
+			{
+				status: 500
+			}
+		);
+	}
+
+	// Redirect to the player page
+	const playerId = safeUserResponse.data.data.player.id;
+	return redirect(302, `/player/${playerId}`);
 };
