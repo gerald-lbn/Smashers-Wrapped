@@ -83,6 +83,10 @@ export const GetPaginatedTournamentsEventsQuery = `
 									selections {
 										entrant {
 											name
+											checkInSeed {
+												placement
+												seedNum
+											}
 										}
 										character {
 											name
