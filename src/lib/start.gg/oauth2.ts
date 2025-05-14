@@ -1,3 +1,5 @@
+import { GetAuthenticatedUserQuery } from './queries';
+
 const authorizationEndpoint = 'https://start.gg/oauth/authorize';
 const accessTokenEndpoint = 'https://api.start.gg/oauth/access_token';
 
@@ -65,9 +67,13 @@ export class Startgg {
 
 	public async getUser(accessToken: OAuth2Token['access_token']) {
 		const res = await fetch('https://api.start.gg/gql/alpha', {
+			method: 'POST',
 			headers: {
 				Authorization: `Bearer ${accessToken}`
-			}
+			},
+			body: JSON.stringify({
+				query: GetAuthenticatedUserQuery
+			})
 		});
 
 		const data = await res.json();

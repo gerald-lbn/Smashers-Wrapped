@@ -22,6 +22,14 @@ export const SearchPlayerByGamerTagQuery = `
 `;
 export const SearchPlayerByGamerTag = graphql(SearchPlayerByGamerTagQuery);
 
+export const GetAuthenticatedUserQuery = `
+	query GetAuthenticatedUser {
+		currentUser {
+			id
+		}
+	}
+`;
+
 export const GetTournamentsEventsPageInfoQuery = `
 	query GetTournamentsEventsPageInfo($userID: ID!) {
 		user(id: $userID) {
