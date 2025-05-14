@@ -33,7 +33,8 @@ export const GET = async ({ url }) => {
 		return json(
 			{
 				error: 'Invalid user response',
-				details: safeUserResponse.error.flatten()
+				details: safeUserResponse.error.flatten(),
+				response: userResponse
 			},
 			{
 				status: 500

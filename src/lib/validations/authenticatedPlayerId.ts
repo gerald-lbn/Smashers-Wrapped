@@ -16,5 +16,4 @@ const authenticatedPlayerIdSchema = z.object({
 	actionRecords: z.array(z.unknown())
 });
 
-export type AuthenticatedPlayerId = z.infer<typeof authenticatedPlayerIdSchema>;
 export default authenticatedPlayerIdSchema;
