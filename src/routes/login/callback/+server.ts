@@ -43,6 +43,6 @@ export const GET = async ({ url }) => {
 	}
 
 	// Redirect to the player page
-	const playerId = safeUserResponse.data.data.player.id;
+	const playerId = safeUserResponse.data.data.currentUser.player.id;
 	return redirect(302, `/player/${playerId}`);
 };
