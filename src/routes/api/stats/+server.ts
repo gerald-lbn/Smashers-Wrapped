@@ -123,8 +123,8 @@ export const GET = async ({ url }) => {
 			const playerScore = player[playerIndex].score;
 
 			return {
-				taken: acc.taken + (otherPlayerScore === 0 ? 1 : 0),
-				given: acc.given + (playerScore === 0 ? 1 : 0)
+				taken: acc.taken + (playerScore === 0 ? 1 : 0),
+				given: acc.given + (otherPlayerScore === 0 ? 1 : 0)
 			};
 		},
 		{ taken: 0, given: 0 }
