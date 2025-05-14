@@ -41,7 +41,7 @@ export const Main: React.FC<CompositionProps> = ({ stats, theme }) => {
 				>
 					<Slide direction="right">
 						<Slide direction="left">
-							<TournamentsHeatmap theme={theme} heats={stats.tournament.perWeek} />
+							<TournamentsHeatmap theme={theme} />
 						</Slide>
 					</Slide>
 				</Series.Sequence>
@@ -65,7 +65,14 @@ export const Main: React.FC<CompositionProps> = ({ stats, theme }) => {
 				>
 					<Slide direction="right">
 						<Slide direction="left">
-							<FavouriteCharacters theme={theme} characters={stats.player.selection.characters} />
+							<FavouriteCharacters
+								theme={theme}
+								characters={[
+									{ id: 'sora', name: 'Sora', games: 790 },
+									{ id: 'lucario', name: 'Lucario', games: 480 },
+									{ id: 'sonic', name: 'Sonic', games: 6 }
+								]}
+							/>
 						</Slide>
 					</Slide>
 				</Series.Sequence>

@@ -1,82 +1,99 @@
 import { graphql } from '$lib/graphql';
 
-export const SearchPlayerByGamerTagQuery = `
-	query SearchByGamerTag($search: PlayerQuery!) {
-		players(query: $search) {
-			nodes {
+export const WrappedTournamentsAndSetsOnStream = graphql(`
+	query WrappedTournamentsAndSetsOnStream($playerId: ID!, $videoGameId: ID!) {
+		player(id: $playerId) {
+			id
+			gamerTag
+			prefix
+
+			sets(filters: { hasVod: true, hideEmpty: true }) {
+				pageInfo {
+					total
+				}
+			}
+
+			user {
 				id
-				gamerTag
-				user {
+				images(type: "profile") {
 					id
-					slug
-					location {
-						country
+
+					url
+					ratio
+				}
+
+				tournaments(
+					query: {
+						perPage: 500
+						filter: { past: true, upcoming: false, videogameId: [$videoGameId] }
 					}
-					images(type: "profile") {
-						url
+				) {
+					pageInfo {
+						total
+						totalPages
+					}
+					nodes {
+						id
+						name
+						startAt
+						hasOfflineEvents
+						hasOnlineEvents
+						numAttendees
+						city
+						countryCode
 					}
 				}
 			}
 		}
 	}
-`;
-export const SearchPlayerByGamerTag = graphql(SearchPlayerByGamerTagQuery);
+`);
 
-export const GetTournamentsEventsPageInfoQuery = `
-	query GetTournamentsEventsPageInfo($userID: ID!) {
-		user(id: $userID) {
-			events(
-				query: { filter: { videogameId: [1386], eventType: 1 }, sortBy: "endAt DESC", perPage: 10 }
+export const WrappedSets = graphql(`
+	query WrappedSets($playerId: ID!, $tournamentsIds: [ID!], $page: Int, $perPage: Int) {
+		player(id: $playerId) {
+			id
+
+			sets(
+				filters: {
+					showByes: false
+					tournamentIds: $tournamentsIds
+					# Filtering by entrantSize to avoid showing sets with more than 2 entrants is not working
+					# https://discord.com/channels/339548254704369677/504697661795074058/930881754326265907
+					# entrantSize: [2]
+				}
+				page: $page
+				perPage: $perPage
 			) {
 				pageInfo {
+					page
 					total
 					totalPages
 				}
-			}
-		}
-	}
-`;
-export const GetTournamentsEventsPageInfo = graphql(GetTournamentsEventsPageInfoQuery);
 
-export const GetPaginatedTournamentsEventsQuery = `
-	query GetTournamentsEvents($userID: ID!, $page: Int!) {
-		user(id: $userID) {
-			events(query: { filter: { videogameId: [1386], eventType: 1 }, page: $page, perPage: 10 }) {
 				nodes {
-					name
-					numEntrants
-					startAt
-					tournament {
-						name
-						countryCode
-						images(type: "profile") {
-							url
-						}
-					}
-					userEntrant(userId: $userID) {
-						name
-						lostTo
-						record
-						checkInSeed {
-							placement
-							seedNum
-						}
-						paginatedSets {
-							nodes {
-								displayScore
-								fullRoundText
-								totalGames
-								games {
-									stage {
-										name
-									}
-									selections {
-										entrant {
-											name
-										}
-										character {
-											name
-										}
+					id
+
+					displayScore
+					winnerId
+
+					game(orderNum: 1) {
+						id
+
+						selections {
+							id
+
+							entrant {
+								id
+								name
+								initialSeedNum
+								participants {
+									id
+
+									player {
+										id
+
+										gamerTag
+										prefix
 									}
 								}
 							}
@@ -86,5 +103,37 @@ export const GetPaginatedTournamentsEventsQuery = `
 			}
 		}
 	}
-`;
-export const GetPaginatedTournamentsEvents = graphql(GetPaginatedTournamentsEventsQuery);
+`);
+
+export const WrappedSelections = graphql(`
+	query WrappedSelections($playerId: ID!, $tournamentsIds: [ID!], $page: Int, $perPage: Int) {
+		player(id: $playerId) {
+			id
+			sets(filters: { tournamentIds: $tournamentsIds }, page: $page, perPage: $perPage) {
+				pageInfo {
+					total
+					totalPages
+				}
+
+				nodes {
+					id
+					games {
+						id
+						selections {
+							id
+							entrant {
+								id
+							}
+							character {
+								name
+							}
+						}
+						stage {
+							name
+						}
+					}
+				}
+			}
+		}
+	}
+`);

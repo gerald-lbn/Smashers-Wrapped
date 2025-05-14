@@ -2,13 +2,28 @@ import React from 'react';
 import { type Theme } from '../constants';
 import { interpolate, spring, useCurrentFrame, useVideoConfig } from 'remotion';
 
-export type HeatmapData = {
+export type Heat = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
+
+export const FAKE_DATA: {
 	label: string;
-	heats: number[];
-}[];
+	heats: Heat[];
+}[] = [
+	{ label: 'Jan', heats: [7, 4, 5, 1, 5] },
+	{ label: 'Feb', heats: [1, 0, 3, 0] },
+	{ label: 'Mar', heats: [3, 3, 5, 1] },
+	{ label: 'Apr', heats: [6, 6, 3, 7] },
+	{ label: 'May', heats: [0, 0, 3, 7, 1] },
+	{ label: 'Jun', heats: [6, 6, 3, 7] },
+	{ label: 'Jul', heats: [6, 6, 0, 5, 7] },
+	{ label: 'Aug', heats: [5, 2, 3, 7] },
+	{ label: 'Sep', heats: [6, 4, 4, 1] },
+	{ label: 'Oct', heats: [5, 2, 7, 7, 0] },
+	{ label: 'Nov', heats: [6, 4, 7, 0] },
+	{ label: 'Dec', heats: [6, 3, 4, 5] }
+];
 
 export const HeatmapCell: React.FC<{
-	heat: number;
+	heat: Heat;
 	size: number;
 	theme: Theme;
 	style?: React.CSSProperties;
@@ -33,9 +48,7 @@ export const HeatmapCell: React.FC<{
 				width: size,
 				height: size,
 				border: `4px solid ${theme.colors.black}`,
-				// FIXME: fix this type error
-				// @ts-expect-error heat might not be in [0, 7]
-				backgroundColor: heat <= 7 && heat >= 0 ? theme.colors.heatmap[heat] : theme.colors.black,
+				backgroundColor: theme.colors.heatmap[heat],
 				opacity: animate ? opacity : 1
 			}}
 		></div>
@@ -44,7 +57,7 @@ export const HeatmapCell: React.FC<{
 
 export const HeatmapColumn: React.FC<{
 	label: string;
-	heats: number[];
+	heats: Heat[];
 	size: number;
 	theme: Theme;
 	index: number;
@@ -95,11 +108,11 @@ export const HeatmapRowLabel: React.FC<{
 };
 
 export const Heatmap: React.FC<{
-	data: HeatmapData;
+	weeks: { label: string; heats: Heat[] }[];
 	rowLabels: string[];
 	size: number;
 	theme: Theme;
-}> = ({ data, rowLabels, size, theme }) => {
+}> = ({ weeks, rowLabels, size, theme }) => {
 	return (
 		<div>
 			<div style={{ display: 'flex', gap: 4 }}>
@@ -116,15 +129,15 @@ export const Heatmap: React.FC<{
 						<HeatmapRowLabel key={i} label={label} theme={theme} />
 					))}
 				</div>
-				{data.map((d, i) => (
+				{weeks.map((week, i) => (
 					<HeatmapColumn
 						key={i}
-						label={d.label}
-						heats={d.heats}
+						label={week.label}
+						heats={week.heats}
 						size={size}
 						theme={theme}
 						index={i}
-						maxIndex={data.length}
+						maxIndex={weeks.length}
 					/>
 				))}
 			</div>
@@ -161,7 +174,14 @@ export const HeatmapScale: React.FC<{
 			<span style={style}>0</span>
 			<div style={{ display: 'flex', gap: 4 }}>
 				{scale.map((sc, idx) => (
-					<HeatmapCell key={idx} heat={sc} size={SIZE} index={sc} theme={theme} animate={false} />
+					<HeatmapCell
+						key={idx}
+						heat={sc as Heat}
+						size={SIZE}
+						index={sc}
+						theme={theme}
+						animate={false}
+					/>
 				))}
 			</div>
 			<span style={style}>7</span>

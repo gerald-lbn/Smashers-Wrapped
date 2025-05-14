@@ -7,7 +7,7 @@ export const FavouriteCharacters: React.FC<{
 	theme: Theme;
 	characters: {
 		name: string;
-		image: string;
+		id: string;
 		games: number;
 	}[];
 }> = ({ theme, characters }) => {

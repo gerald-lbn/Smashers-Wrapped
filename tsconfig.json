@@ -16,7 +16,7 @@
 		"plugins": [
 			{
 				"name": "@0no-co/graphqlsp",
-				"schema": "./introspection.json",
+				"schema": "./schema.graphql",
 				"tadaOutputLocation": "./src/graphql-env.d.ts"
 			}
 		]

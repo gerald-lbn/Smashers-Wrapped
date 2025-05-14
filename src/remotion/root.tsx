@@ -68,8 +68,7 @@ export const RemotionRoot: React.FC = () => {
 					width={config.compositionWidth}
 					height={config.compositionHeight}
 					defaultProps={{
-						theme: player1Theme,
-						heats: fakeData.tournament.perWeek
+						theme: player1Theme
 					}}
 				/>
 				<Composition
@@ -81,7 +80,23 @@ export const RemotionRoot: React.FC = () => {
 					height={config.compositionHeight}
 					defaultProps={{
 						theme: player1Theme,
-						characters: fakeData.player.selection.characters
+						characters: [
+							{
+								id: 'sora',
+								name: 'Sora',
+								games: 790
+							},
+							{
+								id: 'lucario',
+								name: 'Lucario',
+								games: 480
+							},
+							{
+								id: 'sonic',
+								name: 'Sonic',
+								games: 6
+							}
+						]
 					}}
 				/>
 			</Folder>
