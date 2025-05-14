@@ -1,6 +1,10 @@
 {
 	"typescript.tsdk": "node_modules/typescript/lib",
 	"typescript.enablePromptUseWorkspaceTsdk": true,
+	"conventionalCommits.scopes": ["remotion", "site", "deps"],
+	"vscord.status.problems.enabled": true,
+	"vscord.status.details.text.editing": "Working on {file_name}{file_extension}",
 	"vscord.enabled": false,
-	"conventionalCommits.scopes": ["remotion", "site", "deps"]
+	"vscord.status.state.text.editing": " {problems}",
+	"vscord.status.problems.text": "Dealing with {problems_count} problems"
 }

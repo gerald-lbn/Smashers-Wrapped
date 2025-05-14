@@ -1,26 +1,23 @@
-import { STARTGG_BEARER_TOKEN } from '$env/static/private';
-import { cacheExchange } from '@urql/exchange-graphcache';
-import { Client, fetchExchange, ssrExchange } from '@urql/svelte';
+import type { ResultOf, TadaDocumentNode, VariablesOf } from 'gql.tada';
 
-const isServerSide = typeof window === 'undefined';
+export async function getDataFromStartGG<T = TadaDocumentNode>(
+	query: string,
+	variables: VariablesOf<T>,
+	init?: RequestInit
+) {
+	const url = `https://www.start.gg/api/-/gql?query=${encodeURIComponent(query)}&variables=${encodeURIComponent(
+		JSON.stringify(variables)
+	)}`;
+	const response = await fetch(url, {
+		method: 'GET',
+		credentials: 'omit',
+		mode: 'cors',
+		...init
+	});
 
-const ENDPOINT = 'https://api.start.gg/gql/alpha';
+	const result = await response.json();
 
-const ssr = ssrExchange({
-	isClient: !isServerSide,
-	initialState: !isServerSide ? {} : undefined
-});
-
-const client = new Client({
-	url: ENDPOINT,
-	exchanges: [cacheExchange(), ssr, fetchExchange],
-	fetchOptions: () => {
-		return {
-			headers: {
-				Authorization: `Bearer ${STARTGG_BEARER_TOKEN}`
-			}
-		};
-	}
-});
-
-export default client;
+	return result as {
+		data: ResultOf<T>;
+	};
+}

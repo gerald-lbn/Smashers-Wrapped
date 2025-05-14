@@ -6,7 +6,7 @@ import type { Theme } from '../constants';
 export const Characters: React.FC<{
 	characters: {
 		name: string;
-		id: string;
+		image: string;
 		games: number;
 	}[];
 	theme: Theme;
@@ -45,14 +45,7 @@ export const Characters: React.FC<{
 							left: i * width
 						}}
 					>
-						<Character
-							character={{
-								...character,
-								image: `images/${character.id}/chara_1_trail_00.png`
-							}}
-							theme={theme}
-							offsetDelay={delay}
-						/>
+						<Character character={character} theme={theme} offsetDelay={delay} />
 					</AbsoluteFill>
 				);
 			})}
