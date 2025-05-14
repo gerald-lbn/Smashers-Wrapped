@@ -2,8 +2,10 @@ import { z } from 'zod';
 
 const authenticatedPlayerIdSchema = z.object({
 	data: z.object({
-		player: z.object({
-			id: z.number()
+		currentUser: z.object({
+			player: z.object({
+				id: z.number()
+			})
 		})
 	}),
 	extensions: z.object({
