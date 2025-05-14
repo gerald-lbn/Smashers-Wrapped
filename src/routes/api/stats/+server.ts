@@ -130,6 +130,11 @@ export const GET = async ({ url }) => {
 		{ taken: 0, given: 0 }
 	);
 
+	// Upsets dealt and taken with Upser Factor
+	const upsets = undefined;
+	// Highest upset factor dealt and taken
+	const highestUpset = undefined;
+
 	return json({
 		me: player,
 		tournaments: {
@@ -151,7 +156,9 @@ export const GET = async ({ url }) => {
 				wins: numberOfWins,
 				losses: numberOfLosses
 			},
-			shutouts
+			shutouts,
+			upsets,
+			highestUpset
 		},
 		raw: events
 	});
