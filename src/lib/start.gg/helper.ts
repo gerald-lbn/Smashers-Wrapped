@@ -401,3 +401,47 @@ export const upsetFactor = (playerSeed: number, opponentSeed: number, bracket: B
 
 	return playerRFV - opponentRFV;
 };
+
+/**
+ * Computes the number of shutouts given and taken by a player.
+ * @param matches - An array of matches, each match is an array of players with their scores
+ * @param aliases - A set of aliases for the player
+ * @returns An object containing the number of shutouts given and taken
+ */
+export const computeShutouts = (matches: (ParsedMatch | 'DQ')[], aliases: Set<string>) => {
+	const matchesWithoutDQ = matches.filter((match) => match !== 'DQ');
+	const shutouts = matchesWithoutDQ.reduce(
+		(acc, player) => {
+			const playerIndex = player.findIndex((p) => aliases.has(p.name));
+			if (playerIndex === -1) return acc;
+
+			const otherPlayerScore = player[(playerIndex + 1) % 2].score;
+			const playerScore = player[playerIndex].score;
+
+			return {
+				taken: acc.taken + (playerScore === 0 ? 1 : 0),
+				given: acc.given + (otherPlayerScore === 0 ? 1 : 0)
+			};
+		},
+		{ taken: 0, given: 0 }
+	);
+
+	return shutouts;
+};
+
+export type UserEntrantRecord = {
+	wins: number;
+	losses: number;
+};
+
+export const computeWinrateInfo = (userRecords: UserEntrantRecord[]) => {
+	const numberOfWins = userRecords.reduce((acc, record) => acc + record.wins, 0);
+	const numberOfLosses = userRecords.reduce((acc, record) => acc + record.losses, 0);
+	const winrate = Math.round((numberOfWins / (numberOfLosses + numberOfWins)) * 100);
+
+	return {
+		numberOfWins,
+		numberOfLosses,
+		winrate
+	};
+};

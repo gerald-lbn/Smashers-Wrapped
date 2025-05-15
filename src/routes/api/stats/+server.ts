@@ -3,12 +3,15 @@ import { SearchPlayerByGamerTag, SearchPlayerByGamerTagQuery } from '$lib/start.
 import { getDataFromStartGG } from '$lib/start.gg/start.gg';
 import {
 	aggregateByMonth,
+	computeShutouts,
+	computeWinrateInfo,
 	getThisYearEvents,
 	getTop3Occurrences,
 	notNullNorUndefined,
 	parseMatch,
 	upsetFactor,
-	type BracketType
+	type BracketType,
+	type UserEntrantRecord
 } from '$lib/start.gg/helper';
 
 export const GET = async ({ url }) => {
@@ -71,17 +74,11 @@ export const GET = async ({ url }) => {
 	const aliasesSet = new Set(aliases);
 
 	// Compute global winrate, wins and losses
-	type Record = {
-		wins: number;
-		losses: number;
-	};
 	const eventsRecord = events
 		.map((e) => e?.userEntrant?.record)
-		.filter(notNullNorUndefined) as Record[];
+		.filter(notNullNorUndefined) as UserEntrantRecord[];
 
-	const numberOfWins = eventsRecord.reduce((acc, record) => acc + record.wins, 0);
-	const numberOfLosses = eventsRecord.reduce((acc, record) => acc + record.losses, 0);
-	const winrate = Math.round((numberOfWins / (numberOfLosses + numberOfWins)) * 100);
+	const { numberOfWins, numberOfLosses, winrate } = computeWinrateInfo(eventsRecord);
 
 	// Paginated sets
 	const paginatedSets = events
@@ -112,25 +109,10 @@ export const GET = async ({ url }) => {
 	const parsedMatches = paginatedSets
 		.map((set) => set?.displayScore)
 		.filter(notNullNorUndefined)
-		.map(parseMatch)
-		.filter((match) => match !== 'DQ');
+		.map(parseMatch);
 
 	// Shutouts given and taken
-	const shutouts = parsedMatches.reduce(
-		(acc, player) => {
-			const playerIndex = player.findIndex((p) => aliasesSet.has(p.name));
-			if (playerIndex === -1) return acc;
-
-			const otherPlayerScore = player[(playerIndex + 1) % 2].score;
-			const playerScore = player[playerIndex].score;
-
-			return {
-				taken: acc.taken + (playerScore === 0 ? 1 : 0),
-				given: acc.given + (otherPlayerScore === 0 ? 1 : 0)
-			};
-		},
-		{ taken: 0, given: 0 }
-	);
+	const shutouts = computeShutouts(parsedMatches, aliasesSet);
 
 	/**
 	 * Only consider sets with a bracket type of SINGLE_ELIMINATION or DOUBLE_ELIMINATION
