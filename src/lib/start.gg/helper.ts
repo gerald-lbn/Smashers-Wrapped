@@ -357,7 +357,7 @@ export const doubleBracketRoundsFromVictory = (placement: number) => {
 	return Math.floor(Math.log2(placement - 1)) + Math.ceil(Math.log2((2 / 3) * placement));
 };
 
-type BracketType = 'singleElimination' | 'doubleElimination';
+type BracketType = 'SINGLE_ELIMINATION' | 'DOUBLE_ELIMINATION';
 
 /**
  * Measures a player's performance in a bracket relative to their seed.
@@ -370,12 +370,12 @@ type BracketType = 'singleElimination' | 'doubleElimination';
  */
 export const seedingPerformanceRating = (seed: number, placement: number, bracket: BracketType) => {
 	const expectedRFV =
-		bracket === 'singleElimination'
+		bracket === 'SINGLE_ELIMINATION'
 			? singleBracketRoundsFromVictory(seed)
 			: doubleBracketRoundsFromVictory(seed);
 
 	const actualRFV =
-		bracket === 'singleElimination'
+		bracket === 'SINGLE_ELIMINATION'
 			? singleBracketRoundsFromVictory(placement)
 			: doubleBracketRoundsFromVictory(placement);
 
@@ -390,12 +390,12 @@ export const seedingPerformanceRating = (seed: number, placement: number, bracke
  */
 export const upsetFactor = (playerSeed: number, opponentSeed: number, bracket: BracketType) => {
 	const playerRFV =
-		bracket === 'singleElimination'
+		bracket === 'SINGLE_ELIMINATION'
 			? singleBracketRoundsFromVictory(playerSeed)
 			: doubleBracketRoundsFromVictory(playerSeed);
 
 	const opponentRFV =
-		bracket === 'singleElimination'
+		bracket === 'SINGLE_ELIMINATION'
 			? singleBracketRoundsFromVictory(opponentSeed)
 			: doubleBracketRoundsFromVictory(opponentSeed);
 
