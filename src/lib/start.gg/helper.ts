@@ -357,7 +357,7 @@ export const doubleBracketRoundsFromVictory = (placement: number) => {
 	return Math.floor(Math.log2(placement - 1)) + Math.ceil(Math.log2((2 / 3) * placement));
 };
 
-type BracketType = 'SINGLE_ELIMINATION' | 'DOUBLE_ELIMINATION';
+export type BracketType = 'SINGLE_ELIMINATION' | 'DOUBLE_ELIMINATION';
 
 /**
  * Measures a player's performance in a bracket relative to their seed.
