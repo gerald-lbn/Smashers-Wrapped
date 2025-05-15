@@ -29,7 +29,7 @@ A platform that generates a year-in-review video for each [start.gg](start.gg) u
 
 - [ ] Adversaire affronté le plus souvent
 - [ ] Joueurs contre qui il/elle a le meilleur/mauvais ratio
-- [ ] Upsets réalisés (victoires contre joueurs mieux seedés)
+- [x] Upsets réalisés (victoires contre joueurs mieux seedés)
 - [ ] Nombre de fois éliminé par le même joueur
 
 ### 🎖️ Badges et fun stats
