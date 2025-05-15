@@ -76,12 +76,17 @@ export const GetPaginatedTournamentsEventsQuery = `
 								displayScore
 								fullRoundText
 								totalGames
+								phaseGroup {
+									bracketType
+								}
+								winnerId
 								games {
 									stage {
 										name
 									}
 									selections {
 										entrant {
+											id
 											name
 											checkInSeed {
 												placement
