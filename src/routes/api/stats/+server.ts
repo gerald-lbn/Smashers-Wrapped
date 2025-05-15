@@ -3,10 +3,16 @@ import { SearchPlayerByGamerTag, SearchPlayerByGamerTagQuery } from '$lib/start.
 import { getDataFromStartGG } from '$lib/start.gg/start.gg';
 import {
 	aggregateByMonth,
+	computeShutouts,
+	computeWinrateInfo,
 	getThisYearEvents,
 	getTop3Occurrences,
+	getUserAliases,
 	notNullNorUndefined,
-	parseMatch
+	parseMatch,
+	upsetFactor,
+	type BracketType,
+	type UserEntrantRecord
 } from '$lib/start.gg/helper';
 
 export const GET = async ({ url }) => {
@@ -65,21 +71,15 @@ export const GET = async ({ url }) => {
 		}));
 
 	// Get the aliases used by the player
-	const aliases = events.map((e) => e?.userEntrant?.name).filter(notNullNorUndefined);
-	const aliasesSet = new Set(aliases);
+	const entrantNames = events.map((e) => e?.userEntrant?.name);
+	const aliasesSet = getUserAliases(entrantNames);
 
 	// Compute global winrate, wins and losses
-	type Record = {
-		wins: number;
-		losses: number;
-	};
 	const eventsRecord = events
 		.map((e) => e?.userEntrant?.record)
-		.filter(notNullNorUndefined) as Record[];
+		.filter(notNullNorUndefined) as UserEntrantRecord[];
 
-	const numberOfWins = eventsRecord.reduce((acc, record) => acc + record.wins, 0);
-	const numberOfLosses = eventsRecord.reduce((acc, record) => acc + record.losses, 0);
-	const winrate = Math.round((numberOfWins / (numberOfLosses + numberOfWins)) * 100);
+	const { numberOfWins, numberOfLosses, winrate } = computeWinrateInfo(eventsRecord);
 
 	// Paginated sets
 	const paginatedSets = events
@@ -110,25 +110,90 @@ export const GET = async ({ url }) => {
 	const parsedMatches = paginatedSets
 		.map((set) => set?.displayScore)
 		.filter(notNullNorUndefined)
-		.map(parseMatch)
-		.filter((match) => match !== 'DQ');
+		.map(parseMatch);
 
-	// Shutouts dealt and taken
-	const shutouts = parsedMatches.reduce(
-		(acc, player) => {
-			const playerIndex = player.findIndex((p) => aliasesSet.has(p.name));
-			if (playerIndex === -1) return acc;
+	// Shutouts given and taken
+	const shutouts = computeShutouts(parsedMatches, aliasesSet);
 
-			const otherPlayerScore = player[(playerIndex + 1) % 2].score;
-			const playerScore = player[playerIndex].score;
+	/**
+	 * Only consider sets with a bracket type of SINGLE_ELIMINATION or DOUBLE_ELIMINATION
+	 * because they are the only ones where the initial seed matters. (I think)
+	 */
+	const setsWithSingleOrDoubleEliminations = paginatedSets
+		.filter(
+			(set) =>
+				set.phaseGroup?.bracketType === 'SINGLE_ELIMINATION' ||
+				set.phaseGroup?.bracketType === 'DOUBLE_ELIMINATION'
+		)
+		.filter(notNullNorUndefined)
+		.map((set) => ({
+			...set,
+			games: undefined,
+			firstGame: set.games?.[0]?.selections
+		}));
 
-			return {
-				taken: acc.taken + (otherPlayerScore === 0 ? 1 : 0),
-				given: acc.given + (playerScore === 0 ? 1 : 0)
-			};
+	// Highest upset factor inflicted and received
+	const upsets = {
+		inflicted: {
+			against: '',
+			factor: -Infinity
 		},
-		{ taken: 0, given: 0 }
-	);
+		received: {
+			against: '',
+			factor: Infinity
+		},
+		count: {
+			inflicted: 0,
+			received: 0
+		}
+	};
+
+	// Iterate over the sets and compute the upset factor
+	setsWithSingleOrDoubleEliminations.forEach((set) => {
+		// Search for the player in the set
+		const playerIndex = set.firstGame?.findIndex((p) => aliasesSet.has(p?.entrant?.name || ''));
+		// If the player is not in the set, skip it
+		if (playerIndex === -1 || playerIndex === undefined) return;
+
+		// Get the other player
+		const opponentIndex = (playerIndex + 1) % 2;
+
+		// Get players initial seeds
+		const playerInitialSeed = set.firstGame?.[playerIndex]?.entrant?.checkInSeed?.seedNum;
+		const opponentInitialSeed = set.firstGame?.[opponentIndex]?.entrant?.checkInSeed?.seedNum;
+
+		// If the player or opponent don't have an initial seed, skip it
+		if (!playerInitialSeed || !opponentInitialSeed) return;
+
+		// Compute upset factor
+		const bracketType = set.phaseGroup?.bracketType;
+		// Enforce the type to be either SINGLE_ELIMINATION or DOUBLE_ELIMINATION be
+		// sets are filtered above
+		const UF = upsetFactor(playerInitialSeed, opponentInitialSeed, bracketType as BracketType);
+
+		// If the player won the set
+		if (set.winnerId === set.firstGame?.[playerIndex]?.entrant?.id) {
+			// Check if player "upsetted" the opponent i.e UpsetFactor > 0
+			if (UF > 0) {
+				upsets.count.inflicted++;
+				// Update the highest upset factor given if the current one is higher
+				if (UF > upsets.inflicted.factor) {
+					upsets.inflicted.factor = UF;
+					upsets.inflicted.against = set.firstGame?.[opponentIndex]?.entrant?.name || '';
+				}
+			}
+		} else {
+			// If the player lost the set, check if the opponent "upsetted" the player i.e UpsetFactor < 0
+			if (UF < 0) {
+				upsets.count.received++;
+				// Update the highest upset factor taken if the current one is lower
+				if (UF < upsets.received.factor) {
+					upsets.received.factor = UF;
+					upsets.received.against = set.firstGame?.[opponentIndex]?.entrant?.name || '';
+				}
+			}
+		}
+	});
 
 	return json({
 		me: player,
@@ -151,7 +216,8 @@ export const GET = async ({ url }) => {
 				wins: numberOfWins,
 				losses: numberOfLosses
 			},
-			shutouts
+			shutouts,
+			upsets
 		},
 		raw: events
 	});
