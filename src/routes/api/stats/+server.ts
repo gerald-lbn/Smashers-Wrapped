@@ -7,6 +7,7 @@ import {
 	computeWinrateInfo,
 	getThisYearEvents,
 	getTop3Occurrences,
+	getUserAliases,
 	notNullNorUndefined,
 	parseMatch,
 	upsetFactor,
@@ -70,8 +71,8 @@ export const GET = async ({ url }) => {
 		}));
 
 	// Get the aliases used by the player
-	const aliases = events.map((e) => e?.userEntrant?.name).filter(notNullNorUndefined);
-	const aliasesSet = new Set(aliases);
+	const entrantNames = events.map((e) => e?.userEntrant?.name);
+	const aliasesSet = getUserAliases(entrantNames);
 
 	// Compute global winrate, wins and losses
 	const eventsRecord = events

@@ -445,3 +445,15 @@ export const computeWinrateInfo = (userRecords: UserEntrantRecord[]) => {
 		winrate
 	};
 };
+
+/**
+ * Get a unique set of aliases used by the player
+ * @param entrantNames Names used by the player
+ * @returns A set of unique aliases
+ */
+export const getUserAliases = (entrantNames: (string | null | undefined)[]) => {
+	const aliases = entrantNames.filter(notNullNorUndefined);
+	const aliasesSet = new Set(aliases);
+
+	return aliasesSet;
+};
