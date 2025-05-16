@@ -138,11 +138,11 @@ export const GET = async ({ url }) => {
 	const playerTops = numberOfTops(playerPlacements);
 
 	// Recurring opponents
-	const opponents = games
-		.flatMap((game) => game.selections)
+	const opponents = setsWithFirstGameSelection
+		.flatMap((set) => set.firstGame)
 		.filter((selection) => !aliasesSet.has(selection?.entrant?.name ?? ''))
-		.map((selection) => selection?.entrant?.players)
-		.flatMap((player) => player?.flatMap((p) => p?.gamerTag));
+		.flatMap((selection) => selection?.entrant?.players)
+		.map((player) => player?.gamerTag);
 	const recurringOpponents = getTop3Occurrences(opponents);
 
 	return json({
