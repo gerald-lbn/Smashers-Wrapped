@@ -132,17 +132,8 @@ export const GET = async ({ url }) => {
 	const upsets = computeUpsets(setsWithFirstGameSelection, aliasesSet);
 
 	// Number of tops
-	const playerPlacements = setsWithFirstGameSelection
-		.filter(
-			(set) =>
-				set.phaseGroup?.bracketType === 'SINGLE_ELIMINATION' ||
-				set.phaseGroup?.bracketType === 'DOUBLE_ELIMINATION'
-		)
-		.flatMap((set) => set.firstGame)
-		.map((game) => game?.entrant)
-		.filter(notNullNorUndefined)
-		.filter((entrant) => entrant?.name && aliasesSet.has(entrant.name))
-		.map((entrant) => entrant.checkInSeed?.placement)
+	const playerPlacements = events
+		.map((e) => e?.userEntrant?.checkInSeed?.placement)
 		.filter(notNullNorUndefined);
 	const playerTops = numberOfTops(playerPlacements);
 
