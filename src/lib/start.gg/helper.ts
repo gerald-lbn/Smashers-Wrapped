@@ -457,3 +457,107 @@ export const getUserAliases = (entrantNames: (string | null | undefined)[]) => {
 
 	return aliasesSet;
 };
+
+type MinimalSetInfo = {
+	firstGame:
+		| ({
+				entrant:
+					| {
+							id: string | null | undefined;
+							name: string | null | undefined;
+							checkInSeed:
+								| {
+										seedNum: number | null | undefined;
+								  }
+								| null
+								| undefined;
+					  }
+					| null
+					| undefined;
+		  } | null)[]
+		| null
+		| undefined;
+	winnerId: number | null;
+	phaseGroup:
+		| {
+				bracketType: string | null;
+		  }
+		| null
+		| undefined;
+	displayScore: string | null | undefined;
+};
+
+export const computeUpsets = (sets: MinimalSetInfo[], aliases: Set<string>) => {
+	const upsets = {
+		inflicted: {
+			against: '',
+			factor: -Infinity
+		},
+		received: {
+			against: '',
+			factor: Infinity
+		},
+		count: {
+			inflicted: 0,
+			received: 0
+		}
+	};
+
+	/**
+	 * Only consider sets with a bracket type of SINGLE_ELIMINATION or DOUBLE_ELIMINATION
+	 * because they are the only ones where the initial seed matters. (I think)
+	 */
+	sets
+		.filter(
+			(set) =>
+				set.phaseGroup?.bracketType === 'SINGLE_ELIMINATION' ||
+				set.phaseGroup?.bracketType === 'DOUBLE_ELIMINATION'
+		)
+		.forEach((set) => {
+			// Search for the player in the set
+			const playerIndex = set.firstGame?.findIndex((p) => aliases.has(p?.entrant?.name || ''));
+			// If the player is not in the set, skip it
+			if (playerIndex === -1 || playerIndex === undefined) return;
+
+			// Get the other player
+			const opponentIndex = (playerIndex + 1) % 2;
+
+			// Get players initial seeds
+			const playerInitialSeed = set.firstGame?.[playerIndex]?.entrant?.checkInSeed?.seedNum;
+			const opponentInitialSeed = set.firstGame?.[opponentIndex]?.entrant?.checkInSeed?.seedNum;
+
+			// If the player or opponent don't have an initial seed, skip it
+			if (!playerInitialSeed || !opponentInitialSeed) return;
+
+			// Compute upset factor
+			const bracketType = set.phaseGroup?.bracketType;
+			// Enforce the type to be either SINGLE_ELIMINATION or DOUBLE_ELIMINATION be
+			// sets are filtered above
+			const UF = upsetFactor(playerInitialSeed, opponentInitialSeed, bracketType as BracketType);
+
+			// If the player won the set
+			if (set.winnerId === set.firstGame?.[playerIndex]?.entrant?.id) {
+				// Check if player "upsetted" the opponent i.e UpsetFactor > 0
+				if (UF > 0) {
+					upsets.count.inflicted++;
+					// Update the highest upset factor given if the current one is higher
+					if (UF > upsets.inflicted.factor) {
+						upsets.inflicted.factor = UF;
+						upsets.inflicted.against = set.firstGame?.[opponentIndex]?.entrant?.name || '';
+					}
+				}
+			} else {
+				// If the player lost the set, check if the opponent "upsetted" the player i.e UpsetFactor < 0
+				if (UF < 0) {
+					upsets.count.received++;
+					// Update the highest upset factor taken if the current one is lower
+					if (UF < upsets.received.factor) {
+						upsets.received.factor = UF;
+						upsets.received.against = set.firstGame?.[opponentIndex]?.entrant?.name || '';
+					}
+				}
+			}
+		});
+
+	return upsets;
+};
