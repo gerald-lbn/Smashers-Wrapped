@@ -137,8 +137,17 @@ export const GET = async ({ url }) => {
 		.filter(notNullNorUndefined);
 	const playerTops = numberOfTops(playerPlacements);
 
+	// Recurring opponents
+	const opponents = games
+		.flatMap((game) => game.selections)
+		.filter((selection) => !aliasesSet.has(selection?.entrant?.name ?? ''))
+		.map((selection) => selection?.entrant?.players)
+		.flatMap((player) => player?.flatMap((p) => p?.gamerTag));
+	const recurringOpponents = getTop3Occurrences(opponents);
+
 	return json({
 		me: player,
+		recurringOpponents,
 		tournaments: {
 			attended: tournaments.length,
 			perMonth: tournamentsByMonth,

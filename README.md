@@ -17,18 +17,17 @@ A platform that generates a year-in-review video for each [start.gg](start.gg) u
 - [x] Personnages joués les plus fréquents
 - [x] Maps jouées les plus fréquentes
 - [x] Nombre de X-O's réalisés et reçus
-- [ ] Meilleurs et pires performance (en terme de SPR)
-- [ ] Meilleurs et pires résultats (en terme de `placement`)
+- [x] Meilleur performance (en terme de SPR)
+- [x] Meilleur résultats (en terme de `placement`)
 
 ### 🏆 Performances par tournoi
 
-- [ ] Meilleure performance (place la plus haute)
 - [x] Tournois avec le plus grand nombre de participants
 - [x] Nombre de Top 8 / Top 16 / sorties de pools
 
 ### ⚔️ Rivalités et adversaires
 
-- [ ] Adversaire affronté le plus souvent
+- [x] Adversaire affronté le plus souvent
 - [ ] Joueurs contre qui il/elle a le meilleur/mauvais ratio
 - [x] Upsets réalisés (victoires contre joueurs mieux seedés)
 - [ ] Nombre de fois éliminé par le même joueur
