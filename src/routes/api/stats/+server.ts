@@ -10,6 +10,7 @@ import {
 	getTop3Occurrences,
 	getUserAliases,
 	notNullNorUndefined,
+	numberOfTops,
 	parseMatch,
 	type BracketType,
 	type UserEntrantRecord
@@ -115,22 +116,26 @@ export const GET = async ({ url }) => {
 	// Shutouts given and taken
 	const shutouts = computeShutouts(parsedMatches, aliasesSet);
 
-	const setsWithSingleOrDoubleEliminations = paginatedSets
-		.filter(notNullNorUndefined)
-		.map((set) => ({
-			...set,
-			set: {
-				phaseGroup: {
-					...set.phaseGroup,
-					bracketType: set.phaseGroup?.bracketType as BracketType | null
-				}
-			},
-			games: undefined,
-			firstGame: set.games?.[0]?.selections
-		}));
+	const setsWithFirstGameSelection = paginatedSets.filter(notNullNorUndefined).map((set) => ({
+		...set,
+		set: {
+			phaseGroup: {
+				...set.phaseGroup,
+				bracketType: set.phaseGroup?.bracketType as BracketType | null
+			}
+		},
+		games: undefined,
+		firstGame: set.games?.[0]?.selections
+	}));
 
 	// Highest upset factor inflicted and received
-	const upsets = computeUpsets(setsWithSingleOrDoubleEliminations, aliasesSet);
+	const upsets = computeUpsets(setsWithFirstGameSelection, aliasesSet);
+
+	// Number of tops
+	const playerPlacements = events
+		.map((e) => e?.userEntrant?.checkInSeed?.placement)
+		.filter(notNullNorUndefined);
+	const playerTops = numberOfTops(playerPlacements);
 
 	return json({
 		me: player,
@@ -154,7 +159,8 @@ export const GET = async ({ url }) => {
 				losses: numberOfLosses
 			},
 			shutouts,
-			upsets
+			upsets,
+			tops: playerTops
 		},
 		raw: events
 	});
