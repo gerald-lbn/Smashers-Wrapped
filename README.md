@@ -23,7 +23,6 @@ A platform that generates a year-in-review video for each [start.gg](start.gg) u
 - [ ] Meilleure performance (place la plus haute)
 - [x] Tournois avec le plus grand nombre de participants
 - [ ] Nombre de Top 8 / Top 16 / sorties de pools
-- [ ] Tournoi le plus fréquenté où le joueur a battu un seed plus élevé
 
 ### ⚔️ Rivalités et adversaires
 
