@@ -561,3 +561,22 @@ export const computeUpsets = (sets: MinimalSetInfo[], aliases: Set<string>) => {
 
 	return upsets;
 };
+
+/**
+ * Counts the amount of times a player has placed in the top 1, 4, 8
+ */
+export const numberOfTops = (placements: number[]) => {
+	const tops = {
+		top1: 0,
+		top4: 0,
+		top8: 0
+	};
+
+	placements.forEach((placement) => {
+		if (placement === 1) tops.top1++;
+		if (placement <= 4) tops.top4++;
+		if (placement <= 8) tops.top8++;
+	});
+
+	return tops;
+};
