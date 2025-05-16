@@ -574,8 +574,8 @@ export const numberOfTops = (placements: number[]) => {
 
 	placements.forEach((placement) => {
 		if (placement === 1) tops.top1++;
-		if (placement <= 4) tops.top4++;
-		if (placement <= 8) tops.top8++;
+		else if (placement <= 4) tops.top4++;
+		else if (placement <= 8) tops.top8++;
 	});
 
 	return tops;
