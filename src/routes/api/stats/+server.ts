@@ -145,7 +145,74 @@ export const GET = async ({ url }) => {
 		.map((player) => player?.gamerTag);
 	const recurringOpponents = getTop3Occurrences(opponents);
 
+	/********************************************************************************
+	 * Achievements
+	 ********************************************************************************/
+	// 1. ThroneBreaker
+	const throneBreaker = paginatedSets.some((set) => {
+		const displayScore = set?.displayScore;
+		if (!displayScore) return false;
+
+		const parsedScore = parseMatch(displayScore);
+		if (parsedScore === 'DQ') return false;
+
+		const playerIndex = parsedScore.findIndex((p) => aliasesSet.has(p.name));
+		if (playerIndex === -1) return false;
+		const opponentIndex = playerIndex === 0 ? 1 : 0;
+
+		// Early return if the player is not the winner
+		if (parsedScore[playerIndex].score < parsedScore[opponentIndex].score) return false;
+
+		const firstGame = set?.games?.[0]?.selections;
+		if (!firstGame) return false;
+
+		// Check if the opponent is seed 1
+		const opponent = firstGame.find((s) => s?.entrant?.name && !aliasesSet.has(s?.entrant?.name));
+		if (!opponent) return false;
+		if (opponent.entrant?.checkInSeed?.seedNum !== 1) return false;
+		return true;
+	});
+
+	// 2. Back from the Dead
+	const backFromTheDead = undefined;
+
+	// 3. Upset King
+	const upsetKing = undefined;
+
+	// 4. Defender
+	const defender = undefined;
+
+	// 5. Top 8 Finisher
+	const top8Finisher = undefined;
+
+	// 6. The Comeback kid
+	const comebackKid = undefined;
+
+	// 7. The regular
+	const theRegular = undefined;
+
+	// 8. The underdog
+	const underdog = undefined;
+
+	// 9/ GlobeTrotter
+	const globeTrotter = undefined;
+
+	// 10. Killing Machine
+	const killingMachine = undefined;
+
 	return json({
+		achievemts: {
+			throneBreaker,
+			backFromTheDead,
+			upsetKing,
+			defender,
+			top8Finisher,
+			comebackKid,
+			theRegular,
+			underdog,
+			globeTrotter,
+			killingMachine
+		},
 		me: player,
 		recurringOpponents,
 		tournaments: {
