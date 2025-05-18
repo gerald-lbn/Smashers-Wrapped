@@ -4,11 +4,9 @@ export const SearchPlayerByGamerTagQuery = `
 	query SearchByGamerTag($search: PlayerQuery!) {
 		players(query: $search) {
 			nodes {
-				id
 				gamerTag
 				user {
 					id
-					slug
 					location {
 						country
 					}
@@ -108,63 +106,4 @@ export const GetPaginatedTournamentsEventsQuery = `
 		}
 	}
 `;
-export const GetPaginatedTournamentsEvents = graphql(`
-	query GetTournamentsEvents($userID: ID!, $page: Int!) {
-		user(id: $userID) {
-			events(query: { filter: { videogameId: [1386], eventType: 1 }, page: $page, perPage: 10 }) {
-				nodes {
-					name
-					numEntrants
-					startAt
-					tournament {
-						name
-						countryCode
-						images(type: "profile") {
-							url
-						}
-					}
-					userEntrant(userId: $userID) {
-						name
-						lostTo
-						record
-						checkInSeed {
-							placement
-							seedNum
-						}
-						paginatedSets {
-							nodes {
-								displayScore
-								fullRoundText
-								phaseGroup {
-									bracketType
-								}
-								winnerId
-								games {
-									stage {
-										name
-									}
-									selections {
-										entrant {
-											id
-											name
-											checkInSeed {
-												placement
-												seedNum
-											}
-											players {
-												gamerTag
-											}
-										}
-										character {
-											name
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-`); // GetPaginatedTournamentsEventsQuery);
+export const GetPaginatedTournamentsEvents = graphql(GetPaginatedTournamentsEventsQuery);
