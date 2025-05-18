@@ -179,7 +179,7 @@ export const GET = async ({ url }) => {
 	const backFromTheDead = undefined;
 
 	// 3. Upset King
-	const upsetKing = undefined;
+	const upsetKing = upsets.count.inflicted;
 
 	// 4. Defender
 	const defender = undefined;
