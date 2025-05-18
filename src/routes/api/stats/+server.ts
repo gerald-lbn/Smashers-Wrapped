@@ -185,7 +185,7 @@ export const GET = async ({ url }) => {
 	const defender = undefined;
 
 	// 5. Top 8 Finisher
-	const top8Finisher = undefined;
+	const top8Finisher = playerTops.top1 + playerTops.top4 + playerTops.top8;
 
 	// 6. The Comeback kid
 	const comebackKid = undefined;
@@ -194,9 +194,24 @@ export const GET = async ({ url }) => {
 	const theRegular = undefined;
 
 	// 8. The underdog
-	const underdog = undefined;
+	const underdog = setsWithFirstGameSelection.filter((set) => {
+		const displayScore = set?.displayScore;
+		if (!displayScore) return false;
 
-	// 9/ GlobeTrotter
+		const parsedScore = parseMatch(displayScore);
+		if (parsedScore === 'DQ') return false;
+
+		const playerIndex = parsedScore.findIndex((p) => aliasesSet.has(p.name));
+		if (playerIndex === -1) return false;
+
+		// Check if the player is placed 1 while been seed 8+
+		const playerSeedInfo = set?.firstGame?.find(
+			(selection) => selection?.entrant?.name && aliasesSet.has(selection?.entrant?.name)
+		)?.entrant?.checkInSeed;
+		return playerSeedInfo?.seedNum === 1 && playerSeedInfo?.seedNum >= 8;
+	}).length;
+
+	// 9 GlobeTrotter
 	const globeTrotter = undefined;
 
 	// 10. Killing Machine
