@@ -149,29 +149,31 @@ export const GET = async ({ url }) => {
 	 * Achievements
 	 ********************************************************************************/
 	// 1. ThroneBreaker
-	const throneBreaker = paginatedSets.some((set) => {
-		const displayScore = set?.displayScore;
-		if (!displayScore) return false;
+	const throneBreaker = paginatedSets
+		.map((set) => {
+			const displayScore = set?.displayScore;
+			if (!displayScore) return false;
 
-		const parsedScore = parseMatch(displayScore);
-		if (parsedScore === 'DQ') return false;
+			const parsedScore = parseMatch(displayScore);
+			if (parsedScore === 'DQ') return false;
 
-		const playerIndex = parsedScore.findIndex((p) => aliasesSet.has(p.name));
-		if (playerIndex === -1) return false;
-		const opponentIndex = playerIndex === 0 ? 1 : 0;
+			const playerIndex = parsedScore.findIndex((p) => aliasesSet.has(p.name));
+			if (playerIndex === -1) return false;
+			const opponentIndex = playerIndex === 0 ? 1 : 0;
 
-		// Early return if the player is not the winner
-		if (parsedScore[playerIndex].score < parsedScore[opponentIndex].score) return false;
+			// Early return if the player is not the winner
+			if (parsedScore[playerIndex].score < parsedScore[opponentIndex].score) return false;
 
-		const firstGame = set?.games?.[0]?.selections;
-		if (!firstGame) return false;
+			const firstGame = set?.games?.[0]?.selections;
+			if (!firstGame) return false;
 
-		// Check if the opponent is seed 1
-		const opponent = firstGame.find((s) => s?.entrant?.name && !aliasesSet.has(s?.entrant?.name));
-		if (!opponent) return false;
-		if (opponent.entrant?.checkInSeed?.seedNum !== 1) return false;
-		return true;
-	});
+			// Check if the opponent is seed 1
+			const opponent = firstGame.find((s) => s?.entrant?.name && !aliasesSet.has(s?.entrant?.name));
+			if (!opponent) return false;
+			if (opponent.entrant?.checkInSeed?.seedNum !== 1) return false;
+			return true;
+		})
+		.filter(Boolean).length;
 
 	// 2. Back from the Dead
 	const backFromTheDead = undefined;
