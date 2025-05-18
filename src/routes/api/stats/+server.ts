@@ -212,7 +212,8 @@ export const GET = async ({ url }) => {
 	}).length;
 
 	// 9 GlobeTrotter
-	const globeTrotter = undefined;
+	const globeTrotter = new Set(tournaments.map((t) => t.countryCode).filter(notNullNorUndefined))
+		.size;
 
 	// 10. Killing Machine
 	const killingMachine = undefined;
