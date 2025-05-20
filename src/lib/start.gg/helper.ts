@@ -477,10 +477,10 @@ export const upsetFactor = (playerSeed: number, opponentSeed: number, bracket: B
 };
 
 /**
- * Computes the number of shutouts given and taken by a player.
+ * Computes the number of shutouts inflicted and received by a player.
  * @param matches - An array of matches, each match is an array of players with their scores
  * @param aliases - A set of aliases for the player
- * @returns An object containing the number of shutouts given and taken
+ * @returns An object containing the number of shutouts inflicted and received
  */
 export const computeShutouts = (matches: (ParsedMatch | 'DQ')[], aliases: Set<string>) => {
 	const matchesWithoutDQ = matches.filter((match) => match !== 'DQ');
@@ -493,11 +493,11 @@ export const computeShutouts = (matches: (ParsedMatch | 'DQ')[], aliases: Set<st
 			const playerScore = player[playerIndex].score;
 
 			return {
-				taken: acc.taken + (playerScore === 0 ? 1 : 0),
-				given: acc.given + (otherPlayerScore === 0 ? 1 : 0)
+				received: acc.received + (playerScore === 0 ? 1 : 0),
+				inflicted: acc.inflicted + (otherPlayerScore === 0 ? 1 : 0)
 			};
 		},
-		{ taken: 0, given: 0 }
+		{ received: 0, inflicted: 0 }
 	);
 
 	return shutouts;
