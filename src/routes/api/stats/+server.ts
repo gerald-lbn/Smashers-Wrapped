@@ -181,8 +181,49 @@ export const GET = async ({ url }) => {
 	// 3. Upset King
 	const upsetKing = upsets.count.inflicted;
 
-	// 4. Defender
-	const defender = undefined;
+	/**
+	 * 4. Defender - "Never lost to a lower seed in a tournament"
+	 *
+	 * NOTE: Only applicable for the entire tournament and not all sets (this would be less impressive)
+	 */
+	const defender = events
+		.map((e) => {
+			// Only get the 1st set to get the set result and seed info
+			const set = e?.userEntrant?.paginatedSets?.nodes?.filter(
+				(set) =>
+					set?.phaseGroup?.bracketType === 'DOUBLE_ELIMINATION' ||
+					set?.phaseGroup?.bracketType === 'SINGLE_ELIMINATION'
+			)?.[0];
+			if (!set) return false;
+
+			// Parse match score
+			const displayScore = set?.displayScore;
+			if (!displayScore) return false;
+			const parsedScore = parseMatch(displayScore);
+			if (parsedScore === 'DQ') return false;
+
+			// Get each player's score
+			const playerIndex = parsedScore.findIndex((p) => aliasesSet.has(p.name));
+			if (playerIndex === -1) return false;
+			const opponentIndex = playerIndex === 0 ? 1 : 0;
+			const playerScore = parsedScore[playerIndex].score;
+			const opponentScore = parsedScore[opponentIndex].score;
+
+			// Get each player's seed
+			const firstGame = set?.games?.[0]?.selections;
+			if (!firstGame) return false;
+			const entrants = firstGame.flatMap((s) => s?.entrant);
+			if (!entrants) return false;
+			const playerSeed = entrants.find((e) => e?.name && aliasesSet.has(e.name))?.checkInSeed
+				?.seedNum;
+			const opponentSeed = entrants.find((e) => e?.name && !aliasesSet.has(e.name))?.checkInSeed
+				?.seedNum;
+			if (!playerSeed || !opponentSeed) return false;
+
+			// Check if the player won and against a lower seed
+			return playerScore > opponentScore && playerSeed < opponentSeed;
+		})
+		.filter(Boolean).length;
 
 	// 5. Top 8 Finisher
 	const top8Finisher = playerTops.top1 + playerTops.top4 + playerTops.top8;
