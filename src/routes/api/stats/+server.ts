@@ -97,11 +97,13 @@ export const GET = async ({ url }) => {
 
 			// Character selections
 			game.selections?.forEach((selection) => {
-				const isPlayer = selection?.entrant?.name && aliasesSet.has(selection.entrant.name);
-				if (selection?.character?.name) {
-					const target = isPlayer ? accGame.charactersPlayed : accGame.charactersPlayedAgainst;
-					target.set(selection.character.name, (target.get(selection.character.name) ?? 0) + 1);
-				}
+				if (!selection?.entrant?.name) return;
+				if (!selection.character?.name) return;
+				const isPlayer = aliasesSet.has(selection.entrant.name);
+				const characterName = selection.character.name;
+
+				const target = isPlayer ? accGame.charactersPlayed : accGame.charactersPlayedAgainst;
+				target.set(characterName, (target.get(characterName) ?? 0) + 1);
 			});
 			return accGame;
 		},
@@ -112,21 +114,31 @@ export const GET = async ({ url }) => {
 		}
 	);
 	// Most played maps
-	const mapsPlayedTop3 = getTop3Occurrences(
-		[...selections.maps.entries()].sort((a, b) => b[1] - a[1]).map(([name]) => name)
-	);
+	const mapsPlayedTop3 = [...selections.maps.entries()]
+		.sort((a, b) => b[1] - a[1])
+		.map(([name, count]) => ({
+			name,
+			count
+		}))
+		.slice(0, 3);
 
 	// Most played characters
-	const charactersPlayedTop3 = getTop3Occurrences(
-		[...selections.charactersPlayed.entries()].sort((a, b) => b[1] - a[1]).map(([name]) => name)
-	);
+	const charactersPlayedTop3 = [...selections.charactersPlayed.entries()]
+		.sort((a, b) => b[1] - a[1])
+		.map(([name, count]) => ({
+			name,
+			count
+		}))
+		.slice(0, 3);
 
 	// Top 3 characters played against
-	const charactersPlayedAgainstTop3 = getTop3Occurrences(
-		[...selections.charactersPlayedAgainst.entries()]
-			.sort((a, b) => b[1] - a[1])
-			.map(([name]) => name)
-	);
+	const charactersPlayedAgainstTop3 = [...selections.charactersPlayedAgainst.entries()]
+		.sort((a, b) => b[1] - a[1])
+		.map(([name, count]) => ({
+			name,
+			count
+		}))
+		.slice(0, 3);
 
 	const parsedMatches = paginatedSets
 		.map((set) => set?.displayScore)
