@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /api/
+Disallow: /background-pattern.svg
+Disallow: /login/
+Disallow: /og.png
+Disallow: /player/
