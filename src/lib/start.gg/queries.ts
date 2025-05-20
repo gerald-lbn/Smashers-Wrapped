@@ -62,6 +62,7 @@ export const GetPaginatedTournamentsEventsQuery = `
 						}
 					}
 					userEntrant(userId: $userID) {
+						id
 						name
 						lostTo
 						record

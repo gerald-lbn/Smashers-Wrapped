@@ -654,3 +654,38 @@ export const numberOfTops = (placements: number[]) => {
 
 	return tops;
 };
+
+/**
+ * Determines if a reverse sweep occurred in a match.
+ * A reverse sweep occurs when a player loses the first game(s) but wins the match straight after.
+ * For example, in a best of 5, if the player loses the first two games and then wins the next three,
+ * it is considered a reverse sweep.
+ * @param playerEntrantId - The ID of the player's entrant
+ * @param opponentEntrantId - The ID of the opponent's entrant
+ * @param winnerIds - An array of winner IDs
+ * @returns `player` if the player won by reverse sweep, `opponent` if the opponent won by reverse sweep, or `null` if neither did.
+ */
+export const whoReversedSweep = <T extends string>(
+	playerEntrantId: T,
+	opponentEntrantId: T,
+	winnerIds: T[]
+): 'player' | 'opponent' | null => {
+	// Reverse sweep occurs in a BO3 at least
+	if (winnerIds.length < 3) return null;
+
+	const checkReverseSweep = (winnerId: T, loserId: T) => {
+		const gamesLostToReverseSweep = Math.floor(winnerIds.length / 2);
+		const lostFirstGames = winnerIds
+			.slice(0, gamesLostToReverseSweep)
+			.every((id) => id === loserId);
+		const wonLastGames = winnerIds.slice(gamesLostToReverseSweep).every((id) => id === winnerId);
+		return lostFirstGames && wonLastGames;
+	};
+
+	// Check if the player or the opponent reverse swept the other
+	if (checkReverseSweep(playerEntrantId, opponentEntrantId)) return 'player';
+	if (checkReverseSweep(opponentEntrantId, playerEntrantId)) return 'opponent';
+
+	// If neither player reverse swept, return null
+	return null;
+};

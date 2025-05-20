@@ -13,6 +13,7 @@ import {
 	notNullNorUndefined,
 	numberOfTops,
 	parseMatch,
+	whoReversedSweep,
 	type BracketType,
 	type UserEntrantRecord
 } from '$lib/start.gg/helper';
@@ -177,6 +178,32 @@ export const GET = async ({ url }) => {
 		.map((player) => player?.gamerTag);
 	const recurringOpponents = getTop3Occurrences(opponents);
 
+	// Number of reverse sweeps inflicted and received
+	const reverseSweeps = events.reduce(
+		(acc, e) => {
+			const sets = e?.userEntrant?.paginatedSets?.nodes;
+			if (!sets) return acc;
+
+			const playerEntrantId = e.userEntrant?.id;
+			const opponentEntrantId = sets[0]?.games?.[0]?.selections?.find(
+				(selection) => selection?.entrant?.id !== playerEntrantId
+			)?.entrant?.id;
+			const winnerIds = sets.map((set) => String(set?.winnerId));
+
+			if (!playerEntrantId || !opponentEntrantId || !winnerIds) return acc;
+
+			const reverseSweepPerson = whoReversedSweep(playerEntrantId, opponentEntrantId, winnerIds);
+			if (reverseSweepPerson === 'player') acc.inflicted += 1;
+			else if (reverseSweepPerson === 'opponent') acc.received += 1;
+
+			return acc;
+		},
+		{
+			inflicted: 0,
+			received: 0
+		}
+	);
+
 	/********************************************************************************
 	 * Achievements
 	 ********************************************************************************/
@@ -260,13 +287,10 @@ export const GET = async ({ url }) => {
 	// 5. Top 8 Finisher
 	const top8Finisher = playerTops.top1 + playerTops.top4 + playerTops.top8;
 
-	// 6. The Comeback kid
-	const comebackKid = undefined;
+	// 6. Game 4 MKLeo
+	const game4MKLeo = reverseSweeps.inflicted;
 
-	// 7. The regular
-	const theRegular = undefined;
-
-	// 8. The underdog
+	// 7. The underdog
 	const underdog = setsWithFirstGameSelection.reduce((count, set) => {
 		if (!set.displayScore) return count;
 		const parsedScore = parseMatch(set.displayScore);
@@ -282,11 +306,11 @@ export const GET = async ({ url }) => {
 		return playerSeedInfo?.seedNum === 1 && playerSeedInfo?.seedNum >= 8 ? count + 1 : count;
 	}, 0);
 
-	// 9 GlobeTrotter
+	// 8 GlobeTrotter
 	const globeTrotter = new Set(tournaments.map((t) => t.countryCode).filter(notNullNorUndefined))
 		.size;
 
-	// 10. Perfect Run
+	// 9. Perfect Run
 	const perfectRun = events
 		.filter((e) =>
 			// Perfect run only applies to double elimination brackets
@@ -312,8 +336,7 @@ export const GET = async ({ url }) => {
 			upsetKing,
 			defender,
 			top8Finisher,
-			comebackKid,
-			theRegular,
+			game4MKLeo,
 			underdog,
 			globeTrotter,
 			perfectRun
@@ -341,6 +364,7 @@ export const GET = async ({ url }) => {
 			},
 			shutouts,
 			upsets,
+			reverseSweeps,
 			tops: playerTops
 		},
 		raw: events
