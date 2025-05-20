@@ -9,6 +9,7 @@ import {
 	getThisYearEvents,
 	getTop3Occurrences,
 	getUserAliases,
+	isPerfectRun,
 	notNullNorUndefined,
 	numberOfTops,
 	parseMatch,
@@ -256,8 +257,26 @@ export const GET = async ({ url }) => {
 	const globeTrotter = new Set(tournaments.map((t) => t.countryCode).filter(notNullNorUndefined))
 		.size;
 
-	// 10. Killing Machine
-	const killingMachine = undefined;
+	// 10. Perfect Run
+	const perfectRun = events
+		.filter((e) =>
+			// Perfect run only applies to double elimination brackets
+			e?.userEntrant?.paginatedSets?.nodes?.some(
+				(set) =>
+					set?.phaseGroup?.bracketType &&
+					['DOUBLE_ELIMINATION'].includes(set?.phaseGroup?.bracketType)
+			)
+		)
+		.map((e) => {
+			const placement = e?.userEntrant?.checkInSeed?.placement;
+			const roundTexts = e?.userEntrant?.paginatedSets?.nodes
+				?.map((set) => set?.fullRoundText)
+				.filter(notNullNorUndefined);
+			if (!placement || !roundTexts) return false;
+
+			return isPerfectRun(roundTexts, placement);
+		})
+		.filter(Boolean).length;
 
 	return json({
 		achievemts: {
@@ -270,7 +289,7 @@ export const GET = async ({ url }) => {
 			theRegular,
 			underdog,
 			globeTrotter,
-			killingMachine
+			perfectRun
 		},
 		me: player,
 		recurringOpponents,

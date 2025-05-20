@@ -34,6 +34,80 @@ export const parseMatch = (match: string): ParsedMatch | 'DQ' => {
 	});
 };
 
+export type RoundTextParsed =
+	| { type: 'tiebreak'; placement: number }
+	| { type: 'winners' | 'losers'; round: number }
+	| { type: 'round'; round: number }
+	| {
+			type: 'winners' | 'losers' | 'grand' | 'final';
+			stage: 'semi' | 'quarter' | 'final';
+			reset: boolean;
+	  }
+	| null;
+
+export const parseRoundText = (roundText: string): RoundTextParsed => {
+	// Tiebreak pattern
+	const tiebreakMatch = roundText.match(/^(\d+)(?:st|nd|rd|th) Place Tiebreak$/i);
+	if (tiebreakMatch)
+		return {
+			type: 'tiebreak',
+			placement: parseInt(tiebreakMatch[1], 10)
+		};
+
+	// Winners/Losers round pattern
+	const bracketRoundMatch = roundText.match(/^(Winners|Losers) Round (\d+)$/i);
+	if (bracketRoundMatch)
+		return {
+			type: bracketRoundMatch[1].toLowerCase() as 'winners' | 'losers',
+			round: parseInt(bracketRoundMatch[2], 10)
+		};
+
+	// Simple round pattern
+	const simpleRoundMatch = roundText.match(/^Round (\d+)$/i);
+	if (simpleRoundMatch)
+		return {
+			type: 'round',
+			round: parseInt(simpleRoundMatch[1], 10)
+		};
+
+	// Finals pattern
+	const finalsMatch = roundText.match(
+		/^(Winners |Losers |Grand )?(Semi-|Quarter-)?Final( Reset)?$/i
+	);
+	if (finalsMatch)
+		return {
+			type: ((finalsMatch[1] || '').toLowerCase().trim() || 'final') as
+				| 'winners'
+				| 'losers'
+				| 'grand'
+				| 'final',
+			stage: ((finalsMatch[2] || '').toLowerCase().replace('-', '') || 'final') as
+				| 'semi'
+				| 'quarter'
+				| 'final',
+			reset: !!finalsMatch[3]
+		};
+
+	return null;
+};
+
+/**
+ * Determines if a player made a perfect tournament run i.e won the tournament without dropping to losers bracket
+ * @param roundTexts Array of round texts the player played in
+ * @param placement Final placement of the player
+ * @returns True if the player won the tournament without dropping to losers bracket
+ */
+export const isPerfectRun = (roundTexts: string[], placement: number) => {
+	// In order to be a perfect run, the player must have won the tournament
+	if (placement !== 1) return false;
+
+	// Check if the player when to loosers bracket
+	return !roundTexts.some((roundText) => {
+		const parsedText = parseRoundText(roundText);
+		return parsedText?.type === 'losers';
+	});
+};
+
 export const characterNameToSlug = (name: string) => {
 	switch (name) {
 		case 'Banjo-Kazooie':
