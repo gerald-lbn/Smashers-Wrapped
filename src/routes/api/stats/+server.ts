@@ -52,17 +52,14 @@ export const GET = async ({ url }) => {
 	// Group tournaments by month
 	const tournaments = events.map((e) => ({
 		...e?.tournament,
-		startAt: e?.startAt
+		startAt: e?.startAt,
+		numEntrants: e?.numEntrants
 	}));
 	const tournamentsStartAt = tournaments.map((t) => t.startAt).filter(notNullNorUndefined);
 	const tournamentsByMonth = aggregateByMonth(tournamentsStartAt);
 
 	// Get the tournaments with the most entrants
-	const tournamentsWithMostEntrants = events
-		.map((e) => ({
-			...e?.tournament,
-			numEntrants: e?.numEntrants
-		}))
+	const tournamentsWithMostEntrants = tournaments
 		.sort((a, b) => (b.numEntrants ?? 0) - (a.numEntrants ?? 0))
 		.slice(0, 3)
 		.map((t) => ({
@@ -91,23 +88,45 @@ export const GET = async ({ url }) => {
 	// Games
 	const games = paginatedSets.flatMap((set) => set?.games ?? []).filter(notNullNorUndefined);
 
+	// Selections
+	const selections = games.reduce(
+		(accGame, game) => {
+			// Map selection
+			if (game.stage?.name)
+				accGame.maps.set(game.stage.name, (accGame.maps.get(game.stage.name) ?? 0) + 1);
+
+			// Character selections
+			game.selections?.forEach((selection) => {
+				const isPlayer = selection?.entrant?.name && aliasesSet.has(selection.entrant.name);
+				if (selection?.character?.name) {
+					const target = isPlayer ? accGame.charactersPlayed : accGame.charactersPlayedAgainst;
+					target.set(selection.character.name, (target.get(selection.character.name) ?? 0) + 1);
+				}
+			});
+			return accGame;
+		},
+		{
+			maps: new Map<string, number>(),
+			charactersPlayed: new Map<string, number>(),
+			charactersPlayedAgainst: new Map<string, number>()
+		}
+	);
 	// Most played maps
-	const mapsPlayed = games.map((game) => game?.stage?.name);
-	const mapsPlayedTop3 = getTop3Occurrences(mapsPlayed);
+	const mapsPlayedTop3 = getTop3Occurrences(
+		[...selections.maps.entries()].sort((a, b) => b[1] - a[1]).map(([name]) => name)
+	);
 
 	// Most played characters
-	const charactersPlayed = games
-		.flatMap((game) => game?.selections ?? [])
-		.filter((selection) => selection?.entrant?.name && aliasesSet.has(selection?.entrant?.name))
-		.map((selection) => selection?.character?.name);
-	const charactersPlayedTop3 = getTop3Occurrences(charactersPlayed);
+	const charactersPlayedTop3 = getTop3Occurrences(
+		[...selections.charactersPlayed.entries()].sort((a, b) => b[1] - a[1]).map(([name]) => name)
+	);
 
 	// Top 3 characters played against
-	const charactersPlayedAgainst = games
-		.flatMap((game) => game?.selections ?? [])
-		.filter((selection) => selection?.entrant?.name && !aliasesSet.has(selection?.entrant?.name))
-		.map((selection) => selection?.character?.name);
-	const charactersPlayedAgainstTop3 = getTop3Occurrences(charactersPlayedAgainst);
+	const charactersPlayedAgainstTop3 = getTop3Occurrences(
+		[...selections.charactersPlayedAgainst.entries()]
+			.sort((a, b) => b[1] - a[1])
+			.map(([name]) => name)
+	);
 
 	const parsedMatches = paginatedSets
 		.map((set) => set?.displayScore)
@@ -279,7 +298,7 @@ export const GET = async ({ url }) => {
 		.filter(Boolean).length;
 
 	return json({
-		achievemts: {
+		achievements: {
 			throneBreaker,
 			backFromTheDead,
 			upsetKing,
