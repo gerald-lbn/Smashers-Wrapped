@@ -34,6 +34,80 @@ export const parseMatch = (match: string): ParsedMatch | 'DQ' => {
 	});
 };
 
+export type RoundTextParsed =
+	| { type: 'tiebreak'; placement: number }
+	| { type: 'winners' | 'losers'; round: number }
+	| { type: 'round'; round: number }
+	| {
+			type: 'winners' | 'losers' | 'grand' | 'final';
+			stage: 'semi' | 'quarter' | 'final';
+			reset: boolean;
+	  }
+	| null;
+
+export const parseRoundText = (roundText: string): RoundTextParsed => {
+	// Tiebreak pattern
+	const tiebreakMatch = roundText.match(/^(\d+)(?:st|nd|rd|th) Place Tiebreak$/i);
+	if (tiebreakMatch)
+		return {
+			type: 'tiebreak',
+			placement: parseInt(tiebreakMatch[1], 10)
+		};
+
+	// Winners/Losers round pattern
+	const bracketRoundMatch = roundText.match(/^(Winners|Losers) Round (\d+)$/i);
+	if (bracketRoundMatch)
+		return {
+			type: bracketRoundMatch[1].toLowerCase() as 'winners' | 'losers',
+			round: parseInt(bracketRoundMatch[2], 10)
+		};
+
+	// Simple round pattern
+	const simpleRoundMatch = roundText.match(/^Round (\d+)$/i);
+	if (simpleRoundMatch)
+		return {
+			type: 'round',
+			round: parseInt(simpleRoundMatch[1], 10)
+		};
+
+	// Finals pattern
+	const finalsMatch = roundText.match(
+		/^(Winners |Losers |Grand )?(Semi-|Quarter-)?Final( Reset)?$/i
+	);
+	if (finalsMatch)
+		return {
+			type: ((finalsMatch[1] || '').toLowerCase().trim() || 'final') as
+				| 'winners'
+				| 'losers'
+				| 'grand'
+				| 'final',
+			stage: ((finalsMatch[2] || '').toLowerCase().replace('-', '') || 'final') as
+				| 'semi'
+				| 'quarter'
+				| 'final',
+			reset: !!finalsMatch[3]
+		};
+
+	return null;
+};
+
+/**
+ * Determines if a player made a perfect tournament run i.e won the tournament without dropping to losers bracket
+ * @param roundTexts Array of round texts the player played in
+ * @param placement Final placement of the player
+ * @returns True if the player won the tournament without dropping to losers bracket
+ */
+export const isPerfectRun = (roundTexts: string[], placement: number) => {
+	// In order to be a perfect run, the player must have won the tournament
+	if (placement !== 1) return false;
+
+	// Check if the player when to loosers bracket
+	return !roundTexts.some((roundText) => {
+		const parsedText = parseRoundText(roundText);
+		return parsedText?.type === 'losers';
+	});
+};
+
 export const characterNameToSlug = (name: string) => {
 	switch (name) {
 		case 'Banjo-Kazooie':
@@ -403,10 +477,10 @@ export const upsetFactor = (playerSeed: number, opponentSeed: number, bracket: B
 };
 
 /**
- * Computes the number of shutouts given and taken by a player.
+ * Computes the number of shutouts inflicted and received by a player.
  * @param matches - An array of matches, each match is an array of players with their scores
  * @param aliases - A set of aliases for the player
- * @returns An object containing the number of shutouts given and taken
+ * @returns An object containing the number of shutouts inflicted and received
  */
 export const computeShutouts = (matches: (ParsedMatch | 'DQ')[], aliases: Set<string>) => {
 	const matchesWithoutDQ = matches.filter((match) => match !== 'DQ');
@@ -419,11 +493,11 @@ export const computeShutouts = (matches: (ParsedMatch | 'DQ')[], aliases: Set<st
 			const playerScore = player[playerIndex].score;
 
 			return {
-				taken: acc.taken + (playerScore === 0 ? 1 : 0),
-				given: acc.given + (otherPlayerScore === 0 ? 1 : 0)
+				received: acc.received + (playerScore === 0 ? 1 : 0),
+				inflicted: acc.inflicted + (otherPlayerScore === 0 ? 1 : 0)
 			};
 		},
-		{ taken: 0, given: 0 }
+		{ received: 0, inflicted: 0 }
 	);
 
 	return shutouts;
@@ -579,4 +653,39 @@ export const numberOfTops = (placements: number[]) => {
 	});
 
 	return tops;
+};
+
+/**
+ * Determines if a reverse sweep occurred in a match.
+ * A reverse sweep occurs when a player loses the first game(s) but wins the match straight after.
+ * For example, in a best of 5, if the player loses the first two games and then wins the next three,
+ * it is considered a reverse sweep.
+ * @param playerEntrantId - The ID of the player's entrant
+ * @param opponentEntrantId - The ID of the opponent's entrant
+ * @param winnerIds - An array of winner IDs
+ * @returns `player` if the player won by reverse sweep, `opponent` if the opponent won by reverse sweep, or `null` if neither did.
+ */
+export const whoReversedSweep = <T extends string>(
+	playerEntrantId: T,
+	opponentEntrantId: T,
+	winnerIds: T[]
+): 'player' | 'opponent' | null => {
+	// Reverse sweep occurs in a BO3 at least
+	if (winnerIds.length < 3) return null;
+
+	const checkReverseSweep = (winnerId: T, loserId: T) => {
+		const gamesLostToReverseSweep = Math.floor(winnerIds.length / 2);
+		const lostFirstGames = winnerIds
+			.slice(0, gamesLostToReverseSweep)
+			.every((id) => id === loserId);
+		const wonLastGames = winnerIds.slice(gamesLostToReverseSweep).every((id) => id === winnerId);
+		return lostFirstGames && wonLastGames;
+	};
+
+	// Check if the player or the opponent reverse swept the other
+	if (checkReverseSweep(playerEntrantId, opponentEntrantId)) return 'player';
+	if (checkReverseSweep(opponentEntrantId, playerEntrantId)) return 'opponent';
+
+	// If neither player reverse swept, return null
+	return null;
 };
