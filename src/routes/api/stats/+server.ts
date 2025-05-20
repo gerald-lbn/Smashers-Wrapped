@@ -255,22 +255,20 @@ export const GET = async ({ url }) => {
 	const theRegular = undefined;
 
 	// 8. The underdog
-	const underdog = setsWithFirstGameSelection.filter((set) => {
-		const displayScore = set?.displayScore;
-		if (!displayScore) return false;
-
-		const parsedScore = parseMatch(displayScore);
-		if (parsedScore === 'DQ') return false;
+	const underdog = setsWithFirstGameSelection.reduce((count, set) => {
+		if (!set.displayScore) return count;
+		const parsedScore = parseMatch(set.displayScore);
+		if (parsedScore === 'DQ') return count;
 
 		const playerIndex = parsedScore.findIndex((p) => aliasesSet.has(p.name));
-		if (playerIndex === -1) return false;
+		if (playerIndex === -1) return count;
 
-		// Check if the player is placed 1 while been seed 8+
 		const playerSeedInfo = set?.firstGame?.find(
 			(selection) => selection?.entrant?.name && aliasesSet.has(selection?.entrant?.name)
 		)?.entrant?.checkInSeed;
-		return playerSeedInfo?.seedNum === 1 && playerSeedInfo?.seedNum >= 8;
-	}).length;
+
+		return playerSeedInfo?.seedNum === 1 && playerSeedInfo?.seedNum >= 8 ? count + 1 : count;
+	}, 0);
 
 	// 9 GlobeTrotter
 	const globeTrotter = new Set(tournaments.map((t) => t.countryCode).filter(notNullNorUndefined))
