@@ -279,9 +279,7 @@ export const GET = async ({ url }) => {
 		.filter((e) =>
 			// Perfect run only applies to double elimination brackets
 			e?.userEntrant?.paginatedSets?.nodes?.some(
-				(set) =>
-					set?.phaseGroup?.bracketType &&
-					['DOUBLE_ELIMINATION'].includes(set?.phaseGroup?.bracketType)
+				(set) => set?.phaseGroup?.bracketType === 'DOUBLE_ELIMINATION'
 			)
 		)
 		.map((e) => {
