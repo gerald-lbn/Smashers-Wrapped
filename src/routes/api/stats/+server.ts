@@ -366,7 +366,6 @@ export const GET = async ({ url }) => {
 			upsets,
 			reverseSweeps,
 			tops: playerTops
-		},
-		raw: events
+		}
 	});
 };
